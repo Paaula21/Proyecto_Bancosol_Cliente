@@ -1,45 +1,39 @@
 document.getElementById('form-register').addEventListener('submit', async function (e) {
-    e.preventDefault(); // Evita que la página se refresque
+    e.preventDefault();
 
-    // 1. Obtener los datos del formulario de forma sencilla
     const formData = new FormData(e.target);
-
-    // 2. Convertir los datos básicos a un objeto
-    // Esto guardará nombre, email, telefono y observaciones
     const datosVoluntario = Object.fromEntries(formData.entries());
 
-    // 3. Manejar los checkboxes de disponibilidad (la tabla)
-    // Como hay muchos con el mismo nombre "asistencia", los guardaremos en un array
+    // Capturamos los checkboxes marcados
     const asistencias = [];
     document.querySelectorAll('input[name="asistencia"]:checked').forEach((checkbox) => {
-        // Aquí podrías guardar algo más específico si añades IDs a los checkboxes
         asistencias.push(checkbox.value);
     });
 
-    // Añadimos las asistencias al objeto principal
+    // Añadimos el array de horarios y borramos el campo individual duplicado
     datosVoluntario.horarios = asistencias;
+    delete datosVoluntario.asistencia;
 
-    console.log("Datos a enviar:", datosVoluntario);
+    console.log("Enviando a json-server:", datosVoluntario);
 
-    // 4. Simular el envío al servidor con 'fetch'
     try {
-        // Aquí pondrías la URL de tu API o servidor
-        const response = await fetch('https://tu-api-ejemplo.com/registro', {
+        // Conexión al servidor local en el puerto 3000
+        const response = await fetch('http://localhost:3001/turnos', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
             },
-            body: JSON.stringify(datosVoluntario) // Convertimos el objeto a texto JSON
+            body: JSON.stringify(datosVoluntario)
         });
 
         if (response.ok) {
-            alert("¡Registro enviado con éxito!");
-            e.target.reset(); // Limpia el formulario
+            alert("¡Registro guardado en db.json con éxito!");
+            e.target.reset();
         } else {
-            alert("Hubo un error en el servidor.");
+            alert("Error: El servidor no pudo procesar el registro.");
         }
     } catch (error) {
         console.error("Error de conexión:", error);
-        alert("No se pudo conectar con el servidor (es normal si aún no tienes uno).");
+        alert("No se pudo conectar con el servidor. Revisa la terminal.");
     }
 });
