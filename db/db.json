@@ -1,0 +1,11 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "username": "cristobal",
+      "password": "1234",
+      "role": "colab",
+      "token": "token-falso-colab-123"
+    }
+  ]
+}
