@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Cambiar la hiperreferencia a la correcta -->
+        <link rel="stylesheet" href="../../static/css/Login.css">
+        <title>Ventana de inicio</title>
+        <script src="Login.js" defer></script>
+</head>
+<body>
+        <div class="main-container">
+                <div class="div-image">
+                        <!-- No se ve bien la imagen-->
+                        <img src="../../images/icono.png" alt="Logo de BancoSol">
+                        <h1>Inicio de sesión</h1>
+                </div>
+                <fieldset class="login-container">
+                        <form class="form-login" id="form-login">
+                                <!-- Añadimos los parámetros autocomplete para la opción de recordarme -->
+                                <label for="username">Nombre de usuario</label><br>
+                                <input type="text" id="username" name="username" placeholder="Ej: Cristóbal" required autocomplete="username" /><br><br>
+
+                                <label for="password">Contraseña</label><br>
+                                <input type="password" id="password" name="password" required autocomplete="current-password" /><br><br>
+
+                                <div class="other-options">
+                                        <label class="remember">
+                                                <input type="checkbox" name="remember" id="remember"> Recordarme
+                                        </label>
+                                        <br>
+                                        <a href="#" class="forget-password" id="forgot-password">¿Olvidaste tu contraseña?</a>
+                                </div>
+                                <br>
+                                <button type="submit">Inicio de sesión</button>
+                        </form>
+                </fieldset>
+                <!-- Esto muestra mensajes de error o éxito -->
+                <p id="message"></p>
+        </div>
+</body>
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="AsignaciónTurnos.css">
+    <link rel="stylesheet" href="Sidebar.css">
+
+    <title>Asignación de turnos</title>
+</head>
+<body>
+
+<header class="cabecera">
+    <nav>
+        <h1>Asignación de turnos</h1>
+        <p>Gestión de horarios para voluntarios</p>
+
+        <div class="top-bar-actions">
+            <input type="search" placeholder="Buscar...">
+        </div>
+    </nav>
+</header>
+
+<div class="main-layout">
+    <!--Barra lateral que hay que añadir-->
+    <aside class="sidebar">
+    </aside>
+    <!--Seccion de selección de campaña-->
+
+    <div class="content-wrapper">
+        <section class="list-container">
+            <header class="list-header">
+                <h2>Listado de Voluntarios</h2>
+                <p>5 colaboradores registrados</p>
+                <div class="list-actions">
+                    <button type="button"> Exportar</button>
+                    <button type="button">+ Añadir</button>
+                </div>
+            </header>
+        </section>
+    </div>
+
+    <!-- Sección de Asignación de fechas -->
+
+    <div class="content-wrapper">
+        <section class="list-container">
+            <header class="list-header">
+                <h2>Asignación de fechas</h2>
+                <p>5 colaboradores registrados</p>
+                <div class="list-actions">
+                    <button type="button"> Exportar</button>
+                    <button type="button">+ Añadir</button>
+                </div>
+            </header>
+        </section>
+    </div>
+
+    <main>
+        <section class="form-section">
+            <h2>Selección de campaña:</h2>
+            <div class="campaign-options">
+                <label class="separator">
+                    <input type="radio" name="campanya" value="GR"> GR
+                </label>
+                <label class="separator">
+                    <input type="radio" name="campanya" value="Primavera"> Primavera
+                </label>
+            </div>
+
+            <br>
+
+            <fieldset>
+                <legend> Selección de fechas </legend>
+                <div class="date-row">
+                    <div class="date-group">
+                        <label for="desde">Desde:</label>
+                        <input type="date" id="desde" name="fecha_desde">
+                    </div>
+                    <div class="date-group">
+                        <label for="hasta">Hasta:</label>
+                        <input type="date" id="hasta" name="fecha_hasta">
+                    </div>
+                </div>
+            </fieldset>
+
+            <fieldset>
+                <!-- TERMINAR Y HACER UNA BÚSQUEDA -->
+                <legend> Filtros </legend>
+                <p>
+                    <textarea name="cadena" cols="30" rows="1" type=text> Cadena </textarea>
+                </p>
+                <p>
+                    <textarea name="localidad" cols="30" rows="1" type=text> Localidad </textarea>
+                </p>
+            </fieldset>
+
+            <br>
+
+            <h2>Asignación de fechas:</h2>
+            <!-- Lo hacen los administradores y coordinadores -->
+            <div class="table-container">
+                <table border ="1" width="100%">
+                    <thead>
+                    <tr>
+                        <th>TIENDA</th>
+                        <th>DOMICILIO</th>
+                        <th>LOCALIDAD</th>
+                        <th>CAPITÁN</th>
+                        <th>VIERNES MAÑANA</th>
+                        <th>VIERNES TARDE</th>
+                        <th>SÁBADO MAÑANA</th>
+                        <th>SÁBADO TARDE</th>
+                        <th>OBSERVACIONES</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <tr>
+                        <td>Ejemplo1</td>
+                        <td>
+                            <textarea name="domicilio" cols="20" rows="3" type=text> Domicilio </textarea>
+                        </td>
+                        <td>
+                            <textarea name="localidad" cols="20" rows="3" type=text> Localidad </textarea>
+                        </td>
+                        <td>
+                            <textarea name="capitán" cols="20" rows="3" type=text> Capitán </textarea>
+                        </td>
+                        <td>
+                            <textarea name="viernesmañana" cols="20" rows="3" type=text> TurnoVM </textarea>
+                        </td>
+                        <td>
+                            <textarea name="viernestarde" cols="20" rows="3" type=text> TurnoVT </textarea>
+                        </td>
+                        <td>
+                            <textarea name="sabadomañana" cols="20" rows="3" type=text> TurnoSM </textarea>
+                        </td>
+                        <td>
+                            <textarea name="sabadotarde" cols="20" rows="3" type=text> TurnoST </textarea>
+                        </td>
+                        <td>
+                            <textarea name="observaciones" cols="20" rows="3" type=text> Observaciones </textarea>
+                        </td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <br>
+
+            <div class="action-area">
+                <button type="submit" class="btn-save">Guardar en Base de Datos</button>
+            </div>
+        </section>
+    </main>
+
+    <aside class="menu">
+        <h2>Menú de Recursos</h2>
+        <p>Índice de pestañas del proyecto:</p>
+        <ul>
+            <!-- La idea es hacer un menú que nos lleve al resto de pestañas (HAY QUE VER SI PODEMOS PONERLO EN EL LADO IZQUIERDO COMO DESPLEGABLE?)-->
+            <li><a href="#">Inicio</a></li>
+        </ul>
+    </aside>
+</div>
+
+<footer>
+    <p><strong>Autores:</strong> Grupo 12 | <strong>Asignatura:</strong> Tecnologías del Cliente y el Servidor</p>
+    <p>Ingeniería del Software (Plan 2023) - Universidad de Málaga - 2026</p>
+</footer>
+
+</body>
+</html>

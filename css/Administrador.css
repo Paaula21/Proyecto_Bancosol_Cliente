@@ -1,0 +1,34 @@
+body {
+        font-family: Arial, sans-serif;
+        font-weight: lighter;
+}
+
+h1 {
+        text-align: center;
+        font-weight: lighter;
+}
+
+.tabla-campanya {
+        width: 80%;
+        margin: 20px auto;
+}
+
+.tabla-campanya th, .tabla-campanya td {
+        border: 2px solid #0004ff;
+        padding: 10px;
+        text-align: center;
+        background-color: #0543ad2f;
+}
+
+.tabla-campanya td button {
+        width: 100%;
+        padding: 1px;
+        background-color: #0543ad;
+        color: white;
+        border: none;
+        border-radius: 5px;
+}
+
+.tabla-campanya td button:hover {
+        background-color: #032663;
+}

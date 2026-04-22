@@ -1,0 +1,199 @@
+<!--PROCESO DE ADAPTACION-->
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Cadenas</title>
+    <link rel="stylesheet" href="InformacionCadena.css">
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar">
+        <!--PENDIENTE-->
+    </aside>
+    <div class="right-content">
+        <header class="main-header">
+            <nav>
+                <div class="header-branding">
+                    <img src="/images/icono.png" alt="App Icon" class="header-logo">
+                    <div class="header-titles">
+                        <h1>Cadena</h1>
+                        <p>Panel de administración para registrar y gestionar las marcas de los supermercados</p>
+                    </div>
+                </div>
+                <button class="btn btn--secondary" id="btn-notifications">Notificaciones</button>
+            </nav>
+        </header>
+
+        <div class="main-layout">
+            <main>
+                <!--FILTROS-->
+                <form>
+                    <section class="filters">
+                        <!--TIENDA-->
+                        <div class="filter-group">
+                            <label for="filter-chain">Cadena</label>
+                            <select id="filter-chain" name="chain">
+                                <option value="">Todas las cadenas</option>
+                                <option value="mercadona">Mercadona</option>
+                                <option value="carrefour">Carrefour</option>
+                                <option value="dia">Dia</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-group">
+                            <label for="filter-name">Nombre</label>
+                            <input type="text" id="filter-name" name="name" placeholder="Ej: Carrefour Hiper">
+                        </div>
+
+                        <!--DIRECCIONES-->
+                        <div class="filter-group small-box">
+                            <label for="filter-type">Tipo de Vía</label>
+                            <select id="filter-type" name="type">
+                                <option value="">Sin especificar</option>
+                                <option value="street">Calle</option>
+                                <option value="avenue">Avenida</option>
+                                <option value="square">Plaza</option>
+                            </select>
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-street">Calle</label>
+                            <input type="text" id="filter-street" name="street" placeholder="Nombre">
+                        </div>
+                        <div class="filter-group small-box">
+                            <label for="filter-code">Cód. Postal</label>
+                            <input type="text" id="filter-code" name="code" minlength="5" maxlength="5" pattern="[0-9]{5}"
+                                   title="Por favor, introduce exactamente 5 números" placeholder="29XXX">
+                        </div>
+                        <div class="filter-group small-box">
+                            <label for="filter-district">Distrito</label>
+                            <input type="text" id="filter-district" name="district" minlength="1" maxlength="2" placeholder="Ej: 3" >
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-city">Localidad</label>
+                            <input type="text" id="filter-city" name="city" placeholder="Buscar localidad...">
+                        </div>
+                        <div class="filter-group">
+                            <label for="filter-zone">Zona Geográfica</label>
+                            <input type="text" id="filter-zone" name="zone" placeholder="Buscar zona geografica...">
+                        </div>
+                        <div class="filter-group small-box">
+                            <label for="filter-gr">¿Gran Recogida?</label>
+                            <select id="filter-gr" name="gr">
+                                <option value="yes">Si</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="filter-group small-box">
+                            <label for="filter-primavera">¿Primavera?</label>
+                            <select id="filter-primavera" name="primavera">
+                                <option value="yes">Si</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+
+                        <!--COORDINADOR-->
+                        <div class="filter-group">
+                            <label for="filter-coordinator">Coordinador</label>
+                            <select id="filter-coordinator" name="coordinator">
+                                <option value="all">Todos</option>
+                            </select>
+                        </div>
+
+                        <div class="filter-button">
+                            <button type="submit" class="btn btn--primary">Filtrar</button>
+                        </div>
+                    </section>
+                </form>
+
+                <section class="content-wrapper">
+                    <div class="list-container">
+                        <div class="list-header">
+                            <h2>Listado de Cadenas</h2>
+                            <div class="list-actions">
+                                <a href="NuevaTienda.html">
+                                    <button type="button" class="btn btn--primary">+ Añadir</button>
+                                </a>
+                            </div>
+                        </div>
+
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Localidad</th>
+                                <th>Coordinador</th>
+                                <th>¿Gran Recogida?</th>
+                                <th>¿Primavera?</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr>
+                                <td><strong>Carrefour Hiper</strong></td>
+                                <td>Rincón de la Victoria</td>
+                                <td>J.M. Cobos</td>
+                                <td><span class="badge badge-yes">Sí</span></td>
+                                <td><span class="badge badge-yes">Sí</span></td>
+                                <td>
+                                    <button type="button" class="btn btn--secondary">Editar</button>
+                                    <button type="button" class="btn btn--secondary">Borrar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Carrefour Express</strong></td>
+                                <td>Rincón de la Victoria</td>
+                                <td>J.M. Cobos</td>
+                                <td><span class="badge badge-yes">Sí</span></td>
+                                <td><span class="badge badge-no">No</span></td>
+                                <td>
+                                    <button type="button" class="btn btn--secondary">Editar</button>
+                                    <button type="button" class="btn btn--secondary">Borrar</button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><strong>Carrefour Market</strong></td>
+                                <td>Rincón de la Victoria</td>
+                                <td>J.M. Cobos</td>
+                                <td><span class="badge badge-yes">Sí</span></td>
+                                <td><span class="badge badge-yes">Sí</span></td>
+                                <td>
+                                    <button type="button" class="btn btn--secondary">Editar</button>
+                                    <button type="button" class="btn btn--secondary">Borrar</button>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+
+                    <!--INFORMACION-->
+                    <aside class="detail-panel">
+                        <div class="store-card-header">
+                            <div class="store-header-text">
+                                <h3>Carrefour Hiper</h3>
+                                <p>Rincón de la Victoria, Málaga</p>
+                            </div>
+                        </div>
+                        <div class="detail-fields">
+                            <div class="field"><span>Cadena:</span> Carrefour</div>
+                            <div class="field"><span>Alias:</span> Carrefour Hiper</div>
+                            <div class="field"><span>Lineales:</span> Carrefour</div>
+                            <div class="field"><span>Coordinador:</span> J.M. Cobos</div>
+                            <div class="field"><span>Dirección:</span> C/ Nueva Tienda s/n</div>
+                            <div class="field"><span>Colaborador:</span> Cristobal</div>
+                            <div class="field"><span>Primavera:</span> No</div>
+                            <div class="field"><span>GR:</span> Sí</div>
+                        </div>
+
+                    </aside>
+
+                </section>
+            </main>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

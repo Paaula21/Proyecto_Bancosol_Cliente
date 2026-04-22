@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="RegistroVoluntarios.css">
+    <link rel="stylesheet" href="Sidebar.css">
+
+    <title>Registro de Voluntarios</title>
+
+    <script src="RegistroVoluntarios.js" defer></script>
+</head>
+
+<body>
+
+<header class="cabecera">
+    <nav>
+        <h1>Voluntariado</h1>
+        <p>Gestión de registro para los voluntarios</p>
+
+        <div class="top-bar-actions">
+            <input type="search" placeholder="Buscar...">
+        </div>
+    </nav>
+</header>
+
+<div class="main-layout">
+    <!--Barra lateral que hay que añadir-->
+    <aside class="sidebar">
+    </aside>
+
+    <main>
+        <form id="form-register">
+            <div class="content-wrapper">
+                <section class="list-container">
+                    <header class="user-header">
+                        <h3>Información Personal</h3>
+                        <p>
+                            Nombre* <br>
+                            <textarea name="nombre" cols="30" rows="1" type=text required> </textarea>
+                        </p>
+
+                        <p>
+                            Email* <br>
+                            <textarea name="email" cols="30" rows="1" type=email required> </textarea>
+                        </p>
+                        <p>
+                            Teléfono (Opcional) <br>
+                            <textarea name="telefono" cols="30" rows="1" type=tel min=9> </textarea>
+                        </p>
+                        <p>
+                            Indique aquí las <b>observaciones</b> que debemos tener en cuenta sobre su disponibilidad:
+                            <br> <br>
+                            <textarea name="observacionesinfopersonal" cols="50" rows="1"> </textarea>
+                        </p>
+                    </header>
+                </section>
+            </div>
+
+            <div class="content-wrapper">
+                <section class="list-container">
+                    <header class="list-header">
+                        <h2>Disponibilidad de horarios</h2>
+                        <p>Incluya aquí los horarios disponibles del voluntario</p>
+
+                    </header>
+
+                    <p>
+                        <label>Especifique su <b>disponibilidad</b> de los siguientes turnos:</label> <br> <br>
+                    <table>
+                        <thead>
+                        <tr>
+                            <th>
+                                Mañana/Tarde
+                            </th>
+                            <th>
+                                Lunes
+                            </th>
+                            <th>
+                                Martes
+                            </th>
+                            <th>
+                                Miércoles
+                            </th>
+                            <th>
+                                Jueves
+                            </th>
+                            <th>
+                                Viernes
+                            </th>
+                            <th>
+                                Sábado
+                            </th>
+                            <th>
+                                Domingo
+                            </th>
+                        </tr>
+                        </thead>
+
+                        <tbody>
+                        <tr>
+                            <td> Mañana</td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                        </tr>
+                        <tr>
+                            <td> Tarde</td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                            <td><input type="checkbox" name="asistencia" value="si"></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    </p>
+
+                    <br>
+
+                    <p>
+                        Indique aquí las <b>observaciones</b> que debemos tener en cuenta sobre su disponibilidad: <br>
+                        <br>
+                        <textarea name="observacionesdisponibilidad" cols="50" rows="1"> </textarea>
+                    </p>
+
+                    <div class="scrollbar-ui"></div>
+                </section>
+            </div>
+
+            <div class="content-wrapper">
+                <section class="list-container">
+                    <h3>Finalización de la encuesta</h3>
+                    <input type="submit" value="Enviar">
+                </section>
+            </div>
+        </form>
+    </main>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Editar Campaña</title>
+</head>
+<body>
+        <h1>Edición de campaña</h1>
+        <form>
+                <fieldset>
+                        <legend>Editar datos de la campaña</legend>
+                        <label for="nombre-campana">Nombre de la campaña: </label>
+                        <input type="text" id="nombre-campana" name="nombre-campana" value="Nombre_Campaña_1"/>
+                        <br>
+                        <label for="fecha-inicio">Fecha de inicio: </label>
+                        <input type="date" id="fecha-inicio" name="fecha-inicio" value="2024-05-15"/>
+                        <br>
+                        <label for="fecha-fin">Fecha de fin: </label>
+                        <input type="date" id="fecha-inicio" name="fecha-inicio" value="2024-05-15"/>
+                        <br>
+                        <label for="estado">Estado de la campaña: </label>
+                        <select id="estado">
+                                <option value="pendiente">Pendiente</option>
+                                <option value="en-curso">En curso</option>
+                                <option value="finalizada">Finalizada</option>
+                                <option value="cancelada">Cancelada</option>
+                        </select>
+                </fieldset>
+                <fieldset>
+                        <legend>Editar Colaboradores</legend>
+                        <table class="colaboradores-disponibles">
+                                <tr>
+                                        <th>Entidades Colaboradoras</th>
+                                        <th>Establecimientos</th>
+                                </tr>
+                                <tr>
+                                        <td>Campaña 1</td>
+                                        <td><button>Editar</button><button>Eliminar</button></td>
+                                </tr>
+                                <tr>
+                                        <td>Campaña 2</td>
+                                        <td><button>Editar</button><button>Eliminar</button></td>
+                                </tr>
+                        </table>
+                </fieldset>
+        </form>
+
+</body>
+</html>
