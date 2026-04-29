@@ -63,11 +63,11 @@ body {
     overflow: hidden;
 }
 
-.sidebar {
+/*.sidebar {
     width: 260px;
     background-color: #420098;
     color: white;
-}
+}*/
 
 .right-content {
     flex: 1;

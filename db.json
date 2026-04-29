@@ -1,0 +1,25 @@
+{
+  "usuarios": [
+    {
+      "id": 1,
+      "username": "cristobal",
+      "password": "1234",
+      "role": "colab",
+      "token": "token-falso-colab-123"
+    }
+  ],
+  "turnos": [
+    {
+      "id": 1,
+      "nombre": "Juan Pérez",
+      "email": "juan.perez@example.com",
+      "telefono": "600123456",
+      "observacionesinfopersonal": "Prefiero contacto por email.",
+      "horarios": [
+        "si",
+        "si"
+      ],
+      "observacionesdisponibilidad": "Solo puedo los fines de semana si es por la mañana."
+    }
+  ]
+}
