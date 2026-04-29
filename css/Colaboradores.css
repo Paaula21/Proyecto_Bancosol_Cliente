@@ -15,6 +15,9 @@ header.cabecera {
     padding: 16px 32px;
     width: 100%;
     position: fixed;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 header.cabecera nav {
@@ -45,6 +48,8 @@ header.cabecera p {
 .main-layout {
     display: flex;
     flex: 1;
+    height: 100vh;
+    width: 100%;
     overflow: hidden;
 }
 
