@@ -1,0 +1,189 @@
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing:border-box;
+}
+
+body {
+    background: #fff;
+    font-family: 'Open Sans', sans-serif;
+}
+
+.contenedor {
+    width: 90%;
+    max-width: 1000px;
+    text-align: left;
+}
+
+.contenedor article h1 {
+    font-size: 30px;
+    text-align: left;
+    padding: 50px 0;
+}
+
+.contenedor article p {
+    margin-bottom: 20px;
+}
+
+.contenedor article .btn-abrir-popup {
+    padding: 0 20px;
+    margin-bottom: 20px;
+    height: 40px;
+    line-height: 40px;
+    border: none;
+    color: #fff;
+    background: #420098;
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    font-size: 16px;
+    cursor: pointer;
+    transition: .3s ease all;
+}
+
+.contenedor article .btn-abrir-popup:hover {
+    background: rgba(94,125,227, .9);
+}
+
+/* ------------------------- */
+/* POPUP */
+/* ------------------------- */
+
+.overlay {
+    background: rgba(0,0,0,.3);
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    align-items: center;
+    justify-content: center;
+    display: flex;
+    visibility: hidden;
+}
+
+.overlay.active {
+    visibility: visible;
+}
+
+.popup {
+    background: #F8F8F8;
+    box-shadow: 0 0 5px 0 rgba(0,0,0,0.3);
+    border-radius: 3px;
+    font-family: 'Montserrat', sans-serif;
+    padding: 20px;
+    text-align: center;
+    width: 600px;
+
+    transition: .3s ease all;
+    transform: scale(0.7);
+    opacity: 0;
+}
+
+.popup .btn-cerrar-popup {
+    font-size: 16px;
+    line-height: 16px;
+    display: block;
+    text-align: right;
+    transition: .3s ease all;
+    color: #BBBBBB;
+}
+
+.popup .btn-cerrar-popup:hover {
+    color: #000;
+}
+
+.popup h3 {
+    font-size: 25px;
+    font-weight: 600;
+    margin-bottom: 10px;
+    opacity: 0;
+}
+
+.popup p {
+    font-size: 15px;
+    font-weight: 300;
+    margin-bottom: 40px;
+    opacity: 0;
+    color: black;
+}
+
+.popup form .contenedor-inputs {
+    opacity: 0;
+}
+
+.popup form .contenedor-inputs input {
+    width: 100%;
+    margin-bottom: 15px;
+    height: 52px;
+    font-size: 18px;
+    line-height: 52px;
+    text-align: left;
+    border: 1px solid #BBBBBB;
+}
+
+.popup form .btn-add {
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: -15px;
+}
+
+.popup form .btn-close {
+    padding: 12px 25px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.3s;
+    margin-top: -15px;
+}
+
+.popup form .btn-add:hover {
+    background: rgba(94,125,227, 0.9);
+    background: #420098;
+    border: none;
+    color: #fff;
+}
+
+.popup form .btn-close:hover {
+    background: rgba(94,125,227, 0.9);
+    background: #420098;
+    border: none;
+    color: #fff;
+}
+
+/* ------------------------- */
+/* ANIMACIONES */
+/* ------------------------- */
+.popup.active {	transform: scale(1); opacity: 1; }
+.popup.active h3 { animation: entradaTitulo .5s ease .3s forwards; }
+.popup.active p { animation: entradaSubtitulo .5s ease .3s forwards; }
+.popup.active .contenedor-inputs { animation: entradaInputs .7s linear .5s forwards; }
+
+@keyframes entradaTitulo {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes entradaSubtitulo {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+@keyframes entradaInputs {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}

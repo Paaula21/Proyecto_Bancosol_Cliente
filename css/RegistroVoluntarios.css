@@ -18,7 +18,7 @@ body {
     border: 1px solid #d1d5db;
     display: inline-flex;
     align-items: center;
-    justify-content: center;
+    justify-content: left;
 }
 
 /*Boton de añadir*/
@@ -230,4 +230,8 @@ input, select {
     box-sizing: border-box;
 }
 
-
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}

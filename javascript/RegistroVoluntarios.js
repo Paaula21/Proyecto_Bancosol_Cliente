@@ -37,3 +37,7 @@ document.getElementById('form-register').addEventListener('submit', async functi
         alert("No se pudo conectar con el servidor. Revisa la terminal.");
     }
 });
+
+
+
+

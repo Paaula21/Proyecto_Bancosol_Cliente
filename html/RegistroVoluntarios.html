@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <title>Registro de voluntarios</title>
     <link rel="stylesheet" href="../css/RegistroVoluntarios.css">
+    <link rel="stylesheet" href="../css/popUpRegistro.css">
 </head>
 <body>
 
@@ -28,6 +29,7 @@
 
             <div class="main-layout">
                 <main>
+                    <form id="form-voluntario">
                         <div class="list-container">
                             <div class="list-header">
                                 <h2>Información del Voluntario</h2> <br>
@@ -121,16 +123,30 @@
                             </div>
                         </div>
 
-                            <div class="list-actions">
-                                <a href="ExitoRegistroVoluntario.html">
-                                <button type="button" class="btn btn--primary">+ Añadir</button>
-                                </a>
-                            </div>
+                    <div class="contenedor">
+                        <article>
+                            <button type="submit" id="btn-abrir-popup" class="btn-abrir-popup">Guardar</button>
+                        </article>
 
+                    </form>
+
+                        <div class="overlay" id="overlay">
+                            <div class="popup" id="popup">
+
+                                <h3>Inscripción completada</h3>
+                                <p>Elija si desea añadir otro voluntario o finalizar la operación</p>
+                                <form action="">
+                                    <!-- Lo pongo de esta manera para no cambiar en el css los inputs por button -->
+                                    <input type="button" class="btn-add" value="Añadir otro voluntario" onclick="window.location.href='RegistroVoluntarios.html'">
+                                    <input type="button" class="btn-close" value="Cerrar" onclick="window.location.href='InformacionCampana.html'">
+                                </form>
+                            </div>
+                        </div>
+                    </div>
                 </main>
             </div>
         </div>
     </div>
-
+<script src="../javascript/popUpRegistro.js"></script>
 </body>
 </html>
