@@ -1,27 +1,37 @@
 <!DOCTYPE html>
 <html lang="es">
-    <div class="user-block">
-        <div class="avatar avatar-jc">JC</div>
-        <div class="user-info">
-            <p class="user-name">J.M. Cobos</p>
-            <p class="user-role">Administrador</p>
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="../css/Sidebar.css">
+        <title>Sidebar</title>
+    </head>
+    <body>
+            <script src="../javascript/Sidebar.js" defer></script>
+            <div class="user-block">
+                <div class="avatar avatar-jc">JC</div>
+                <div class="user-info">
+                    <p class="user-name">J.M. Cobos</p>
+                    <p class="user-role">Administrador</p>
+                </div>
+            </div>
         </div>
-    </div>
 
-    <h2 class="menu-heading">MENÚ PRINCIPAL</h2>
-    <ul>
-        <li><a href="#dashboard">Dashboard</a></li>
-        <li><a href="#campanas">Campañas</a></li>
-        <li><a href="#tiendas">Tiendas</a></li>
-        <li class="active"><a href="#colaboradores">Colaboradores</a></li>
-        <li><a href="#coordinadores">Coordinadores</a></li>
-        <li><a href="#asignaciones">Asignaciones</a></li>
-    </ul>
-
-    <div class="bottom-menu">
+        <h2 class="menu-heading">MENÚ PRINCIPAL</h2>
         <ul>
-            <li><a href="#configuracion"></span> Configuración</a></li>
-            <li><a href="#cerrar-sesion"></span> Cerrar Sesión</a></li>
+            <li><a href="../html/Administrador.html">Dashboard</a></li>
+            <li><a href="#campanas">Campañas</a></li>
+            <li><a href="../html/InformacionTienda.html">Tiendas</a></li>
+            <li class="active"><a href="../html/Colaboradores.html">Colaboradores</a></li>
+            <li><a href="#coordinadores">Coordinadores</a></li>
+            <li><a href="../html/RegistroVoluntarios.html">Asignaciones</a></li>
         </ul>
 
+        <div class="bottom-menu">
+            <ul>
+                <li id="btn-configuracion"></span> Configuración</a></li>
+                <li id="btn-cierre-sesion"><a href="#cerrar-sesion"></span> Cerrar Sesión</a></li>
+            </ul>
+        </div>
+    </body>
 </html>

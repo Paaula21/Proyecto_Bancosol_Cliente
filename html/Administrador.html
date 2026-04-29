@@ -4,36 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/Administrador.css">
+    <link rel="stylesheet" href="../css/Sidebar.css">
+    <script src="../javascript/IncludeHTML.js"></script>
     <title>Dashboard - Vista de administrador</title>
 </head>
 <body>
     <div class="main-container">
         <aside class="sidebar">
-            <div class="sidebar-container">
-                <div class="profile-card user-profile">
-                    <div class="profile-avatar">JC</div>
-                    <div class="profile-info">
-                        <span class="name">J.M. Cobos</span>
-                        <span class="role">Administrador</span>
-                    </div>
-                </div>
-            </div>
-
-            <nav class="sidebar-menu">
-                <ul>
-                    <li class="active"><a href="Administrador.html"> Dashboard</a></li>
-                    <li><a href="CreacionCampanya.html"> Campañas</a></li>
-                    <li><a href="InformacionTienda.html"> Tiendas</a></li>
-                    <li><a href="Colaboradores.html"> Colaboradores</a></li>
-                </ul>
-            </nav>
-
-            <div class="sidebar-bottom">
-                <ul>
-                    <li><a href="#"> Configuración</a></li>
-                    <li><a href="#"> Cerrar Sesión</a></li>
-                </ul>
-            </div>
+            <include-html src="../html/Sidebar.html"></include-html>
         </aside>
 
         <div class="right-container">
@@ -43,9 +21,6 @@
                     <p>Datos del sistema de gestión de campañas</p>
                 </div>
                 <div class="header-actions">
-                    <div class="search-bar">
-                        <input type="text" placeholder="Buscar...">
-                    </div>
                     <button class="notification-btn">
                         <p>N</p>
                     </button>
@@ -182,8 +157,6 @@
                                 <th>Acción</th>
                                 <th>Descripción</th>
                                 <th>Usuario</th>
-                                <!-- ¿Quitamos el tiempo? -->
-                                <th>Tiempo</th>
                                 <th>Estado</th>
                             </tr>
                         </thead>
@@ -192,28 +165,24 @@
                                 <td>Nueva asignación</td>
                                 <td>Carrefour Hiper - Rincón de la Victoria</td>
                                 <td>J.M. Cobos</td>
-                                <td> Hace 5 min</td>
                                 <td>Completado</td>
                             </tr>
                             <tr>
                                 <td>Colaborador añadido</td>
                                 <td>Ayuntamiento de Almachar</td>
                                 <td>Arantxa</td>
-                                <td> Hace 15 min</td>
                                 <td>Pendiente</td>
                             </tr>
                             <tr>
                                 <td>Tienda actualizada</td>
                                 <td>Carrefour Express - Málaga</td>
                                 <td>Fran Jiménez</td>
-                                <td> Hace 1 hora</td>
                                 <td>Revisar</td>
                             </tr>
                             <tr>
                                 <td>Campaña creada</td>
                                 <td>Gran Recogida 2025</td>
                                 <td>J.M. Cobos</td>
-                                <td> Hace 2 horas</td>
                                 <td>Completado</td>
                             </tr>
                         </tbody>

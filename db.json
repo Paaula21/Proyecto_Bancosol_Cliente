@@ -6,6 +6,20 @@
       "password": "1234",
       "role": "colab",
       "token": "token-falso-colab-123"
+    },
+    {
+      "id": 2,
+      "username": "admin_principal",
+      "password": "adminpassword",
+      "role": "admin",
+      "token": "token-falso-admin-456"
+    },
+    {
+      "id": 3,
+      "username": "laura_m",
+      "password": "password123",
+      "role": "colab",
+      "token": "token-falso-colab-789"
     }
   ],
   "turnos": [
@@ -21,5 +35,83 @@
       ],
       "observacionesdisponibilidad": "Solo puedo los fines de semana si es por la mañana."
     }
-  ]
+  ],
+  "establecimientos": [
+    {
+      "id": 1,
+      "nombre_cadena": "Mercadona",
+      "nombre_establecimiento": "Mercadona Héroe de Sostoa",
+      "localidad": "Málaga",
+      "cod_postal": "29002",
+      "calle": "Héroe de Sostoa",
+      "tipo_via": "Calle"
+    },
+    {
+      "id": 2,
+      "nombre_cadena": "Carrefour",
+      "nombre_establecimiento": "Carrefour Los Patios",
+      "localidad": "Málaga",
+      "cod_postal": "29004",
+      "calle": "Velázquez",
+      "tipo_via": "Avenida"
+    },
+    {
+      "id": 3,
+      "nombre_cadena": "Maskom",
+      "nombre_establecimiento": "Maskom Victoria",
+      "localidad": "Málaga",
+      "cod_postal": "29012",
+      "calle": "Victoria",
+      "tipo_via": "Calle"
+    },
+    {
+      "id": 4,
+      "nombre_cadena": "Lidl",
+      "nombre_establecimiento": "Lidl Teatinos",
+      "localidad": "Málaga",
+      "cod_postal": "29010",
+      "calle": "Bulevar Louis Pasteur",
+      "tipo_via": "Bulevar"
+    }
+  ],
+  "voluntarios": [
+    {
+      "id": 1,
+      "nombre": "María González",
+      "email": "maria.gonzalez@example.com"
+    },
+    {
+      "id": 2,
+      "nombre": "Carlos Ruiz",
+      "email": "cruiz_voluntariado@example.com"
+    },
+    {
+      "id": 3,
+      "nombre": "Ana Martín",
+      "email": "ana.martin88@example.com"
+    }
+  ],
+  "dashboard": {
+    "resumen": {
+      "campanasActivas": { "valor": 2, "subtitulo": "Gran Recogida, Primavera" },
+      "tiendasTotales": { "valor": 267, "subtitulo": "En 5 zonas geográficas" },
+      "colaboradores": { "valor": 156, "subtitulo": "Entidades y voluntarios" },
+      "coordinadores": { "valor": 12, "subtitulo": "Activos en campaña" }
+    },
+    "proximasCampanas": [
+        { "nombre": "Gran Recogida 2025", "fecha": "22-23 Nov 2025", "tiendas": 156, "voluntarios": 845 },
+        { "nombre": "Campaña Primavera", "fecha": "15-16 Mar 2025", "tiendas": 120, "voluntarios": 620 }
+    ],
+    "coberturaZona": [
+        { "zona": "Málaga Capital", "tiendas": 45, "porcentaje": 92 },
+        { "zona": "Costa Occidental", "tiendas": 38, "porcentaje": 85 },
+        { "zona": "Axarquía", "tiendas": 28, "porcentaje": 72 },
+        { "zona": "Interior", "tiendas": 22, "porcentaje": 68 },
+        { "zona": "Antequera", "tiendas": 12, "porcentaje": 55 }
+    ],
+    "actividadReciente": [
+        { "accion": "Nueva asignación", "descripcion": "Carrefour Hiper - Rincón de la Victoria", "usuario": "J.M. Cobos", "tiempo": "Hace 5 min", "estado": "Completado" },
+        { "accion": "Colaborador añadido", "descripcion": "Ayuntamiento de Almachar", "usuario": "Arantxa", "tiempo": "Hace 15 min", "estado": "Pendiente" }
+    ]
+  }
 }
