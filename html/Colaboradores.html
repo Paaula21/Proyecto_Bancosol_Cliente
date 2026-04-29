@@ -1,124 +1,128 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Colaboradores</title>
-    <link rel="stylesheet" href="Colaboradores.css">
-    <link rel="stylesheet" href="Sidebar.css">
+    <link rel="stylesheet" href="../css/Colaboradores.css">
+    <link rel="stylesheet" href="../css/Sidebar.css">
+    <script src="../javascript/IncludeHTML.js"></script>
 </head>
+
 <body>
 
-<!--Cabecera general (Solo cambia el título y la descripción) Refactorizar-->
-<header class="cabecera">
-    <nav>
-        <h1>Colaboradores</h1>
-        <p>Gestión de entidades colaboradoras y voluntarios</p>
-    </nav>
-</header>
 
-
-<div class="main-layout">
-    <!--Barra lateral que hay que añadir-->
-    <aside class="sidebar">
-        <include-html src="../html/Sidebar.html"></include-html>
-    </aside>
-    <!--Seccion de colaboradores-->
-    <main>
-        <section class="filters">
-            <div class="filter-group" id="zona-geo">
-                <label>Zona Geográfica</label>
-                <select>
-                    <option>Todas</option>
-                </select>
-            </div>
-
-            <div class="filter-group" id="coord">
-                <label>Coordinador</label>
-                <select>
-                    <option>Todos</option>
-                </select>
-            </div>
-
-            <div class="filter-group" id="buscar">
-                <label>Buscar</label>
-                <input type="text" placeholder="Nombre o código...">
-            </div>
-
-            <div class="filter-button">
-                <button type="button">Filtrar</button>
-            </div>
-        </section>
-
-        <hr>
-
-        <div class="content-wrapper">
-            <section class="list-container">
-                <header class="list-header">
-                    <h2>Listado de Colaboradores</h2>
-                    <p>5 colaboradores registrados</p>
-                    <div class="list-actions">
-                        <button type="button"> Exportar</button>
-                        <button type="button">+ Añadir</button>
+    <div class="main-layout">
+        <!--Barra lateral que hay que añadir-->
+        <aside class="sidebar">
+            <include-html src="../html/Sidebar.html"></include-html>
+        </aside>
+        <!--Seccion de colaboradores-->
+        <div class="right-column">
+            <!--Cabecera general (Solo cambia el título y la descripción) Refactorizar-->
+            <header class="cabecera">
+                <nav>
+                    <h1>Colaboradores</h1>
+                    <p>Gestión de entidades colaboradoras y voluntarios</p>
+                </nav>
+            </header>
+            <main>
+                <section class="filters">
+                    <div class="filter-group" id="zona-geo">
+                        <label>Zona Geográfica</label>
+                        <select>
+                            <option>Todas</option>
+                        </select>
                     </div>
-                </header>
 
-                <table>
-                    <thead>
-                    <tr>
-                        <th>Colaborador</th>
-                        <th>Colabora en</th>
-                        <th>Coordinador</th>
-                        <th>Contacto</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    <tr>
-                        <td><strong>Ayuntamiento de Almachar</strong><br><small>A0362</small></td>
-                        <td>Rincón de la Victoria</td>
-                        <td>J.M. Cobos</td>
-                        <td>Mario Torre (Concejal)<br>555 555 555</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Ayuntamiento de Moclinejo</strong><br><small>A0346</small></td>
-                        <td>Rincón de la Victoria</td>
-                        <td>J.M. Cobos</td>
-                        <td>Arantxa Villalba<br>666 777 777</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Familia García López</strong><br><small>B0001</small></td>
-                        <td>Málaga Capital</td>
-                        <td>Arantxa</td>
-                        <td>Pedro García<br>612 345 678</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Guardia Civil</strong><br><small>A0421</small></td>
-                        <td>Rincón de la Victoria</td>
-                        <td>J.M. Cobos</td>
-                        <td>Sargento Martínez<br>666 888 999</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Colegio Novaschool</strong><br><small>A0422</small></td>
-                        <td>Benalmádena</td>
-                        <td>Mari Carmen Chamizo</td>
-                        <td>Director AMPA<br>952 123 456</td>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="scrollbar-ui"></div>
-            </section>
+                    <div class="filter-group" id="coord">
+                        <label>Coordinador</label>
+                        <select>
+                            <option>Todos</option>
+                        </select>
+                    </div>
 
-            <aside class="detail-panel">
-                <h3>Detalle de Colaborador</h3>
-                <p>Seleccione un colaborador</p>
+                    <div class="filter-group" id="buscar">
+                        <label>Buscar</label>
+                        <input type="text" placeholder="Nombre o código...">
+                    </div>
 
-                <div class="empty-state">
-                    <p>Haga clic en un colaborador de la lista para ver sus detalles</p>
+                    <div class="filter-button">
+                        <button type="button">Filtrar</button>
+                    </div>
+                </section>
+
+                <hr>
+
+                <div class="content-wrapper">
+                    <section class="list-container">
+                        <header class="list-header">
+                            <h2>Listado de Colaboradores</h2>
+                            <p>5 colaboradores registrados</p>
+                            <div class="list-actions">
+                                <button type="button"> Exportar</button>
+                                <button type="button">+ Añadir</button>
+                            </div>
+                        </header>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Colaborador</th>
+                                    <th>Colabora en</th>
+                                    <th>Coordinador</th>
+                                    <th>Contacto</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td><strong>Ayuntamiento de Almachar</strong><br><small>A0362</small></td>
+                                    <td>Rincón de la Victoria</td>
+                                    <td>J.M. Cobos</td>
+                                    <td>Mario Torre (Concejal)<br>555 555 555</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Ayuntamiento de Moclinejo</strong><br><small>A0346</small></td>
+                                    <td>Rincón de la Victoria</td>
+                                    <td>J.M. Cobos</td>
+                                    <td>Arantxa Villalba<br>666 777 777</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Familia García López</strong><br><small>B0001</small></td>
+                                    <td>Málaga Capital</td>
+                                    <td>Arantxa</td>
+                                    <td>Pedro García<br>612 345 678</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Guardia Civil</strong><br><small>A0421</small></td>
+                                    <td>Rincón de la Victoria</td>
+                                    <td>J.M. Cobos</td>
+                                    <td>Sargento Martínez<br>666 888 999</td>
+                                </tr>
+                                <tr>
+                                    <td><strong>Colegio Novaschool</strong><br><small>A0422</small></td>
+                                    <td>Benalmádena</td>
+                                    <td>Mari Carmen Chamizo</td>
+                                    <td>Director AMPA<br>952 123 456</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="scrollbar-ui"></div>
+                    </section>
+
+                    <aside class="detail-panel">
+                        <h3>Detalle de Colaborador</h3>
+                        <p>Seleccione un colaborador</p>
+
+                        <div class="empty-state">
+                            <p>Haga clic en un colaborador de la lista para ver sus detalles</p>
+                        </div>
+                    </aside>
                 </div>
-            </aside>
+            </main>
         </div>
-    </main>
-</div>
 
 
 </body>
+
 </html>
