@@ -5,7 +5,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Cadenas</title>
-    <link rel="stylesheet" href="InformacionCadena.css">
+    <link rel="stylesheet" href="../css/InformacionCadena.css">
 </head>
 <body>
 <div class="app-container">
@@ -16,7 +16,7 @@
         <header class="main-header">
             <nav>
                 <div class="header-branding">
-                    <img src="/images/icono.png" alt="App Icon" class="header-logo">
+                    <img src="../images/icono.png" alt="App Icon" class="header-logo">
                     <div class="header-titles">
                         <h1>Cadena</h1>
                         <p>Panel de administración para registrar y gestionar las marcas de los supermercados</p>
@@ -33,18 +33,13 @@
                     <section class="filters">
                         <!--TIENDA-->
                         <div class="filter-group">
-                            <label for="filter-chain">Cadena</label>
+                            <label for="filter-chain">Nombre</label>
                             <select id="filter-chain" name="chain">
                                 <option value="">Todas las cadenas</option>
                                 <option value="mercadona">Mercadona</option>
                                 <option value="carrefour">Carrefour</option>
                                 <option value="dia">Dia</option>
                             </select>
-                        </div>
-
-                        <div class="filter-group">
-                            <label for="filter-name">Nombre</label>
-                            <input type="text" id="filter-name" name="name" placeholder="Ej: Carrefour Hiper">
                         </div>
 
                         <!--DIRECCIONES-->
@@ -93,14 +88,6 @@
                             </select>
                         </div>
 
-                        <!--COORDINADOR-->
-                        <div class="filter-group">
-                            <label for="filter-coordinator">Coordinador</label>
-                            <select id="filter-coordinator" name="coordinator">
-                                <option value="all">Todos</option>
-                            </select>
-                        </div>
-
                         <div class="filter-button">
                             <button type="submit" class="btn btn--primary">Filtrar</button>
                         </div>
@@ -112,7 +99,7 @@
                         <div class="list-header">
                             <h2>Listado de Cadenas</h2>
                             <div class="list-actions">
-                                <a href="NuevaTienda.html">
+                                <a href="NuevaCadena.html">
                                     <button type="button" class="btn btn--primary">+ Añadir</button>
                                 </a>
                             </div>
@@ -122,8 +109,7 @@
                             <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th>Localidad</th>
-                                <th>Coordinador</th>
+                                <th>Numero de Establecimientos</th>
                                 <th>¿Gran Recogida?</th>
                                 <th>¿Primavera?</th>
                                 <th>Acciones</th>
@@ -131,33 +117,30 @@
                             </thead>
                             <tbody>
                             <tr>
-                                <td><strong>Carrefour Hiper</strong></td>
-                                <td>Rincón de la Victoria</td>
-                                <td>J.M. Cobos</td>
-                                <td><span class="badge badge-yes">Sí</span></td>
-                                <td><span class="badge badge-yes">Sí</span></td>
+                                <td><strong>Carrefour</strong></td>
+                                <td>76</td>
+                                <td>Sí</td>
+                                <td>Sí</td>
                                 <td>
                                     <button type="button" class="btn btn--secondary">Editar</button>
                                     <button type="button" class="btn btn--secondary">Borrar</button>
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong>Carrefour Express</strong></td>
-                                <td>Rincón de la Victoria</td>
-                                <td>J.M. Cobos</td>
-                                <td><span class="badge badge-yes">Sí</span></td>
-                                <td><span class="badge badge-no">No</span></td>
+                                <td><strong>Mercadona</strong></td>
+                                <td>67</td>
+                                <td>Sí</td>
+                                <td>No</td>
                                 <td>
                                     <button type="button" class="btn btn--secondary">Editar</button>
                                     <button type="button" class="btn btn--secondary">Borrar</button>
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong>Carrefour Market</strong></td>
-                                <td>Rincón de la Victoria</td>
-                                <td>J.M. Cobos</td>
-                                <td><span class="badge badge-yes">Sí</span></td>
-                                <td><span class="badge badge-yes">Sí</span></td>
+                                <td><strong>Dia</strong></td>
+                                <td>32</td>
+                                <td>Sí</td>
+                                <td>Sí</td>
                                 <td>
                                     <button type="button" class="btn btn--secondary">Editar</button>
                                     <button type="button" class="btn btn--secondary">Borrar</button>
@@ -166,28 +149,6 @@
                             </tbody>
                         </table>
                     </div>
-
-
-                    <!--INFORMACION-->
-                    <aside class="detail-panel">
-                        <div class="store-card-header">
-                            <div class="store-header-text">
-                                <h3>Carrefour Hiper</h3>
-                                <p>Rincón de la Victoria, Málaga</p>
-                            </div>
-                        </div>
-                        <div class="detail-fields">
-                            <div class="field"><span>Cadena:</span> Carrefour</div>
-                            <div class="field"><span>Alias:</span> Carrefour Hiper</div>
-                            <div class="field"><span>Lineales:</span> Carrefour</div>
-                            <div class="field"><span>Coordinador:</span> J.M. Cobos</div>
-                            <div class="field"><span>Dirección:</span> C/ Nueva Tienda s/n</div>
-                            <div class="field"><span>Colaborador:</span> Cristobal</div>
-                            <div class="field"><span>Primavera:</span> No</div>
-                            <div class="field"><span>GR:</span> Sí</div>
-                        </div>
-
-                    </aside>
 
                 </section>
             </main>

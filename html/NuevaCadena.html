@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Nueva Cadena</title>
+    <link rel="stylesheet" href="../css/NuevaCadena.css">
+</head>
+<body>
+<div class="modal-card">
+    <div class="modal-header">
+        <div class="header-info">
+            <h1>Nueva Cadena</h1>
+            <p>Añadir una nueva cadena a la base de datos</p>
+        </div>
+        <button type="button" class="close-icon">&times;</button>
+    </div>
+
+    <form>
+        <div class="field-group">
+            <label for="chain-name">Cadena</label>
+            <input type="text" id="chain-name" name="chain_name" required placeholder="Ej: Carrefour">
+        </div>
+
+        <div class="form-row columns-2">
+            <div class="field-group">
+                <label for="spring-participation">¿Participa en Primavera?</label>
+                <select id="spring-participation" name="spring-participation">
+                    <option value="yes">Si</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+            <div class="field-group">
+                <label for="gr-participation">¿Participa en GR?</label>
+                <select id="gr-participation" name="gr-participation">
+                    <option value="yes">Si</option>
+                    <option value="no">No</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="reset" class="btn-cancel">Cancelar</button>
+            <button type="submit" class="btn-save">Guardar</button>
+        </div>
+    </form>
+</div>
+
+</body>
+
+</html>

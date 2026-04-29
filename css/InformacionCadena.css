@@ -1,4 +1,4 @@
-/*PROCESO DE ADAPTACION*/
+/*REVISAR: thead y th*/
 
 
 *{
@@ -119,8 +119,7 @@ main {
     background-color: #ffffff;
     border-radius: 8px;
     border: none;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    padding: 20px 24px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);    padding: 20px 24px;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -131,7 +130,7 @@ main {
     display: flex;
     flex-direction: column;
     gap: 8px;
-    flex: 1 1 30%;
+    flex: 1 1 20%;
     min-width: 200px;
 }
 
@@ -176,24 +175,13 @@ main {
     align-items: flex-start;
 }
 
-.list-container,
-.detail-panel {
+.list-container{
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 24px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);    flex: 2;
 
-}
-
-.list-container {
-    flex: 2;
-}
-
-.detail-panel {
-    flex: 0 0 320px;
-    display: flex;
-    flex-direction: column;
 }
 
 .list-header {
@@ -220,12 +208,16 @@ table {
     text-align: left;
 }
 
+thead{
+    background-color: #f8fafc;
+}
+
 th {
     padding: 12px 16px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #111827;
+    font-size: 0.75rem;
+    color: #6b7280;
     border-bottom: 1px solid #e5e7eb;
+    border-top: 1px solid #e5e7eb;
 }
 
 td {
@@ -236,55 +228,26 @@ td {
     vertical-align: middle;
 }
 
-.store-card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 24px;
+/* Repartir el ancho de las columnas de la tabla */
+th:nth-child(1) {
+    width: 40%;
 }
 
-.store-header-text h3 {
-    margin: 0;
-    font-size: 1.125rem;
-    font-weight: 600;
+th:nth-child(2) {
+    width: 20%;
 }
 
-.store-header-text p {
-    margin: 4px 0 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
+th:nth-child(3) {
+    width: 20%;
 }
 
-.detail-fields {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
+/* La última columna (Acciones) toma el resto y se alinea a la derecha */
+th:nth-child(4) {
+    width: 20%;
+    text-align: right;
 }
 
-.field {
-    font-size: 0.875rem;
-    color: #374151;
-}
-
-.field span {
-    font-weight: 600;
-    margin-right: 5px;
-}
-
-/*Botones de Si o No tabla, REVISAR*/
-.badge {
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
-
-.badge-yes {
-    background-color: #dcfce7;
-    color: #166534;
-}
-
-.badge-no {
-    background-color: #f3f4f6;
-    color: #374151;
+/* Alineamos también los botones de las celdas a la derecha */
+td:nth-child(4) {
+    text-align: right;
 }
