@@ -1,12 +1,77 @@
-/* General settings */
+*{
+    box-sizing: border-box;
+}
+
 body {
     font-family: 'Segoe UI', Arial, sans-serif;
-    background-color: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 100vh;
+    background-color: #f5f7f9;
     margin: 0;
+}
+
+/* 2. Estructura principal (Mantiene el sidebar a la izq y el contenido a la derecha) */
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: #420098;
+    color: white;
+}
+
+
+.right-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+/* 3. Estilos de la cabecera superior */
+header.main-header {
+    background-color: #f8fafc;
+    padding: 16px 32px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+header.main-header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-branding {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo {
+    height: 50px;
+}
+
+.header-titles h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.header-titles p {
+    margin: 4px 0 0 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* 4. LA NUEVA REGLA: Contenedor que centra exclusivamente la tarjeta del formulario */
+.form-container-centered {
+    flex: 1; /* Ocupa todo el espacio sobrante debajo del header */
+    display: flex;
+    justify-content: center; /* Centra el formulario horizontalmente */
+    align-items: center; /* Centra el formulario verticalmente */
+    padding: 20px;
+    overflow-y: auto; /* Permite hacer scroll si el formulario es muy largo */
 }
 
 /* Main container */
@@ -113,6 +178,29 @@ input:focus, select:focus {
     justify-content: flex-end;
     gap: 12px;
     margin-top: 30px;
+}
+
+
+.btn {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #d1d5db;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn--secondary {
+    background-color: white;
+    color: #374151;
+}
+
+.btn--secondary:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
 }
 
 .btn-cancel, .btn-save {

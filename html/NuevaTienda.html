@@ -7,79 +7,104 @@
 </head>
 <body>
 
-<div class="modal-card">
-    <div class="modal-header">
-        <div class="header-info">
-            <h1>Nueva Tienda</h1>
-            <p>Añadir una nueva tienda a la base de datos</p>
+<div class="app-container">
+    <aside class="sidebar">
+        <!--PENDIENTE-->
+    </aside>
+    <div class="right-content">
+        <header class="main-header">
+            <nav>
+                <div class="header-branding">
+                    <img src="/images/icono.png" alt="App Icon" class="header-logo">
+                    <div class="header-titles">
+                        <h1>Establecimientos</h1>
+                        <p>Gestión de establecimientos participantes en las campañas</p>
+                    </div>
+                </div>
+                <button class="btn btn--secondary" id="btn-notifications">Notificaciones</button>
+            </nav>
+        </header>
+        <div class="form-container-centered">
+        <div class="modal-card">
+            <main>
+                <div class="modal-header">
+                    <div class="header-info">
+                        <h1>Nueva Tienda</h1>
+                        <p>Añadir una nueva tienda a la base de datos</p>
+                    </div>
+                    <button type="button" class="close-icon">&times;</button>
+                </div>
+
+                <form>
+                    <div class="form-row columns-2">
+                        <div class="field-group">
+                            <label for="chain-select">Cadena</label>
+                            <select id="chain-select" name="chain_id">
+                                <option value="mercadona">Mercadona</option>
+                                <option value="carrefour">Carrefour</option>
+                                <option value="dia">Dia</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="store-name">Nombre</label>
+                            <input type="text" id="store-name" name="store_name" required placeholder="Ej: Carrefour Hiper">
+                        </div>
+                    </div>
+
+                    <div class="form-row columns-2">
+                        <div class="field-group fixed-small">
+                            <label for="street-type">Tipo de Vía</label>
+                            <select id="street-type" name="street_type">
+                                <option value="street">Calle</option>
+                                <option value="avenue">Avenida</option>
+                                <option value="square">Plaza</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="street-address">Calle</label>
+                            <input type="text" id="street-address" name="street_address" required placeholder="Nombre">
+                        </div>
+                    </div>
+
+                    <div class="form-row columns-3">
+                        <div class="field-group box-numero">
+                            <label for="building-number">Número</label>
+                            <input type="text" id="building-number" name="building_number" minlength="1" maxlength="3" placeholder="Ej: 12">
+                        </div>
+                        <div class="field-group box-cp">
+                            <label for="zip-code">Cód. Postal</label>
+                            <input type="text" id="zip-code" name="zip_code" minlength="5" maxlength="5" pattern="[0-9]{5}"
+                                   title="Por favor, introduce exactamente 5 números" placeholder="29XXX">
+                        </div>
+                        <div class="field-group box-distrito">
+                            <label for="district-name">Distrito</label>
+                            <input type="text" id="district-name" name="district_name" minlength="1" maxlength="2" placeholder="Ej: 3" >
+                        </div>
+                    </div>
+
+                    <div class="form-row columns-2">
+                        <div class="field-group">
+                            <label for="city-name">Localidad</label>
+                            <input type="text" id="city-name" name="city_name" required placeholder="Ciudad">
+                        </div>
+                        <div class="field-group">
+                            <label for="geo-zone">Zona Geográfica</label>
+                            <input type="text" id="geo-zone" name="geo_zone" placeholder="Comarca">
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <button type="reset" class="btn-cancel">Cancelar</button>
+                        <button type="submit" class="btn-save">Guardar</button>
+                    </div>
+                </form>
+            </main>
         </div>
-        <button type="button" class="close-icon">&times;</button>
+        </div>
     </div>
-
-    <form>
-        <div class="form-row columns-2">
-            <div class="field-group">
-                <label for="chain-select">Cadena</label>
-                <select id="chain-select" name="chain_id">
-                    <option value="mercadona">Mercadona</option>
-                    <option value="carrefour">Carrefour</option>
-                    <option value="dia">Dia</option>
-                </select>
-            </div>
-            <div class="field-group">
-                <label for="store-name">Nombre</label>
-                <input type="text" id="store-name" name="store_name" required placeholder="Ej: Carrefour Hiper">
-            </div>
-        </div>
-
-        <div class="form-row columns-2">
-            <div class="field-group fixed-small">
-                <label for="street-type">Tipo de Vía</label>
-                <select id="street-type" name="street_type">
-                    <option value="street">Calle</option>
-                    <option value="avenue">Avenida</option>
-                    <option value="square">Plaza</option>
-                </select>
-            </div>
-            <div class="field-group">
-                <label for="street-address">Calle</label>
-                <input type="text" id="street-address" name="street_address" required placeholder="Nombre">
-            </div>
-        </div>
-
-        <div class="form-row columns-3">
-            <div class="field-group box-numero">
-                <label for="building-number">Número</label>
-                <input type="text" id="building-number" name="building_number" minlength="1" maxlength="3" placeholder="Ej: 12">
-            </div>
-            <div class="field-group box-cp">
-                <label for="zip-code">Cód. Postal</label>
-                <input type="text" id="zip-code" name="zip_code" minlength="5" maxlength="5" pattern="[0-9]{5}"
-                       title="Por favor, introduce exactamente 5 números" placeholder="29XXX">
-            </div>
-            <div class="field-group box-distrito">
-                <label for="district-name">Distrito</label>
-                <input type="text" id="district-name" name="district_name" minlength="1" maxlength="2" placeholder="Ej: 3" >
-            </div>
-        </div>
-
-        <div class="form-row columns-2">
-            <div class="field-group">
-                <label for="city-name">Localidad</label>
-                <input type="text" id="city-name" name="city_name" required placeholder="Ciudad">
-            </div>
-            <div class="field-group">
-                <label for="geo-zone">Zona Geográfica</label>
-                <input type="text" id="geo-zone" name="geo_zone" placeholder="Comarca">
-            </div>
-        </div>
-
-        <div class="form-actions">
-            <button type="reset" class="btn-cancel">Cancelar</button>
-            <button type="submit" class="btn-save">Guardar</button>
-        </div>
-    </form>
 </div>
+
+
 
 </body>
 </html>
