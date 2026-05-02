@@ -1,20 +1,10 @@
-const btnCerrarSesion = document.getElementById('btn-cierre-sesion');
+document.addEventListener('click', function(e) {
+    // e.target.closest busca si hicimos clic directamente en el <li> o en algún hijo (como la etiqueta <a>)
+    const btnCerrarSesion = e.target.closest('#btn-logout');
 
-if (btnCerrarSesion) {
-    btnCerrarSesion.addEventListener('click', function (e) {
-        e.preventDefault();
-        
-        // --- CHIVATOS ---
-        console.log("¡Clic detectado!");
-        console.log("Borrando sesión...");
-        
+    if (btnCerrarSesion) {
+        e.preventDefault();        
         sessionStorage.clear();
-        
-        console.log("Redirigiendo...");
-        // ----------------
-        
         window.location.href = '../html/Login.html'; 
-    });
-} else {
-    console.error("ALERTA: El JavaScript no encuentra el botón de cerrar sesión.");
-}
+    }
+});
