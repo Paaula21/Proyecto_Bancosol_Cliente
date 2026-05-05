@@ -1,50 +1,105 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Editar Campaña</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/Administrador.css">
+    <link rel="stylesheet" href="../css/EditarCampana.css">
+    
+    <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/Sidebar.js" defer></script>
+    <title>Editar Campaña</title>
 </head>
 <body>
-        <h1>Edición de campaña</h1>
-        <form>
-                <fieldset>
-                        <legend>Editar datos de la campaña</legend>
-                        <label for="nombre-campana">Nombre de la campaña: </label>
-                        <input type="text" id="nombre-campana" name="nombre-campana" value="Nombre_Campaña_1"/>
-                        <br>
-                        <label for="fecha-inicio">Fecha de inicio: </label>
-                        <input type="date" id="fecha-inicio" name="fecha-inicio" value="2024-05-15"/>
-                        <br>
-                        <label for="fecha-fin">Fecha de fin: </label>
-                        <input type="date" id="fecha-inicio" name="fecha-inicio" value="2024-05-15"/>
-                        <br>
-                        <label for="estado">Estado de la campaña: </label>
-                        <select id="estado">
-                                <option value="pendiente">Pendiente</option>
-                                <option value="en-curso">En curso</option>
-                                <option value="finalizada">Finalizada</option>
-                                <option value="cancelada">Cancelada</option>
-                        </select>
-                </fieldset>
-                <fieldset>
-                        <legend>Editar Colaboradores</legend>
-                        <table class="colaboradores-disponibles">
-                                <tr>
-                                        <th>Entidades Colaboradoras</th>
-                                        <th>Establecimientos</th>
-                                </tr>
-                                <tr>
-                                        <td>Campaña 1</td>
-                                        <td><button>Editar</button><button>Eliminar</button></td>
-                                </tr>
-                                <tr>
-                                        <td>Campaña 2</td>
-                                        <td><button>Editar</button><button>Eliminar</button></td>
-                                </tr>
-                        </table>
-                </fieldset>
-        </form>
+    <div class="main-container">
+        <!-- Barra lateral -->
+        <aside class="sidebar">
+            <include-html src="../html/Sidebar.html"></include-html>
+        </aside>
 
+        <!-- Contenido principal -->
+        <div class="right-container">
+            <!-- Cabecera estilo Dashboard -->
+            <header class="header-dashboard">
+                <!-- Nuevo wrapper para mantener el logo y el título juntos a la izquierda -->
+                <div class="header-left-group">
+                    <img src="../images/icono.png" alt="App Icon" class="header-logo">
+                    <div class="header-titles">
+                        <h1>Edición de Campaña</h1>
+                        <p>Modifique los detalles generales y las cadenas participantes</p>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn" title="Notificaciones">!</button>
+                </div>
+            </header>
+
+            <div class="dashboard-container">
+                <form action="#" method="POST" class="form-grid-layout">
+                    
+                    <div class="form-card">
+                        <fieldset>
+                            <legend>Datos de la campaña</legend>
+                            
+                            <div class="form-group">
+                                <label for="nombre-campanya">Nombre de la campaña</label>
+                                <input type="text" id="nombre-campanya" name="nombre-campanya" value="Campaña Verano 2024" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="fecha-inicio">Fecha de Inicio</label>
+                                <input type="date" id="fecha-inicio" name="fecha-inicio" value="2024-05-15" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="fecha-final">Fecha de Finalización</label>
+                                <input type="date" id="fecha-final" name="fecha-final" value="2024-08-20" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="estado">Estado actual</label>
+                                <select id="estado" name="estado">
+                                    <option value="pendiente">Pendiente</option>
+                                    <option value="en-curso" selected>En curso</option>
+                                    <option value="finalizada">Finalizada</option>
+                                    <option value="cancelada">Cancelada</option>
+                                </select>
+                            </div>
+                        </fieldset>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn-submit">Guardar Cambios</button>
+                            <button type="reset" class="btn-cancel">Descartar</button>
+                        </div>
+                    </div>
+
+                    <div class="form-card">
+                        <fieldset>
+                            <legend>Cadenas Participantes</legend>
+                            <p class="checkbox-section-title">Seleccione las cadenas que forman parte de esta campaña:</p>
+                            
+                            <div class="checkbox-list">
+                                <label class="checkbox-group">
+                                    <input type="checkbox" id="mercadona-elegido" name="mercadona-elegido" checked>
+                                    Mercadona
+                                </label>
+                                
+                                <label class="checkbox-group">
+                                    <input type="checkbox" id="carrefour-elegido" name="carrefour-elegido">
+                                    Carrefour
+                                </label>
+                                
+                                <label class="checkbox-group">
+                                    <input type="checkbox" id="dia-elegido" name="dia-elegido" checked>
+                                    Dia
+                                </label>
+                            </div>
+                        </fieldset>
+                    </div>
+
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
 </html>
