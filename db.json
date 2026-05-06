@@ -1056,6 +1056,7 @@
       "nombre_cadena": "SUMA"
     }
   ],
+<<<<<<< HEAD
   "campana": [
     {
       "id_campana": "GR2025",
@@ -1063,6 +1064,72 @@
       "fecha_inicio": "2025-11-22",
       "fecha_fin": "2025-11-23",
       "estado": "planificada"
+=======
+  "colaboradores": [
+    {
+      "id": 1,
+      "codigo": "A0362",
+      "nombre": "Ayuntamiento de Almáchar",
+      "colabora_en": "Rincón de la Victoria",
+      "coordinador": "J.M. Cobos",
+      "contacto_nombre": "Mario Torre",
+      "contacto_cargo": "Concejal",
+      "contacto_telefono": "555 555 555",
+      "localidad": "Almáchar",
+      "cod_postal": "29718",
+      "calle": "Plaza de España",
+      "tipo_via": "Plaza"
+    },
+    {
+      "id": 2,
+      "codigo": "A0346",
+      "nombre": "Ayuntamiento de Moclinejo",
+      "colabora_en": "Rincón de la Victoria",
+      "coordinador": "J.M. Cobos",
+      "contacto_nombre": "Arantxa Villalba",
+      "contacto_cargo": "Técnico",
+      "contacto_telefono": "666 777 777",
+      "localidad": "Moclinejo",
+      "cod_postal": "29738",
+      "calle": "Plaza de España",
+      "tipo_via": "Plaza"
+    },
+    {
+      "id": 3,
+      "codigo": "V0001",
+      "nombre": "Asociación Voluntarios Málaga",
+      "colabora_en": "Málaga Capital",
+      "coordinador": "Arantxa",
+      "contacto_nombre": "Pedro García",
+      "contacto_cargo": "Presidente",
+      "contacto_telefono": "612 345 678",
+      "localidad": "Málaga",
+      "cod_postal": "29010",
+      "calle": "Bulevar Louis Pasteur",
+      "tipo_via": "Bulevar"
+    },
+    {
+      "id": 4,
+      "codigo": "A0422",
+      "nombre": "Colegio Novaschool",
+      "colabora_en": "Benalmádena",
+      "coordinador": "Mari Carmen Chamizo",
+      "contacto_nombre": "Director AMPA",
+      "contacto_cargo": "Director",
+      "contacto_telefono": "952 123 456",
+      "localidad": "Benalmádena",
+      "cod_postal": "29630",
+      "calle": "Camino de la Ermita",
+      "tipo_via": "Camino"
+    }
+  ],
+  "dashboard": {
+    "resumen": {
+      "campanasActivas": { "valor": 2, "subtitulo": "Gran Recogida, Primavera" },
+      "tiendasTotales": { "valor": 267, "subtitulo": "En 5 zonas geográficas" },
+      "colaboradores": { "valor": 156, "subtitulo": "Entidades y voluntarios" },
+      "coordinadores": { "valor": 12, "subtitulo": "Activos en campaña" }
+>>>>>>> 76f9a60a93233e615297cb66d3f82143429ecede
     },
     {
       "id_campana": "PRIM2025",
