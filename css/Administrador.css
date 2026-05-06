@@ -9,10 +9,6 @@ body {
     color: #111827;
 }
 
-.header-logo {
-    height: 50px;
-}
-
 .main-container {
     display: flex;
     height: 100vh;
@@ -25,87 +21,6 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-}
-
-.profile-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.profile-avatar {
-    width: 36px;
-    height: 36px;
-    background-color: #ffffff;
-    color: #420098;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.profile-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-info .name {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.profile-info .role {
-    font-size: 0.75rem;
-    color: #d1d5db;
-    margin-top: 2px;
-}
-
-.sidebar-menu {
-    flex: 1;
-    padding: 20px 0;
-}
-
-.menu-tittle {
-    padding: 0 24px;
-    font-size: 0.75rem;
-    color: #d1d5db;
-    font-weight: bold;
-    margin-bottom: 10px;
-    letter-spacing: 0.05em;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li a {
-    display: block;
-    padding: 12px 24px;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: background-color 0.2s;
-}
-
-.sidebar ul li.active a,
-.sidebar ul li a:hover {
-    background-color: #310073;
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.sidebar ul li.active a {
-    border-left: 4px solid #ffffff;
-    padding-left: 20px;
-}
-
-.sidebar-bottom {
-    padding: 20px 0;
-    border-top: 1px solid #310073;
 }
 
 .header-dashboard {
@@ -127,6 +42,10 @@ body {
     margin: 4px 0 0 0;
     font-size: 0.875rem;
     color: #6b7280;
+}
+
+.header-logo {
+    height: 50px;
 }
 
 .header-actions {

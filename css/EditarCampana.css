@@ -8,7 +8,7 @@
     height: 50px;
 }
 
-.form-grid-layout {
+.form-edit {
     display: grid;
     grid-template-columns: 1fr 1fr; 
     gap: 24px;
@@ -135,6 +135,5 @@ legend {
 }
 
 .btn-cancel:hover {
-    background-color: #f9fafb;
-    border-color: #9ca3af;
+    background-color: #a9b2bb;
 }
