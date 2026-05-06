@@ -9,6 +9,10 @@ body {
     color: #111827;
 }
 
+.header-logo {
+    height: 50px;
+}
+
 .main-container {
     display: flex;
     height: 100vh;
@@ -21,20 +25,6 @@ body {
     display: flex;
     flex-direction: column;
     overflow-y: auto;
-}
-
-
-.sidebar {
-    width: 260px;
-    background-color: #420098;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar-container {
-    padding: 20px 24px;
-    border-bottom: 1px solid #310073;
 }
 
 .profile-card {
@@ -121,13 +111,10 @@ body {
 .header-dashboard {
     background-color: #ffffff;
     padding: 16px 32px;
+    gap: 15px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
-    z-index: 10;
 }
 
 .header-titles h1 {
@@ -143,8 +130,9 @@ body {
 }
 
 .header-actions {
+    margin-left: auto;
     display: flex;
-    align-items: center;
+    align-items: end;
     gap: 16px;
 }
 
@@ -154,7 +142,6 @@ body {
     border-radius: 50%;
     border: 1px solid #d1d5db;
     background-color: #ffffff;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
