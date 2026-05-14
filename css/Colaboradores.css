@@ -52,11 +52,18 @@ header.cabecera p {
     width: 100%;
     overflow: hidden;
 }
+.right-column {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    height: 100vh;
+    overflow: hidden;
+}
 
 main {
     padding: 24px 32px;
     flex: 1;
-    overflow-y: auto;
+    overflow: hidden; 
     display: flex;
     flex-direction: column;
     gap: 24px;
@@ -121,7 +128,8 @@ hr {
 .content-wrapper {
     display: flex;
     gap: 24px;
-    align-items: flex-start;
+    flex: 1; 
+    overflow: hidden;
 }
 
 .list-container,
@@ -135,11 +143,12 @@ hr {
 .list-container {
     flex: 2;
     overflow-x: auto;
+    overflow-y: auto;
 }
 
 .detail-panel {
     flex: 1;
-    min-height: 400px;
+    overflow-y: auto;
     display: flex;
     flex-direction: column;
 }
@@ -205,6 +214,8 @@ th {
     font-weight: 600;
     color: #111827;
     border-bottom: 1px solid #e5e7eb;
+    top: 0;
+    background-color: #ffffff;
 }
 
 td {

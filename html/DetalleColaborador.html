@@ -1,0 +1,46 @@
+<!-- Mensaje inicial -->
+<div id="estado-vacio" class="estado-vacio">
+    <h3>Detalle de Colaborador</h3>
+    <p>Haga clic en un colaborador de la lista para ver sus detalles.</p>
+</div>
+
+<!-- Datos del colaborador -->
+<div id="datos-colaborador" class="datos-colaborador" style="display: none;">
+    <h3 class="ficha-titulo-principal">Ficha del Colaborador</h3>
+
+    <div class="ficha-cabecera">
+        <div class="ficha-titulos">
+            <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
+            <span id="ficha-codigo" class="ficha-etiqueta-codigo">---</span>
+        </div>
+    </div>
+
+    <div class="ficha-tarjeta-info">
+        <h5>Ubicación</h5>
+        <p><strong>Zona:</strong> <span id="ficha-zona">---</span></p>
+    </div>
+
+    <div class="ficha-tarjeta-info">
+        <h5>Contacto</h5>
+        <p><strong>Persona:</strong> <span id="ficha-contacto-nombre">---</span></p>
+        <p><strong>Cargo:</strong> <span id="ficha-contacto-cargo">---</span></p>
+        
+        <!-- Email: Siempre sale -->
+        <p id="contenedor-email">
+            <strong>Email:</strong> 
+            <a href="#" id="ficha-contacto-email" class="ficha-enlace-tel">---</a>
+        </p>
+
+        <!-- Teléfono: Condicional -->
+        <p id="contenedor-tel">
+            <strong>Teléfono:</strong> 
+            <a href="#" id="ficha-contacto-tel" class="ficha-enlace-tel">---</a>
+        </p>
+    </div>
+
+    <div class="ficha-tarjeta-info sin-margen-inferior">
+        <h5>Dirección Postal</h5>
+        <p id="ficha-direccion">---</p>
+        <p id="ficha-localidad" class="sin-margen">---</p>
+    </div>
+</div>
