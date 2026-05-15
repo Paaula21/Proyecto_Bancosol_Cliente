@@ -79,18 +79,6 @@ body {
     opacity: 0;
 }
 
-.popup .btn-cerrar-popup {
-    font-size: 16px;
-    line-height: 16px;
-    display: block;
-    text-align: right;
-    transition: .3s ease all;
-    color: #BBBBBB;
-}
-
-.popup .btn-cerrar-popup:hover {
-    color: #000;
-}
 
 .popup h3 {
     font-size: 25px;
@@ -121,7 +109,23 @@ body {
     border: 1px solid #BBBBBB;
 }
 
-.popup form .btn-add {
+.popup .btn-cerrar-popup {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 16px;
+    display: block;
+    text-align: center;
+    transition: .3s ease all;
+}
+
+.popup .btn-cerrar-popup:hover {
+    background: rgba(94,125,227, 0.9);
+    background: #420098;
+    border: none;
+    color: #fff;
+}
+
+.popup .btn-add {
     padding: 12px 25px;
     border-radius: 6px;
     font-size: 14px;
@@ -129,6 +133,13 @@ body {
     cursor: pointer;
     transition: background 0.3s;
     margin-top: -15px;
+}
+
+.popup .btn-add:hover {
+    background: rgba(94,125,227, 0.9);
+    background: #420098;
+    border: none;
+    color: #fff;
 }
 
 .popup form .btn-close {
@@ -141,12 +152,6 @@ body {
     margin-top: -15px;
 }
 
-.popup form .btn-add:hover {
-    background: rgba(94,125,227, 0.9);
-    background: #420098;
-    border: none;
-    color: #fff;
-}
 
 .popup form .btn-close:hover {
     background: rgba(94,125,227, 0.9);

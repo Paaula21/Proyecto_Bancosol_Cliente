@@ -1,7 +1,3 @@
-/* Estilos específicos para formularios de edición de campaña */
-/* Basado en la paleta de colores y estructura de Administrador.css */
-
-/* --- NUEVAS CLASES PARA EL LAYOUT --- */
 .header-left-group {
     display: flex;
     align-items: center;
@@ -12,14 +8,12 @@
     height: 50px;
 }
 
-.form-grid-layout {
+.form-edit {
     display: grid;
-    grid-template-columns: 1fr 1fr; /* Divide el espacio a la mitad exacta */
+    grid-template-columns: 1fr 1fr; 
     gap: 24px;
-    align-items: start; /* Para que la tarjeta derecha no se estire si la izquierda es más alta */
     width: 100%;
 }
-/* ------------------------------------ */
 
 .form-card {
     background-color: #ffffff;
@@ -69,8 +63,6 @@ legend {
     border-radius: 6px;
     font-size: 0.9rem;
     color: #111827;
-    font-family: inherit;
-    outline: none;
     transition: border-color 0.2s, box-shadow 0.2s;
 }
 
@@ -98,14 +90,12 @@ legend {
     gap: 12px;
     font-size: 0.9rem;
     color: #374151;
-    cursor: pointer;
 }
 
 .checkbox-group input[type="checkbox"] {
     width: 18px;
     height: 18px;
     accent-color: #420098;
-    cursor: pointer;
 }
 
 .form-actions {
@@ -145,6 +135,5 @@ legend {
 }
 
 .btn-cancel:hover {
-    background-color: #f9fafb;
-    border-color: #9ca3af;
+    background-color: #a9b2bb;
 }

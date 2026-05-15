@@ -23,111 +23,13 @@ body {
     overflow-y: auto;
 }
 
-
-.sidebar {
-    width: 260px;
-    background-color: #420098;
-    color: #ffffff;
-    display: flex;
-    flex-direction: column;
-}
-
-.sidebar-container {
-    padding: 20px 24px;
-    border-bottom: 1px solid #310073;
-}
-
-.profile-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-
-.profile-avatar {
-    width: 36px;
-    height: 36px;
-    background-color: #ffffff;
-    color: #420098;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.profile-info {
-    display: flex;
-    flex-direction: column;
-}
-
-.profile-info .name {
-    font-weight: 600;
-    font-size: 0.9rem;
-}
-
-.profile-info .role {
-    font-size: 0.75rem;
-    color: #d1d5db;
-    margin-top: 2px;
-}
-
-.sidebar-menu {
-    flex: 1;
-    padding: 20px 0;
-}
-
-.menu-tittle {
-    padding: 0 24px;
-    font-size: 0.75rem;
-    color: #d1d5db;
-    font-weight: bold;
-    margin-bottom: 10px;
-    letter-spacing: 0.05em;
-}
-
-.sidebar ul {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-}
-
-.sidebar ul li a {
-    display: block;
-    padding: 12px 24px;
-    color: #ffffff;
-    text-decoration: none;
-    font-size: 0.9rem;
-    transition: background-color 0.2s;
-}
-
-.sidebar ul li.active a,
-.sidebar ul li a:hover {
-    background-color: #310073;
-    color: #ffffff;
-    font-weight: 600;
-}
-
-.sidebar ul li.active a {
-    border-left: 4px solid #ffffff;
-    padding-left: 20px;
-}
-
-.sidebar-bottom {
-    padding: 20px 0;
-    border-top: 1px solid #310073;
-}
-
 .header-dashboard {
     background-color: #ffffff;
     padding: 16px 32px;
+    gap: 15px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    position: sticky;
-    top: 0;
-    z-index: 10;
 }
 
 .header-titles h1 {
@@ -142,9 +44,14 @@ body {
     color: #6b7280;
 }
 
+.header-logo {
+    height: 50px;
+}
+
 .header-actions {
+    margin-left: auto;
     display: flex;
-    align-items: center;
+    align-items: end;
     gap: 16px;
 }
 
@@ -154,7 +61,6 @@ body {
     border-radius: 50%;
     border: 1px solid #d1d5db;
     background-color: #ffffff;
-    cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;

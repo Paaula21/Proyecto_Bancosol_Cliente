@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/Campana.css">
+    <link rel="stylesheet" href="../css/Sidebar.css">
+    <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/Sidebar.js" defer></script>
+    <script src="../javascript/Campana.js" defer></script>
+    <title>Vista de campañas</title>
+</head>
+
+<body>
+    <div class="main-container">
+        <aside class="sidebar">
+            <include-html src="../html/Sidebar.html"></include-html>
+        </aside>
+
+        <div class="right-container">
+            <!-- Usamos la misma estructura de cabecera que en administrador.html -->
+            <header class="header-dashboard">
+                <img src="../images/icono.png" alt="App Icon" class="header-logo">
+                <div class="header-titles">
+                    <h1>Campañas</h1>
+                    <p>Información general y gestión de las campañas</p>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn" title="Notificaciones">
+                        <p>!</p>
+                    </button>
+                </div>
+            </header>
+
+            <!-- Contenedor principal con el mismo comportamiento que dashboard-container -->
+            <main class="campana-container">
+                <section class="filters">
+                    <div class="filter-group" id="estado">
+                        <label>Estado</label>
+                        <select id="filter-state">
+                            <option value="todos">Todos</option>
+                            <option value="planificada">Planificada</option>
+                            <option value="en curso">En Curso</option>
+                            <option value="completada">Completada</option>
+                            <option value="finalizada">Finalizada</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group" id="search">
+                        <label>Buscar</label>
+                        <input type="text" id="filter-search" placeholder="Nombre de campaña...">
+                    </div>
+
+                    <div class="filter-button">
+                        <button type="button" id="btn-filter">Filtrar</button>
+                    </div>
+                </section>
+
+                <div class="content-wrapper">
+                    <section class="list-container">
+                        <header class="list-header">
+                            <h2>Listado de Campañas</h2>
+                            <p id="total-campanas">Cargando campañas...</p>
+                            <button type="button" class="btn-add" onclick="window.location.href='CreacionCampanya.html'">Añadir</button>
+                        </header>
+
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Campaña</th>
+                                    <th>Fecha de Inicio</th>
+                                    <th>Fecha de Fin</th>
+                                    <th>Estado</th>
+                                    <th>Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody id="table-campanas">
+                                <!-- Filas dinámicas generadas por JS -->
+                            </tbody>
+                        </table>
+                    </section>
+                </div>
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>

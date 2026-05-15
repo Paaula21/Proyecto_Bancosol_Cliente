@@ -8,6 +8,7 @@
     
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
+    <script src="../javascript/EditarCampana.js" defer></script>
     <title>Editar Campaña</title>
 </head>
 <body>
@@ -17,11 +18,8 @@
             <include-html src="../html/Sidebar.html"></include-html>
         </aside>
 
-        <!-- Contenido principal -->
         <div class="right-container">
-            <!-- Cabecera estilo Dashboard -->
-            <header class="header-dashboard">
-                <!-- Nuevo wrapper para mantener el logo y el título juntos a la izquierda -->
+            <header class="header-edit">
                 <div class="header-left-group">
                     <img src="../images/icono.png" alt="App Icon" class="header-logo">
                     <div class="header-titles">
@@ -34,31 +32,31 @@
                 </div>
             </header>
 
-            <div class="dashboard-container">
-                <form action="#" method="POST" class="form-grid-layout">
+            <div class="form-container">
+                <form action="#" method="POST" class="form-edit" id="form-edit">
                     
                     <div class="form-card">
                         <fieldset>
                             <legend>Datos de la campaña</legend>
                             
                             <div class="form-group">
-                                <label for="nombre-campanya">Nombre de la campaña</label>
-                                <input type="text" id="nombre-campanya" name="nombre-campanya" value="Campaña Verano 2024" required>
+                                <label for="name-campanya">Nombre de la campaña</label>
+                                <input type="text" id="name-campanya" name="name-campanya" value="Campaña Verano 2024" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="fecha-inicio">Fecha de Inicio</label>
-                                <input type="date" id="fecha-inicio" name="fecha-inicio" value="2024-05-15" required>
+                                <label for="initial-date">Fecha de Inicio</label>
+                                <input type="date" id="initial-date" name="initial-date" value="2024-05-15" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="fecha-final">Fecha de Finalización</label>
-                                <input type="date" id="fecha-final" name="fecha-final" value="2024-08-20" required>
+                                <label for="final-date">Fecha de Finalización</label>
+                                <input type="date" id="final-date" name="final-date" value="2024-08-20" required>
                             </div>
                             
                             <div class="form-group">
-                                <label for="estado">Estado actual</label>
-                                <select id="estado" name="estado">
+                                <label for="status">Estado actual</label>
+                                <select id="status" name="status" required>
                                     <option value="pendiente">Pendiente</option>
                                     <option value="en-curso" selected>En curso</option>
                                     <option value="finalizada">Finalizada</option>
