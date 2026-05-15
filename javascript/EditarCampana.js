@@ -32,15 +32,15 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const campana = data[0];
 
                 // Rellenar el formulario
-                document.getElementById('name-campanya').value = campana.nombre_campana || '';
-                document.getElementById('initial-date').value = campana.fecha_inicio || '';
-                document.getElementById('final-date').value = campana.fecha_fin || '';
+                document.querySelector('#name-campanya').value = campana.nombre_campana || '';
+                document.querySelector('#initial-date').value = campana.fecha_inicio || '';
+                document.querySelector('#final-date').value = campana.fecha_fin || '';
 
                 if (campana.estado) {
                         // El value en HTML para estado está en minúsculas y sin espacios, 
                         // adaptamos según los options (pendiente, en-curso, finalizada, cancelada)
                         // Aseguramos que coincide con una opción válida
-                        document.getElementById('status').value = campana.estado.toLowerCase().replace(' ', '-');
+                        document.querySelector('#status').value = campana.estado.toLowerCase().replace(' ', '-');
                 }
         } catch (error) {
                 console.error('Error al cargar la campaña:', error);
@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', async () => {
         }
 });
 
-document.getElementById('form-edit').addEventListener('submit', async function (e) {
+document.querySelector('#form-edit').addEventListener('submit', async function (e) {
         e.preventDefault();
 
         // Verificamos si realmente hay un ID en la URL
@@ -57,10 +57,10 @@ document.getElementById('form-edit').addEventListener('submit', async function (
                 return;
         }
 
-        const name = document.getElementById('name-campanya').value.trim();
-        const initialDate = document.getElementById('initial-date').value;
-        const finalDate = document.getElementById('final-date').value;
-        const status = document.getElementById('status').value;
+        const name = document.querySelector('#name-campanya').value.trim();
+        const initialDate = document.querySelector('#initial-date').value;
+        const finalDate = document.querySelector('#final-date').value;
+        const status = document.querySelector('#status').value;
 
         // Tenemos que añadir el ID porque en el método PUT reescribimos la entrada
         // al completo

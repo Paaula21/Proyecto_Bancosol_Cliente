@@ -1062,14 +1062,14 @@
       "nombre_campana": "Gran Recogida 2025",
       "fecha_inicio": "2025-11-22",
       "fecha_fin": "2025-11-23",
-      "estado": "planificada"
+      "estado": "Planificada"
     },
     {
       "id_campana": "PRIM2025",
       "nombre_campana": "Campaña Primavera 2025",
       "fecha_inicio": "2025-03-15",
       "fecha_fin": "2025-03-16",
-      "estado": "completada"
+      "estado": "Completada"
     }
   ],
   "campana_cadena": [
@@ -10809,85 +10809,85 @@
     {
       "id_usuario": 42,
       "id_rol": 2,
-      "contrasenia": "$2b$12$29be54446ccc89b8b2066b63909f75b5ad585155145a04fa9659e",
+      "contrasenia": "arantxa",
       "usuario": "arantxa"
     },
     {
       "id_usuario": 43,
       "id_rol": 2,
-      "contrasenia": "$2b$12$0da8c5e95e593e775b56bbe8610b5c4ceca20abdc691020048a75",
+      "contrasenia": "chamizo",
       "usuario": "chamizo"
     },
     {
       "id_usuario": 44,
       "id_rol": 2,
-      "contrasenia": "$2b$12$e4a4d92c4fbfc708c6c3d16f65c50f221aedbe5307998bbb4b092",
+      "contrasenia": "cobos",
       "usuario": "cobos"
     },
     {
       "id_usuario": 45,
       "id_rol": 2,
-      "contrasenia": "$2b$12$ed43f9c4152e46832537a598c8241fb48ca6ac5e1ac8f83e64536",
+      "contrasenia": "cristobal",
       "usuario": "cristobal"
     },
     {
       "id_usuario": 46,
       "id_rol": 2,
-      "contrasenia": "$2b$12$86153f5b1ea64b7dbeafb1ae2fc20f319627c6b7fb0ade157dcf9",
+      "contrasenia": "diego_fuengirola",
       "usuario": "diego_fuengirola"
     },
     {
       "id_usuario": 46,
       "id_rol": 2,
-      "contrasenia": "$2b$12$6dd08ed2affcfcd1c3ab16a103f6a0a0a995f27bfd2a696f4acdf",
+      "contrasenia": "diego_mijas",
       "usuario": "diego_mijas"
     },
     {
       "id_usuario": 47,
       "id_rol": 2,
-      "contrasenia": "$2b$12$25035fe8ab7d7c7cf75b6c650dd06f3101aa92e48ace9e2850332",
+      "contrasenia": "los_olivos",
       "usuario": "los_olivos"
     },
     {
       "id_usuario": 47,
       "id_rol": 2,
-      "contrasenia": "$2b$12$22b3e1cd78b82fa93b8fb0fe70a49c7b7a7348ebfc6be76049f40",
+      "contrasenia": "marbella",
       "usuario": "marbella"
     },
     {
       "id_usuario": 47,
       "id_rol": 2,
-      "contrasenia": "$2b$12$02061056d9edce918afd61d5b5627c1370a47fd1aa6daadc86f15",
+      "contrasenia": "mari_luz",
       "usuario": "mari_luz"
     },
     {
       "id_usuario": 47,
       "id_rol": 2,
-      "contrasenia": "$2b$12$7db5fb56d082675c84cf341579d0606279a045514a2ceac046b9b",
+      "contrasenia": "torremolinos",
       "usuario": "torremolinos"
     },
     {
       "id_usuario": 47,
       "id_rol": 2,
-      "contrasenia": "$2b$12$d70a6ba2826e4ab5a79b08172ef9ccb9c3c684bb0eaa0a3c826d6",
+      "contrasenia": "uma",
       "usuario": "uma"
     },
     {
       "id_usuario": 48,
       "id_rol": 2,
-      "contrasenia": "$2b$12$67c981d65f42c87ec9f8c16f6a23c2346aa3750e49e8b3424b368",
+      "contrasenia": "vicente",
       "usuario": "vicente"
     },
     {
       "id_usuario": 49,
       "id_rol": 2,
-      "contrasenia": "$2b$12$c7a11e9a55de2b146e3b2d75e9112ee6af4e5b439658e725e6afc",
+      "contrasenia": "victoria",
       "usuario": "victoria"
     },
     {
       "id_usuario": 50,
       "id_rol": 1,
-      "contrasenia": "$2b$12$5c859ee94139ba4772142102dc39b3af7eb390230b9ef3f46fe7b",
+      "contrasenia": "admin1234",
       "usuario": "admin"
     }
   ],

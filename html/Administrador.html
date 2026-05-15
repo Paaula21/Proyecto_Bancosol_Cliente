@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,8 +8,10 @@
     <link rel="stylesheet" href="../css/Sidebar.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
+    <script src="../javascript/Administrador.js" defer></script>
     <title>Dashboard - Vista de administrador</title>
 </head>
+
 <body>
     <div class="main-container">
         <aside class="sidebar">
@@ -30,31 +33,34 @@
             </header>
 
             <main class="dashboard-container">
-                
+
+                <!-- TARJETAS DE RESUMEN -->
                 <section class="grid">
                     <div class="card">
                         <h3>Campañas Activas</h3>
-                        <div class="card">2</div>
-                        <p class="card">Gran Recogida, Primavera</p>
+                        <div class="card" id="stat-campaigns-value">-</div>
+                        <p class="card" id="stat-campaigns-subtitle">Cargando...</p>
                     </div>
                     <div class="card">
                         <h3>Tiendas Totales</h3>
-                        <div class="card">267</div>
-                        <p class="card">En 5 zonas geográficas</p>
+                        <div class="card" id="stat-stores-value">-</div>
+                        <p class="card" id="stat-stores-subtitle">Cargando...</p>
                     </div>
                     <div class="card">
                         <h3>Colaboradores</h3>
-                        <div class="card">156</div>
-                        <p class="card">Entidades y voluntarios</p>
+                        <div class="card" id="stat-collaborators-value">-</div>
+                        <p class="card" id="stat-collaborators-subtitle">Cargando...</p>
                     </div>
                     <div class="card">
                         <h3>Coordinadores</h3>
-                        <div class="card">12</div>
-                        <p class="card">Activos en campaña</p>
+                        <div class="card" id="stat-coordinators-value">-</div>
+                        <p class="card" id="stat-coordinators-subtitle">Cargando...</p>
                     </div>
                 </section>
 
                 <section class="dashboard-middle">
+
+                    <!-- PRÓXIMAS CAMPAÑAS -->
                     <div class="upcoming-campaigns">
                         <div class="header-upcoming-campaigns">
                             <div>
@@ -63,87 +69,24 @@
                             </div>
                             <button class="btn-view-all">Ver todas</button>
                         </div>
-                        
-                        <div class="campaign-container">
-                            <div class="campaign-item">
-                                <div class="campaign-info">
-                                    <h4>Gran Recogida 2025</h4>
-                                    <span>22-23 Nov 2025</span>
-                                </div>
-                                <div class="campaign-stats">
-                                    <div class="stat"><strong>156</strong> Tiendas</div>
-                                    <div class="stat"><strong>845</strong> Voluntarios</div>
-                                </div>
-                            </div>
-                            <div class="campaign-item">
-                                <div class="campaign-info">
-                                    <h4>Campaña Primavera</h4>
-                                    <span>15-16 Mar 2025</span>
-                                </div>
-                                <div class="campaign-stats">
-                                    <div class="stat"><strong>120</strong> Tiendas</div>
-                                    <div class="stat"><strong>620</strong> Voluntarios</div>
-                                </div>
-                            </div>
+                        <div class="campaign-container" id="campaign-container">
+                            <!-- Se rellena desde JS -->
                         </div>
                     </div>
 
+                    <!-- COBERTURA POR ZONA -->
                     <div class="zone-coverage panel">
                         <div class="panel-header">
                             <h2>Cobertura por Zona</h2>
                             <p>Número de tiendas por zona</p>
                         </div>
-                        <!-- Para indicar el proceso de la barra se pone un style y se rellena más o menos -->
-                        <div class="shops-list">
-                            <div class="shops-item">
-                                <div class="shop-labels">
-                                    <span>Málaga Capital</span>
-                                    <span>45 tiendas</span>
-                                </div>
-                                <div class="progress-bar-container">
-                                    <div class="progress-bar" style="width: 92%;"></div>
-                                </div>
-                            </div>
-                            <div class="shops-item">
-                                <div class="shop-labels">
-                                    <span>Costa Occidental</span>
-                                    <span>38 tiendas</span>
-                                </div>
-                                <div class="progress-bar-container">
-                                    <div class="progress-bar" style="width: 85%;"></div>
-                                </div>
-                            </div>
-                            <div class="shops-item">
-                                <div class="shop-labels">
-                                    <span>Axarquía</span>
-                                    <span>28 tiendas</span>
-                                </div>
-                                <div class="progress-bar-container">
-                                    <div class="progress-bar" style="width: 72%;"></div>
-                                </div>
-                            </div>
-                            <div class="shops-item">
-                                <div class="shop-labels">
-                                    <span>Interior</span>
-                                    <span>22 tiendas</span>
-                                </div>
-                                <div class="progress-bar-container">
-                                    <div class="progress-bar" style="width: 68%;"></div>
-                                </div>
-                            </div>
-                            <div class="shops-item">
-                                <div class="shop-labels">
-                                    <span>Antequera</span>
-                                    <span>12 tiendas</span>
-                                </div>
-                                <div class="progress-bar-container">
-                                    <div class="progress-bar" style="width: 55%;"></div>
-                                </div>
-                            </div>
+                        <div class="shops-list" id="shops-list">
+                            <!-- Se rellena desde JS -->
                         </div>
                     </div>
                 </section>
 
+                <!-- ACTIVIDAD RECIENTE -->
                 <section class="recent-activity-container">
                     <div class="header-recent-activity">
                         <div>
@@ -152,7 +95,7 @@
                         </div>
                         <button class="btn-view-all">Ver todo</button>
                     </div>
-                    
+
                     <table class="activity-table">
                         <thead>
                             <tr>
@@ -162,31 +105,8 @@
                                 <th>Estado</th>
                             </tr>
                         </thead>
-                        <tbody>
-                            <tr>
-                                <td>Nueva asignación</td>
-                                <td>Carrefour Hiper - Rincón de la Victoria</td>
-                                <td>J.M. Cobos</td>
-                                <td>Completado</td>
-                            </tr>
-                            <tr>
-                                <td>Colaborador añadido</td>
-                                <td>Ayuntamiento de Almachar</td>
-                                <td>Arantxa</td>
-                                <td>Pendiente</td>
-                            </tr>
-                            <tr>
-                                <td>Tienda actualizada</td>
-                                <td>Carrefour Express - Málaga</td>
-                                <td>Fran Jiménez</td>
-                                <td>Revisar</td>
-                            </tr>
-                            <tr>
-                                <td>Campaña creada</td>
-                                <td>Gran Recogida 2025</td>
-                                <td>J.M. Cobos</td>
-                                <td>Completado</td>
-                            </tr>
+                        <tbody id="activity-tbody">
+                            <!-- Se rellena desde JS -->
                         </tbody>
                     </table>
                 </section>
@@ -195,4 +115,5 @@
         </div>
     </div>
 </body>
+
 </html>
