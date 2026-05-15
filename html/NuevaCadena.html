@@ -1,5 +1,4 @@
 <!--COSAS PENDIENTES:
-1) El boton notificaciones de la barra
 2) Refactorizar código-->
 
 <!DOCTYPE html>
@@ -7,67 +6,79 @@
 <head>
     <meta charset="UTF-8">
     <title>Nueva Cadena</title>
-    <link rel="stylesheet" href="../css/NuevaCadena.css">
+    <link rel="stylesheet" href="../css/Formularios.css">
+    <link rel="stylesheet" href="../css/Common.css">
+    <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/Sidebar.js" defer></script>
 </head>
 <body>
     <div class="app-container">
         <aside class="sidebar">
-            <!--PENDIENTE-->
+            <include-html src="../html/Sidebar.html"></include-html>
         </aside>
         <div class="right-content">
+
+            <!-- CABECERA -->
             <header class="main-header">
                 <nav>
                     <div class="header-branding">
-                        <img src="/images/icono.png" alt="App Icon" class="header-logo">
+                        <img src="../images/icono.png" alt="Bancosol" class="header-logo">
                         <div class="header-titles">
-                            <h1>Establecimientos</h1>
-                            <p>Gestión de establecimientos participantes en las campañas</p>
+                            <h1>Cadenas</h1>
+                            <p>Administración de las marcas de supermercados participantes</p>
                         </div>
                     </div>
                     <button class="btn btn--secondary" id="btn-notifications">Notificaciones</button>
                 </nav>
             </header>
+
+            <!-- FORMULARIO -->
             <div class="form-container-centered">
-            <div class="modal-card">
-                <main>
+                <div class="modal-card">
+
                     <div class="modal-header">
-                        <div class="header-info">
+                        <div>
                             <h1>Nueva Cadena</h1>
-                            <p>Añadir una nueva cadena a la base de datos</p>
+                            <p>Añade una nueva cadena de supermercados a la base de datos</p>
                         </div>
-                        <button type="button" class="close-icon">&times;</button>
+                        <a href="InformacionCadena.html">
+                            <button type="button" class="btn-close" title="Volver">&times;</button>
+                        </a>
                     </div>
 
                     <form>
+
                         <div class="field-group">
-                            <label for="chain-name">Cadena</label>
-                            <input type="text" id="chain-name" name="chain_name" required placeholder="Ej: Carrefour">
+                            <label for="chain-name">Nombre de la cadena</label>
+                            <input type="text" id="chain-name" name="chain_name"
+                                   required placeholder="Ej: Carrefour">
                         </div>
 
                         <div class="form-row columns-2">
                             <div class="field-group">
                                 <label for="spring-participation">¿Participa en Primavera?</label>
-                                <select id="spring-participation" name="spring-participation">
-                                    <option value="yes">Si</option>
+                                <select id="spring-participation" name="spring_participation">
+                                    <option value="yes">Sí</option>
                                     <option value="no">No</option>
                                 </select>
                             </div>
                             <div class="field-group">
-                                <label for="gr-participation">¿Participa en GR?</label>
-                                <select id="gr-participation" name="gr-participation">
-                                    <option value="yes">Si</option>
+                                <label for="gr-participation">¿Participa en Gran Recogida?</label>
+                                <select id="gr-participation" name="gr_participation">
+                                    <option value="yes">Sí</option>
                                     <option value="no">No</option>
                                 </select>
                             </div>
                         </div>
 
                         <div class="form-actions">
-                            <button type="reset" class="btn-cancel">Cancelar</button>
-                            <button type="submit" class="btn-save">Guardar</button>
+                            <a href="InformacionCadena.html">
+                                <button type="button" class="btn-cancel">Cancelar</button>
+                            </a>
+                            <button type="submit" class="btn-save">Guardar cadena</button>
                         </div>
                     </form>
-                </main>
-            </div>
+                </div>
             </div>
         </div>
     </div>

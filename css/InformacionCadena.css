@@ -1,105 +1,9 @@
-/*REVISAR: thead y th*/
+/* ===================================================
+   InformacionCadena.css
+   Depende de: Common.css
+   =================================================== */
 
-
-*{
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f5f7f9;
-    color: #111827;
-}
-
-.btn {
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid #d1d5db;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/*Boton de añadir*/
-.btn--primary {
-    background-color: #420098;
-    color: white;
-    border: 1px solid transparent;;
-}
-.btn--primary:hover {
-    background-color: #420098;
-    border-color: #9ca3af;
-}
-
-/*Boton de borrar,editar*/
-.btn--secondary {
-    background-color: white;
-    color: #374151;
-}
-
-.btn--secondary:hover {
-    background-color: #f3f4f6;
-    border-color: #9ca3af;
-}
-
-.app-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
-}
-
-.sidebar {
-    width: 260px;
-    background-color: #420098;
-    color: white;
-}
-
-.right-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-header.main-header {
-    background-color: #f8fafc;
-    padding: 16px 32px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-
-header.main-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header-branding {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.header-logo {
-    height: 50px;
-}
-
-.header-titles h1 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.header-titles p {
-    margin: 4px 0 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
+/* ─── Layout principal ─── */
 .main-layout {
     display: flex;
     flex: 1;
@@ -115,11 +19,12 @@ main {
     gap: 24px;
 }
 
+/* ─── Panel de filtros ─── */
 .filters {
     background-color: #ffffff;
     border-radius: 8px;
-    border: none;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);    padding: 20px 24px;
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+    padding: 20px 24px;
     display: flex;
     flex-wrap: wrap;
     gap: 20px;
@@ -151,7 +56,6 @@ main {
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 0.875rem;
-    outline: none;
     background-color: #ffffff;
     color: #374151;
 }
@@ -169,24 +73,19 @@ main {
     margin-top: 10px;
 }
 
-.content-wrapper {
-    display: flex;
-    gap: 24px;
-    align-items: flex-start;
-}
-
-.list-container{
+/* ─── Contenedor de la lista ─── */
+.list-container {
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 24px;
-    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);    flex: 2;
-
+    box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
 }
 
 .list-header {
     display: grid;
     grid-template-columns: 1fr auto;
+    align-items: center;
     margin-bottom: 24px;
 }
 
@@ -196,19 +95,14 @@ main {
     font-weight: 600;
 }
 
-.list-header p {
-    margin: 4px 0 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
+/* ─── Tabla ─── */
 table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
 }
 
-thead{
+thead {
     background-color: #f8fafc;
 }
 
@@ -216,8 +110,8 @@ th {
     padding: 12px 16px;
     font-size: 0.75rem;
     color: #6b7280;
-    border-bottom: 1px solid #e5e7eb;
     border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
 }
 
 td {
@@ -228,26 +122,19 @@ td {
     vertical-align: middle;
 }
 
-/* Repartir el ancho de las columnas de la tabla */
-th:nth-child(1) {
-    width: 40%;
-}
+th:nth-child(1) { width: 40%; }
+th:nth-child(2) { width: 20%; }
+th:nth-child(3) { width: 15%; }
+th:nth-child(4) { width: 15%; }
 
-th:nth-child(2) {
-    width: 20%;
-}
-
-th:nth-child(3) {
-    width: 20%;
-}
-
-/* La última columna (Acciones) toma el resto y se alinea a la derecha */
-th:nth-child(4) {
-    width: 20%;
+th.col-actions,
+td.col-actions {
+    width: 10%;
     text-align: right;
 }
 
-/* Alineamos también los botones de las celdas a la derecha */
-td:nth-child(4) {
-    text-align: right;
+td.col-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
 }

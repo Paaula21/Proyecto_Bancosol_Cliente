@@ -1,115 +1,9 @@
-/*¿Podemos poner esto?*/
-/*:root {
-    --primary-color: #420098;
-    --primary-hover: #310073;
-    --bg-body: #f5f7f9;
-    --bg-card: #ffffff;
-    --text-main: #111827;
-    --text-muted: #6b7280;
-    --border-color: #d1d5db;
-    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}*/
+/* ===================================================
+   InformacionTienda.css
+   Depende de: Common.css
+   =================================================== */
 
-
-*{
-    box-sizing: border-box;
-}
-
-body {
-    margin: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f5f7f9;
-    color: #111827;
-}
-
-.btn {
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid #d1d5db;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-/*Boton de añadir*/
-.btn--primary {
-    background-color: #420098;
-    color: white;
-    border: 1px solid transparent;;
-}
-.btn--primary:hover {
-    background-color: #420098;
-    border-color: #9ca3af;
-}
-
-/*Boton de borrar,editar*/
-.btn--secondary {
-    background-color: white;
-    color: #374151;
-}
-
-.btn--secondary:hover {
-    background-color: #f3f4f6;
-    border-color: #9ca3af;
-}
-
-.app-container {
-    display: flex;
-    height: 100vh;
-    width: 100%;
-    overflow: hidden;
-}
-
-/*.sidebar {
-    width: 260px;
-    background-color: #420098;
-    color: white;
-}*/
-
-.right-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-}
-
-header.main-header {
-    background-color: #f8fafc;
-    padding: 16px 32px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-}
-
-
-header.main-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header-branding {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.header-logo {
-    height: 50px;
-}
-
-.header-titles h1 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.header-titles p {
-    margin: 4px 0 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
+/* ─── Layout principal ─── */
 .main-layout {
     display: flex;
     flex: 1;
@@ -125,10 +19,10 @@ main {
     gap: 24px;
 }
 
+/* ─── Panel de filtros ─── */
 .filters {
     background-color: #ffffff;
     border-radius: 8px;
-    border: none;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
     padding: 20px 24px;
     display: flex;
@@ -162,7 +56,6 @@ main {
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 0.875rem;
-    outline: none;
     background-color: #ffffff;
     color: #374151;
 }
@@ -180,35 +73,28 @@ main {
     margin-top: 10px;
 }
 
+/* ─── Wrapper lista + panel de detalle ─── */
 .content-wrapper {
     display: flex;
     gap: 24px;
     align-items: flex-start;
 }
 
-.list-container,
-.detail-panel {
+/* ─── Lista de establecimientos ─── */
+.list-container {
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 24px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-
-}
-
-.list-container {
     flex: 2;
-}
-
-.detail-panel {
-    flex: 0 0 320px;
-    display: flex;
-    flex-direction: column;
+    min-width: 0;
 }
 
 .list-header {
     display: grid;
     grid-template-columns: 1fr auto;
+    align-items: center;
     margin-bottom: 24px;
 }
 
@@ -218,16 +104,15 @@ main {
     font-weight: 600;
 }
 
-.list-header p {
-    margin: 4px 0 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
+/* ─── Tabla ─── */
 table {
     width: 100%;
     border-collapse: collapse;
     text-align: left;
+}
+
+thead {
+    background-color: #f8fafc;
 }
 
 th {
@@ -246,55 +131,83 @@ td {
     vertical-align: middle;
 }
 
-.store-card-header {
-    display: flex;
-    align-items: center;
-    margin-bottom: 24px;
+th.col-actions,
+td.col-actions {
+    text-align: right;
 }
 
-.store-header-text h3 {
+td.col-actions {
+    display: flex;
+    gap: 8px;
+    justify-content: flex-end;
+}
+
+/* Fila seleccionada */
+tbody tr.selected {
+    background-color: #f5f0ff;
+}
+
+tbody tr:hover {
+    background-color: #fafafa;
+    cursor: pointer;
+}
+
+/* ─── Panel de detalle lateral ─── */
+.detail-panel {
+    flex: 0 0 300px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.detail-panel-header h3 {
     margin: 0;
     font-size: 1.125rem;
     font-weight: 600;
+    color: #111827;
 }
 
-.store-header-text p {
+.detail-panel-header p {
     margin: 4px 0 0 0;
     font-size: 0.875rem;
     color: #6b7280;
 }
 
 .detail-fields {
-    flex: 1;
     display: flex;
     flex-direction: column;
     gap: 10px;
 }
 
-.field {
-    font-size: 0.875rem;
-    color: #374151;
+.detail-field {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.field span {
-    font-weight: 600;
-    margin-right: 5px;
-}
-
-/*Botones de Si o No tabla, REVISAR*/
-.badge {
-    padding: 4px 8px;
-    border-radius: 999px;
+.field-label {
     font-size: 0.75rem;
-    font-weight: 600;
+    font-weight: 700;
+    color: #6b7280;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
 }
 
-.badge-yes {
-    background-color: #dcfce7;
-    color: #166534;
+.field-value {
+    font-size: 0.875rem;
+    color: #111827;
 }
 
-.badge-no {
-    background-color: #f3f4f6;
-    color: #374151;
+/* Estado vacío del panel */
+.detail-panel.empty {
+    align-items: center;
+    justify-content: center;
+    color: #9ca3af;
+    font-size: 0.875rem;
+    text-align: center;
 }

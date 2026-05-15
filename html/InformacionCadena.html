@@ -1,25 +1,31 @@
-<!--PROCESO DE ADAPTACION-->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Cadenas</title>
-    <link rel="stylesheet" href="../css/InformacionCadena.css">
+    <title>Establecimientos</title>
+    <link rel="stylesheet" href="../css/Common.css">
+    <link rel="stylesheet" href="../css/Sidebar.css">
+    <link rel="stylesheet" href="../css/InformacionTienda.css">
+    <link rel="stylesheet" href="../css/TablaEstilos.css">
+    <script src="../javascript/InformacionTienda.js" defer></script>
+    <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/Sidebar.js" defer></script>
 </head>
 <body>
+
 <div class="app-container">
     <aside class="sidebar">
-        <!--PENDIENTE-->
+        <include-html src="../html/Sidebar.html"></include-html>
     </aside>
+
     <div class="right-content">
         <header class="main-header">
             <nav>
                 <div class="header-branding">
-                    <img src="../images/icono.png" alt="App Icon" class="header-logo">
+                    <img src="../images/icono.png" alt="Bancosol" class="header-logo">
                     <div class="header-titles">
-                        <h1>Cadena</h1>
-                        <p>Panel de administración para registrar y gestionar las marcas de los supermercados</p>
+                        <h1>Establecimientos</h1>
+                        <p>Gestión de establecimientos participantes en las campañas</p>
                     </div>
                 </div>
                 <button class="btn btn--secondary" id="btn-notifications">Notificaciones</button>
@@ -28,12 +34,12 @@
 
         <div class="main-layout">
             <main>
-                <!--FILTROS-->
+
+                <!-- ── Filtros ── -->
                 <form>
                     <section class="filters">
-                        <!--TIENDA-->
                         <div class="filter-group">
-                            <label for="filter-chain">Nombre</label>
+                            <label for="filter-chain">Cadena</label>
                             <select id="filter-chain" name="chain">
                                 <option value="">Todas las cadenas</option>
                                 <option value="mercadona">Mercadona</option>
@@ -41,8 +47,10 @@
                                 <option value="dia">Dia</option>
                             </select>
                         </div>
-
-                        <!--DIRECCIONES-->
+                        <div class="filter-group">
+                            <label for="filter-name">Nombre</label>
+                            <input type="text" id="filter-name" name="name" placeholder="Ej: Carrefour Hiper">
+                        </div>
                         <div class="filter-group small-box">
                             <label for="filter-type">Tipo de Vía</label>
                             <select id="filter-type" name="type">
@@ -58,12 +66,11 @@
                         </div>
                         <div class="filter-group small-box">
                             <label for="filter-code">Cód. Postal</label>
-                            <input type="text" id="filter-code" name="code" minlength="5" maxlength="5" pattern="[0-9]{5}"
-                                   title="Por favor, introduce exactamente 5 números" placeholder="29XXX">
+                            <input type="text" id="filter-code" name="code" minlength="5" maxlength="5" pattern="[0-9]{5}" placeholder="29XXX">
                         </div>
                         <div class="filter-group small-box">
                             <label for="filter-district">Distrito</label>
-                            <input type="text" id="filter-district" name="district" minlength="1" maxlength="2" placeholder="Ej: 3" >
+                            <input type="text" id="filter-district" name="district" minlength="1" maxlength="2" placeholder="Ej: 3">
                         </div>
                         <div class="filter-group">
                             <label for="filter-city">Localidad</label>
@@ -71,87 +78,130 @@
                         </div>
                         <div class="filter-group">
                             <label for="filter-zone">Zona Geográfica</label>
-                            <input type="text" id="filter-zone" name="zone" placeholder="Buscar zona geografica...">
+                            <input type="text" id="filter-zone" name="zone" placeholder="Buscar zona...">
                         </div>
                         <div class="filter-group small-box">
                             <label for="filter-gr">¿Gran Recogida?</label>
                             <select id="filter-gr" name="gr">
-                                <option value="yes">Si</option>
+                                <option value="">Todas</option>
+                                <option value="yes">Sí</option>
                                 <option value="no">No</option>
                             </select>
                         </div>
                         <div class="filter-group small-box">
                             <label for="filter-primavera">¿Primavera?</label>
                             <select id="filter-primavera" name="primavera">
-                                <option value="yes">Si</option>
+                                <option value="">Todas</option>
+                                <option value="yes">Sí</option>
                                 <option value="no">No</option>
                             </select>
                         </div>
-
+                        <div class="filter-group">
+                            <label for="filter-coordinator">Coordinador</label>
+                            <select id="filter-coordinator" name="coordinator">
+                                <option value="">Todos</option>
+                            </select>
+                        </div>
                         <div class="filter-button">
                             <button type="submit" class="btn btn--primary">Filtrar</button>
                         </div>
                     </section>
                 </form>
 
-                <section class="content-wrapper">
+                <div class="content-wrapper">
+
+                    <!-- ── Tabla de establecimientos ── -->
                     <div class="list-container">
                         <div class="list-header">
-                            <h2>Listado de Cadenas</h2>
-                            <div class="list-actions">
-                                <a href="NuevaCadena.html">
-                                    <button type="button" class="btn btn--primary">+ Añadir</button>
-                                </a>
-                            </div>
+                            <h2>Listado de Establecimientos</h2>
+                            <a href="NuevaTienda.html">
+                                <button type="button" class="btn btn--primary">+ Añadir</button>
+                            </a>
                         </div>
 
-                        <table>
+                        <table class="data-table">
                             <thead>
                             <tr>
                                 <th>Nombre</th>
-                                <th>Numero de Establecimientos</th>
-                                <th>¿Gran Recogida?</th>
-                                <th>¿Primavera?</th>
-                                <th>Acciones</th>
+                                <th>Localidad</th>
+                                <th>Coordinador</th>
+                                <th>Gran Recogida</th>
+                                <th>Primavera</th>
+                                <th class="col-actions">Acciones</th>
                             </tr>
                             </thead>
                             <tbody>
                             <tr>
-                                <td><strong>Carrefour</strong></td>
-                                <td>76</td>
-                                <td>Sí</td>
-                                <td>Sí</td>
-                                <td>
-                                    <button type="button" class="btn btn--secondary">Editar</button>
-                                    <button type="button" class="btn btn--secondary">Borrar</button>
+                                <td><strong>Carrefour Hiper</strong></td>
+                                <td>Rincón de la Victoria</td>
+                                <td>J.M. Cobos</td>
+                                <td><span class="dot-yes">Sí</span></td>
+                                <td><span class="dot-yes">Sí</span></td>
+                                <td class="col-actions">
+                                    <button type="button" class="btn-icon" title="Editar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
+                                    </button>
+                                    <button type="button" class="btn-icon btn-icon--danger" title="Borrar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong>Mercadona</strong></td>
-                                <td>67</td>
-                                <td>Sí</td>
-                                <td>No</td>
-                                <td>
-                                    <button type="button" class="btn btn--secondary">Editar</button>
-                                    <button type="button" class="btn btn--secondary">Borrar</button>
+                                <td><strong>Carrefour Express</strong></td>
+                                <td>Rincón de la Victoria</td>
+                                <td>J.M. Cobos</td>
+                                <td><span class="dot-yes">Sí</span></td>
+                                <td><span class="dot-no">No</span></td>
+                                <td class="col-actions">
+                                    <button type="button" class="btn-icon" title="Editar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
+                                    </button>
+                                    <button type="button" class="btn-icon btn-icon--danger" title="Borrar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                    </button>
                                 </td>
                             </tr>
                             <tr>
-                                <td><strong>Dia</strong></td>
-                                <td>32</td>
-                                <td>Sí</td>
-                                <td>Sí</td>
-                                <td>
-                                    <button type="button" class="btn btn--secondary">Editar</button>
-                                    <button type="button" class="btn btn--secondary">Borrar</button>
+                                <td><strong>Carrefour Market</strong></td>
+                                <td>Rincón de la Victoria</td>
+                                <td>J.M. Cobos</td>
+                                <td><span class="dot-yes">Sí</span></td>
+                                <td><span class="dot-yes">Sí</span></td>
+                                <td class="col-actions">
+                                    <button type="button" class="btn-icon" title="Editar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 20h4l10.5 -10.5a2.828 2.828 0 1 0 -4 -4l-10.5 10.5v4" /><path d="M13.5 6.5l4 4" /></svg>
+                                    </button>
+                                    <button type="button" class="btn-icon btn-icon--danger" title="Borrar">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+                                    </button>
                                 </td>
                             </tr>
                             </tbody>
                         </table>
                     </div>
 
-                </section>
+                    <!-- ── Panel de detalle lateral ── -->
+                    <aside class="detail-panel empty" id="detail-panel">
+                        <p>Selecciona un establecimiento para ver su información.</p>
+                    </aside>
+
+                </div>
             </main>
+        </div>
+    </div>
+</div>
+
+<!-- ── Pop-up de confirmación de borrado ── -->
+<div class="delete-overlay" id="delete-overlay">
+    <div class="delete-popup">
+        <div class="delete-icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7l16 0" /><path d="M10 11l0 6" /><path d="M14 11l0 6" /><path d="M5 7l1 12a2 2 0 0 0 2 2h8a2 2 0 0 0 2 -2l1 -12" /><path d="M9 7v-3a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v3" /></svg>
+        </div>
+        <h3>Eliminar establecimiento</h3>
+        <p>¿Estás seguro de que quieres eliminar <strong id="delete-target-name"></strong>? Esta acción no se puede deshacer.</p>
+        <div class="delete-popup-actions">
+            <button class="btn-cancel-del" id="btn-cancel-del">Cancelar</button>
+            <button class="btn-confirm-del" id="btn-confirm-del">Eliminar</button>
         </div>
     </div>
 </div>

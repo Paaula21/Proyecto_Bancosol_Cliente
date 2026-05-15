@@ -1,0 +1,123 @@
+/* ===================================================
+   Common.css — Estilos compartidos por todas las páginas
+   =================================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f5f7f9;
+    color: #111827;
+}
+
+/* ─── Estructura principal ─── */
+.app-container {
+    display: flex;
+    height: 100vh;
+    width: 100%;
+    overflow: hidden;
+}
+
+.sidebar {
+    width: 260px;
+    background-color: #420098;
+    color: white;
+}
+
+.right-content {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+}
+
+/* ─── Cabecera ─── */
+header.main-header {
+    background-color: #f8fafc;
+    padding: 16px 32px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    flex-shrink: 0;
+}
+
+header.main-header nav {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.header-branding {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.header-logo {
+    height: 50px;
+}
+
+.header-titles h1 {
+    margin: 0;
+    font-size: 1.25rem;
+    font-weight: 600;
+}
+
+.header-titles p {
+    margin: 4px 0 0 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
+/* ─── Botones ─── */
+.btn {
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #d1d5db;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.btn--primary {
+    background-color: #420098;
+    color: white;
+    border-color: transparent;
+}
+
+.btn--primary:hover {
+    background-color: #310073;
+}
+
+.btn--secondary {
+    background-color: white;
+    color: #374151;
+}
+
+.btn--secondary:hover {
+    background-color: #f3f4f6;
+    border-color: #9ca3af;
+}
+
+/* ─── Badges Sí/No ─── */
+.badge {
+    padding: 4px 8px;
+    border-radius: 999px;
+    font-size: 0.75rem;
+    font-weight: 600;
+}
+
+.badge-yes {
+    background-color: #dcfce7;
+    color: #166534;
+}
+
+.badge-no {
+    background-color: #f3f4f6;
+    color: #374151;
+}
