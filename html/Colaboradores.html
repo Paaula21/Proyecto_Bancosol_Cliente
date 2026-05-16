@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/Colaboradores.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
     <link rel="stylesheet" href="../css/DetalleColaborador.css">
+    <link rel="stylesheet" href="../css/popUpRegistro.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Colaboradores.js"></script>
 </head>
@@ -63,7 +64,9 @@
                                 </tr>
                             </thead>
                             <tbody id="tabla-colaboradores">
-                                <tr><td colspan="4" style="text-align: center; padding: 20px;">Cargando...</td></tr>
+                                <tr>
+                                    <td colspan="4" style="text-align: center; padding: 20px;">Cargando...</td>
+                                </tr>
                             </tbody>
                         </table>
                     </section>
@@ -75,5 +78,20 @@
             </main>
         </div>
     </div>
+    <div class="overlay" id="overlay-eliminar">
+        <div class="popup" id="popup-eliminar">
+            <h3>¿Eliminar Colaborador?</h3>
+            <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar a este colaborador de la base de
+                datos?</p>
+
+            <div class="popup-actions">
+                <form action="">
+                    <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
+                    <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 </body>
+
 </html>

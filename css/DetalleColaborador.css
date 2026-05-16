@@ -35,7 +35,7 @@
 }
 
 .ficha-etiqueta-codigo {
-    background: #4a69bd;
+    background: #420098;
     color: white;
     padding: 3px 8px;
     border-radius: 12px;
@@ -78,4 +78,50 @@
 
 .ficha-enlace-tel:hover {
     text-decoration: underline;
+}
+
+.ficha-acciones {
+    display: flex;
+    gap: 10px;
+    margin-top: 25px;
+    padding-top: 20px;
+    border-top: 1px solid #eee;
+}
+
+.btn-ficha {
+    flex: 1;
+    padding: 10px 15px;
+    border: none;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.btn-ficha:active {
+    transform: scale(0.98);
+}
+
+.btn-editar {
+    background-color: #420098;
+    color: white;
+    transition: background-color 0.3s, color 0.3s; 
+}
+
+.btn-editar:hover {
+    background-color: #2d0068;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-eliminar {
+    background-color: #f8f9fa;
+    color: #e74c3c;
+    border: 1px solid #e74c3c;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.btn-eliminar:hover {
+    background-color: #e74c3c;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
 }

@@ -1,14 +1,15 @@
 // ----- CONFIGURACIÓN INICIAL -----
 const API_BASE = 'http://localhost:3000';
 
-let colaboradoresGlobal = []; 
+let colaboradoresGlobal = [];
+let colaboradorSeleccionadoId = null;
 
 document.addEventListener("DOMContentLoaded", () => {
     cargarDatosColaboradores();
-    
+
     document.getElementById('btn-filter').addEventListener('click', aplicarFiltros);
     document.getElementById('input-search').addEventListener('input', aplicarFiltros);
-}); 
+});
 
 // ----- OBTENER Y PROCESAR DATOS DE LA DB -----
 async function cargarDatosColaboradores() {
@@ -81,9 +82,9 @@ function aplicarFiltros() {
 
     const filtrados = colaboradoresGlobal.filter(c => {
         const cumpleZona = (valZona === 'Todas' || c.id_zona == valZona);
-        
-        const cumpleTexto = c.nombre_colaborador.toLowerCase().includes(valSearch) || 
-                            c.id_colaborador.toLowerCase().includes(valSearch);
+
+        const cumpleTexto = c.nombre_colaborador.toLowerCase().includes(valSearch) ||
+            c.id_colaborador.toLowerCase().includes(valSearch);
 
         return cumpleZona && cumpleTexto;
     });
@@ -95,11 +96,11 @@ function aplicarFiltros() {
 // ----- RENDERIZADO DE TABLA -----
 function mostrarColaboradores(lista) {
     const tbody = document.getElementById('tabla-colaboradores');
-    tbody.innerHTML = ''; 
+    tbody.innerHTML = '';
 
     lista.forEach(colaborador => {
         const tr = document.createElement('tr');
-        tr.style.cursor = 'pointer'; 
+        tr.style.cursor = 'pointer';
         tr.onclick = () => mostrarDetalle(colaborador);
 
         tr.innerHTML = `
@@ -118,16 +119,19 @@ function actualizarContador(total) {
 
 // ----- PANEL DE DETALLES (Derecha) -----
 async function mostrarDetalle(c) {
+
+    colaboradorSeleccionadoId = c.id;
+
     document.getElementById('estado-vacio').style.display = 'none';
     document.getElementById('datos-colaborador').style.display = 'block';
 
     document.getElementById('ficha-nombre').textContent = c.nombre_colaborador;
     document.getElementById('ficha-codigo').textContent = `Código: ${c.id_colaborador}`;
     document.getElementById('ficha-zona').textContent = c.nombre_zona;
-    
+
     document.getElementById('ficha-contacto-nombre').textContent = c.contacto_principal;
     document.getElementById('ficha-contacto-cargo').textContent = c.contacto_cargo;
-    
+
     // --- LÓGICA EMAIL ---
     const linkEmail = document.getElementById('ficha-contacto-email');
     linkEmail.textContent = c.contacto_correo;
@@ -136,7 +140,7 @@ async function mostrarDetalle(c) {
     // --- LÓGICA TELÉFONO ---
     const contenedorTel = document.getElementById('contenedor-tel');
     const linkTel = document.getElementById('ficha-contacto-tel');
-    
+
     if (c.contacto_telefono && c.contacto_telefono.trim() !== "") {
         contenedorTel.style.display = "block";
         linkTel.textContent = c.contacto_telefono;
@@ -163,4 +167,70 @@ async function mostrarDetalle(c) {
         document.getElementById('ficha-direccion').textContent = `${d.tipo_via || ''} ${via}${numeroStr}`;
         document.getElementById('ficha-localidad').textContent = `${c.localidad} (${c.obj_cp ? c.obj_cp.codigo : ''})`;
     }
+    // --- LÓGICA BOTON ELIMINAR ---
+
+    document.addEventListener('click', async function (e) {
+
+        if (e.target && e.target.id === 'btn-eliminar-colaborador') {
+            e.preventDefault();
+
+            if (!colaboradorSeleccionadoId) {
+                alert("Error: No se ha seleccionado ningún colaborador.");
+                return;
+            }
+
+            document.getElementById('overlay-eliminar').classList.add('active');
+            document.getElementById('popup-eliminar').classList.add('active');
+        }
+
+        if (e.target && e.target.id === 'btn-cancelar-eliminar') {
+            e.preventDefault();
+            document.getElementById('overlay-eliminar').classList.remove('active');
+            document.getElementById('popup-eliminar').classList.remove('active');
+        }
+
+        if (e.target && e.target.id === 'btn-confirmar-eliminar') {
+            e.preventDefault();
+
+            const btnConfirmar = e.target;
+            const textoOriginal = btnConfirmar.textContent;
+
+            try {
+                btnConfirmar.textContent = "Eliminando...";
+                btnConfirmar.disabled = true;
+
+                const urlEliminar = `${API_BASE}/colaborador/${colaboradorSeleccionadoId}`;
+
+                const response = await fetch(urlEliminar, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error en el servidor: ${response.status}`);
+                }
+
+                document.getElementById('overlay-eliminar').classList.remove('active');
+                document.getElementById('popup-eliminar').classList.remove('active');
+
+                document.getElementById('estado-vacio').style.display = 'block';
+                document.getElementById('datos-colaborador').style.display = 'none';
+
+                colaboradorSeleccionadoId = null;
+
+                await cargarDatosColaboradores();
+
+                alert("Colaborador eliminado con éxito");
+
+            } catch (error) {
+                console.error("Error al intentar eliminar el colaborador:", error);
+                alert("No se pudo eliminar el colaborador. Asegúrate de que el cambio a 'id' se guardó correctamente en db.json.");
+            } finally {
+                btnConfirmar.textContent = textoOriginal;
+                btnConfirmar.disabled = false;
+            }
+        }
+    });
 }
