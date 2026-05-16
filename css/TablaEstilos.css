@@ -1,9 +1,12 @@
-/* ===================================================
-   TablaEstilos.css — Iconos, popup borrado, tabla mejorada
-   Depende de: Common.css
-   =================================================== */
+ablaestilos · CSS
+Copy
 
-/* ── Botones icono ── */
+    /* ===================================================
+       TablaEstilos.css — Iconos, popup borrado, tabla mejorada
+       Depende de: Common.css
+       =================================================== */
+
+    /* ── Botones icono ── */
 .btn-icon {
     background: none;
     border: none;
@@ -153,8 +156,10 @@
     background-color: #f8fafc;
 }
 
+/* Sin efecto hover */
 .data-table tbody tr:hover {
-    background-color: #f0f4ff !important;
+    background-color: inherit !important;
+    cursor: default;
 }
 
 .data-table tbody tr.selected {

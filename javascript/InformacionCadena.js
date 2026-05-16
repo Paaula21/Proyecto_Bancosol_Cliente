@@ -1,22 +1,32 @@
 /**
  * InformacionCadena.js
  * Funcionalidades:
- *  1. Pop-up de confirmación antes de borrar una fila
- *  2. Filtros en tiempo real sobre la tabla de cadenas
+ *  1. Pop-up de confirmación antes de borrar
+ *  2. Filtros en tiempo real sobre la tabla
+ *  3. Contador de resultados + scroll vertical a partir de 5 filas
+ *  4. Botón Editar navega a NuevaCadena.html?edit=Nombre
  */
 
 document.addEventListener('DOMContentLoaded', () => {
 
-    const tbody      = document.querySelector('.data-table tbody');
-    const filterForm = document.querySelector('form');
-    const overlay    = document.getElementById('delete-overlay');
-    const targetName = document.getElementById('delete-target-name');
-    const btnCancel  = document.getElementById('btn-cancel-del');
-    const btnConfirm = document.getElementById('btn-confirm-del');
+    // ─── Referencias al DOM ──────────────────────────────────────────────────
+    const tbody        = document.querySelector('.data-table tbody');
+    const filterForm   = document.querySelector('form');
+    const overlay      = document.getElementById('delete-overlay');
+    const targetName   = document.getElementById('delete-target-name');
+    const btnCancel    = document.getElementById('btn-cancel-del');
+    const btnConfirm   = document.getElementById('btn-confirm-del');
+    const tableWrapper = document.querySelector('.table-wrapper');
+
+    // Crear el elemento del contador de resultados (debajo de la tabla)
+    const resultCount = document.createElement('p');
+    resultCount.id = 'result-count';
+    resultCount.style.cssText = 'margin: 12px 0 0 0; font-size: 0.8125rem; color: #6b7280;';
+    tableWrapper?.insertAdjacentElement('afterend', resultCount);
 
     let pendingRow = null;
 
-    // ─── Helpers popup ───────────────────────────────────────────────────────
+    // ─── Helpers popup borrado ───────────────────────────────────────────────
 
     function openDeletePopup(row) {
         const name = row.querySelector('td strong')?.textContent.trim() ?? '';
@@ -38,6 +48,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     btnConfirm?.addEventListener('click', () => {
         pendingRow?.remove();
+        updateCounterAndScroll();
         closeDeletePopup();
     });
 
@@ -52,19 +63,41 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (e.target.closest('.btn-icon')) {
-            const chainName = row.querySelector('td strong')?.textContent.trim();
-            alert(`Editar: ${chainName}\n(Funcionalidad pendiente de implementar)`);
+        if (e.target.closest('.btn--secondary') && !e.target.closest('.btn-icon--danger')) {
+            const btn = e.target.closest('button');
+            if (btn && btn.textContent.trim() === 'Editar') {
+                const chainName = row.querySelector('td strong')?.textContent.trim();
+                if (chainName) {
+                    window.location.href = `NuevaCadena.html?edit=${encodeURIComponent(chainName)}`;
+                }
+                return;
+            }
         }
     });
+
+    // ─── Contador de resultados y scroll vertical ────────────────────────────
+
+    function updateCounterAndScroll() {
+        const allRows     = tbody?.querySelectorAll('tr') ?? [];
+        const visibleRows = [...allRows].filter(r => r.style.display !== 'none');
+        const count       = visibleRows.length;
+
+        if (resultCount) {
+            resultCount.textContent = count === 1 ? '1 resultado' : `${count} resultados`;
+        }
+
+        if (tableWrapper) {
+            tableWrapper.classList.toggle('scrollable', count > 4);
+        }
+    }
 
     // ─── Filtros en tiempo real ───────────────────────────────────────────────
 
     function getFilterValues() {
         return {
-            chain:    (document.getElementById('filter-chain')?.value || '').toLowerCase(),
-            gr:        document.getElementById('filter-gr')?.value || '',
-            primavera: document.getElementById('filter-primavera')?.value || '',
+            chain:     (document.getElementById('filter-chain')?.value || '').toLowerCase(),
+            gr:         document.getElementById('filter-gr')?.value || '',
+            primavera:  document.getElementById('filter-primavera')?.value || '',
         };
     }
 
@@ -76,11 +109,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const grText   = cells[2]?.textContent.trim().toLowerCase() ?? '';
         const primText = cells[3]?.textContent.trim().toLowerCase() ?? '';
 
-        if (f.chain && !name.includes(f.chain)) return false;
-        if (f.gr === 'yes' && grText !== 'sí')  return false;
-        if (f.gr === 'no'  && grText !== 'no')  return false;
-        if (f.primavera === 'yes' && primText !== 'sí') return false;
-        if (f.primavera === 'no'  && primText !== 'no') return false;
+        if (f.chain && !name.includes(f.chain))              return false;
+        if (f.gr === 'yes' && grText !== 'sí')               return false;
+        if (f.gr === 'no'  && grText !== 'no')               return false;
+        if (f.primavera === 'yes' && primText !== 'sí')      return false;
+        if (f.primavera === 'no'  && primText !== 'no')      return false;
+        // f.gr === 'todas' y f.primavera === 'todas' no filtran
 
         return true;
     }
@@ -90,6 +124,7 @@ document.addEventListener('DOMContentLoaded', () => {
         tbody?.querySelectorAll('tr').forEach(row => {
             row.style.display = rowMatchesFilters(row, f) ? '' : 'none';
         });
+        updateCounterAndScroll();
     }
 
     document.querySelectorAll('.filters input, .filters select').forEach(el => {
@@ -101,5 +136,8 @@ document.addEventListener('DOMContentLoaded', () => {
         e.preventDefault();
         applyFilters();
     });
+
+    // ─── Inicializar contador al cargar ──────────────────────────────────────
+    updateCounterAndScroll();
 
 });

@@ -2,86 +2,168 @@
 2) Refactorizar código-->
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
     <title>Nueva Cadena</title>
     <link rel="stylesheet" href="../css/Formularios.css">
+    <link rel="stylesheet" href="../css/TablaEstilos.css">
     <link rel="stylesheet" href="../css/Common.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
 </head>
 <body>
-    <div class="app-container">
-        <aside class="sidebar">
-            <include-html src="../html/Sidebar.html"></include-html>
-        </aside>
-        <div class="right-content">
+<div class="app-container">
+    <aside class="sidebar">
+        <include-html src="../html/Sidebar.html"></include-html>
+    </aside>
+    <div class="right-content">
 
-            <!-- CABECERA -->
-            <header class="main-header">
-                <nav>
-                    <div class="header-branding">
-                        <img src="../images/icono.png" alt="Bancosol" class="header-logo">
-                        <div class="header-titles">
-                            <h1>Cadenas</h1>
-                            <p>Administración de las marcas de supermercados participantes</p>
-                        </div>
+        <!-- CABECERA -->
+        <header class="main-header">
+            <nav>
+                <div class="header-branding">
+                    <img src="../images/icono.png" alt="Bancosol" class="header-logo">
+                    <div class="header-titles">
+                        <h1>Cadenas</h1>
+                        <p>Administración de las marcas de supermercados participantes</p>
                     </div>
-                    <button class="btn btn--secondary" id="btn-notifications">Notificaciones</button>
-                </nav>
-            </header>
-
-            <!-- FORMULARIO -->
-            <div class="form-container-centered">
-                <div class="modal-card">
-
-                    <div class="modal-header">
-                        <div>
-                            <h1>Nueva Cadena</h1>
-                            <p>Añade una nueva cadena de supermercados a la base de datos</p>
-                        </div>
-                        <a href="InformacionCadena.html">
-                            <button type="button" class="btn-close" title="Volver">&times;</button>
-                        </a>
-                    </div>
-
-                    <form>
-
-                        <div class="field-group">
-                            <label for="chain-name">Nombre de la cadena</label>
-                            <input type="text" id="chain-name" name="chain_name"
-                                   required placeholder="Ej: Carrefour">
-                        </div>
-
-                        <div class="form-row columns-2">
-                            <div class="field-group">
-                                <label for="spring-participation">¿Participa en Primavera?</label>
-                                <select id="spring-participation" name="spring_participation">
-                                    <option value="yes">Sí</option>
-                                    <option value="no">No</option>
-                                </select>
-                            </div>
-                            <div class="field-group">
-                                <label for="gr-participation">¿Participa en Gran Recogida?</label>
-                                <select id="gr-participation" name="gr_participation">
-                                    <option value="yes">Sí</option>
-                                    <option value="no">No</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="form-actions">
-                            <a href="InformacionCadena.html">
-                                <button type="button" class="btn-cancel">Cancelar</button>
-                            </a>
-                            <button type="submit" class="btn-save">Guardar cadena</button>
-                        </div>
-                    </form>
                 </div>
+                <button class="btn btn--secondary" id="btn-notifications">Notificaciones</button>
+            </nav>
+        </header>
+
+        <!-- FORMULARIO -->
+        <div class="form-container-centered">
+            <div class="modal-card">
+
+                <div class="modal-header">
+                    <div>
+                        <!-- Título dinámico: "Nueva Cadena" o "Editar Cadena" -->
+                        <h1 id="form-title">Nueva Cadena</h1>
+                        <p id="form-subtitle">Añade una nueva cadena de supermercados a la base de datos</p>
+                    </div>
+                    <a href="InformacionCadena.html">
+                        <button type="button" class="btn-close" title="Volver">&times;</button>
+                    </a>
+                </div>
+
+                <form id="chain-form">
+
+                    <div class="field-group">
+                        <label for="chain-name">Nombre de la cadena</label>
+                        <input type="text" id="chain-name" name="chain_name"
+                               required placeholder="Ej: Carrefour">
+                    </div>
+
+                    <div class="form-row columns-2">
+                        <div class="field-group">
+                            <label for="spring-participation">¿Participa en Primavera?</label>
+                            <select id="spring-participation" name="spring_participation">
+                                <option value="yes">Sí</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                        <div class="field-group">
+                            <label for="gr-participation">¿Participa en Gran Recogida?</label>
+                            <select id="gr-participation" name="gr_participation">
+                                <option value="yes">Sí</option>
+                                <option value="no">No</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="form-actions">
+                        <a href="InformacionCadena.html">
+                            <button type="button" class="btn-cancel">Cancelar</button>
+                        </a>
+                        <!-- type="button" para interceptar antes del submit nativo -->
+                        <button type="button" class="btn-save" id="btn-save">Guardar cadena</button>
+                    </div>
+                </form>
             </div>
         </div>
     </div>
-</body>
+</div>
 
+<!-- Pop-up confirmación de guardado — reutiliza estilos de TablaEstilos.css -->
+<div class="delete-overlay" id="save-overlay">
+    <div class="delete-popup">
+        <div class="delete-icon" style="background:#e0f2fe; color:#0369a1;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+        </div>
+        <h3 id="save-popup-title">¿Guardar cadena?</h3>
+        <p id="save-popup-msg">Los datos introducidos se guardarán en la base de datos.</p>
+        <div class="delete-popup-actions">
+            <button class="btn-cancel-del" id="btn-cancel-save">Cancelar</button>
+            <button class="btn-confirm-del" id="btn-confirm-save"
+                    style="background:#420098;">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ── Datos de ejemplo (en producción vendrían del servidor) ─────────────
+        const chainData = {
+            'Carrefour':  { name: 'Carrefour',  primavera: 'yes', gr: 'yes' },
+            'Mercadona':  { name: 'Mercadona',  primavera: 'no',  gr: 'yes' },
+            'Dia':        { name: 'Dia',         primavera: 'yes', gr: 'yes' },
+        };
+
+        // ── Detectar modo edición por parámetro URL: ?edit=NombreCadena ───────
+        const params    = new URLSearchParams(window.location.search);
+        const editName  = params.get('edit');
+        const isEdit    = Boolean(editName && chainData[editName]);
+
+        if (isEdit) {
+            document.getElementById('form-title').textContent      = 'Editar Cadena';
+            document.getElementById('form-subtitle').textContent   = `Modificando datos de "${editName}"`;
+            document.getElementById('save-popup-title').textContent = '¿Guardar cambios?';
+            document.getElementById('save-popup-msg').textContent   = `Se actualizarán los datos de "${editName}".`;
+
+            const d = chainData[editName];
+            document.getElementById('chain-name').value            = d.name;
+            document.getElementById('spring-participation').value  = d.primavera;
+            document.getElementById('gr-participation').value      = d.gr;
+        }
+
+        // ── Popup de confirmación de guardado ──────────────────────────────────
+        const saveOverlay    = document.getElementById('save-overlay');
+        const btnSave        = document.getElementById('btn-save');
+        const btnCancelSave  = document.getElementById('btn-cancel-save');
+        const btnConfirmSave = document.getElementById('btn-confirm-save');
+        const form           = document.getElementById('chain-form');
+
+        btnSave.addEventListener('click', () => {
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            saveOverlay.classList.add('active');
+        });
+
+        btnCancelSave.addEventListener('click', () => {
+            saveOverlay.classList.remove('active');
+        });
+
+        saveOverlay.addEventListener('click', (e) => {
+            if (e.target === saveOverlay) saveOverlay.classList.remove('active');
+        });
+
+        btnConfirmSave.addEventListener('click', () => {
+            // Aquí iría la llamada al servidor. Por ahora redirigimos.
+            window.location.href = 'InformacionCadena.html';
+        });
+
+    });
+</script>
+
+</body>
 </html>

@@ -6,6 +6,7 @@
     <link rel="stylesheet" href="../css/Formularios.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
     <link rel="stylesheet" href="../css/Common.css">
+    <link rel="stylesheet" href="../css/TablaEstilos.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
 </head>
@@ -40,15 +41,16 @@
 
                 <div class="modal-header">
                     <div>
-                        <h1>Nueva Tienda</h1>
-                        <p>Añade un nuevo establecimiento a la base de datos</p>
+                        <!-- El título cambia dinámicamente: "Nueva Tienda" o "Editar Tienda" -->
+                        <h1 id="form-title">Nueva Tienda</h1>
+                        <p id="form-subtitle">Añade un nuevo establecimiento a la base de datos</p>
                     </div>
                     <a href="InformacionTienda.html">
                         <button type="button" class="btn-close" title="Volver">&times;</button>
                     </a>
                 </div>
 
-                <form>
+                <form id="store-form">
 
                     <!-- Cadena + Nombre -->
                     <div class="form-row columns-2">
@@ -122,7 +124,8 @@
                         <a href="InformacionTienda.html">
                             <button type="button" class="btn-cancel">Cancelar</button>
                         </a>
-                        <button type="submit" class="btn-save">Guardar tienda</button>
+                        <!-- type="button" para interceptar el click antes de validar el form -->
+                        <button type="button" class="btn-save" id="btn-save">Guardar tienda</button>
                     </div>
 
                 </form>
@@ -131,6 +134,112 @@
     </div>
 
 </div>
+
+<!-- ── Pop-up confirmación de guardado ── -->
+<div class="delete-overlay" id="save-overlay">
+    <div class="delete-popup">
+        <div class="delete-icon" style="background:#e0f2fe; color:#0369a1;">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
+                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+                <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path>
+                <polyline points="17 21 17 13 7 13 7 21"></polyline>
+                <polyline points="7 3 7 8 15 8"></polyline>
+            </svg>
+        </div>
+        <h3 id="save-popup-title">¿Guardar establecimiento?</h3>
+        <p id="save-popup-msg">Los datos introducidos se guardarán en la base de datos.</p>
+        <div class="delete-popup-actions">
+            <button class="btn-cancel-del" id="btn-cancel-save">Cancelar</button>
+            <button class="btn-confirm-del" id="btn-confirm-save"
+                    style="background:#420098;">Guardar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+
+        // ── Datos de ejemplo (en producción vendrían del servidor) ──────────────
+        // Deben coincidir con los de InformacionTienda.js
+        const storeData = {
+            'Carrefour Hiper': {
+                chain: 'carrefour', storeName: 'Carrefour Hiper',
+                streetType: 'street', streetAddress: 'Arroyo de Totalán',
+                buildingNumber: '36', zipCode: '', district: '',
+                city: 'Rincón de la Victoria', geoZone: 'Málaga',
+            },
+            'Carrefour Express': {
+                chain: 'carrefour', storeName: 'Carrefour Express',
+                streetType: 'avenue', streetAddress: 'del Mediterráneo',
+                buildingNumber: '12', zipCode: '', district: '',
+                city: 'Rincón de la Victoria', geoZone: 'Málaga',
+            },
+            'Carrefour Market': {
+                chain: 'carrefour', storeName: 'Carrefour Market',
+                streetType: 'square', streetAddress: 'Mayor',
+                buildingNumber: '5', zipCode: '', district: '',
+                city: 'Rincón de la Victoria', geoZone: 'Málaga',
+            },
+        };
+
+        // ── Detectar modo edición por parámetro URL: ?edit=NombreTienda ─────────
+        const params   = new URLSearchParams(window.location.search);
+        const editName = params.get('edit');
+        const isEdit   = Boolean(editName && storeData[editName]);
+
+        if (isEdit) {
+            // Cambiar títulos
+            document.getElementById('form-title').textContent     = 'Editar Tienda';
+            document.getElementById('form-subtitle').textContent  = `Modificando datos de "${editName}"`;
+            document.getElementById('save-popup-title').textContent = '¿Guardar cambios?';
+            document.getElementById('save-popup-msg').textContent   = `Se actualizarán los datos de "${editName}".`;
+
+            // Precargar campos
+            const d = storeData[editName];
+            document.getElementById('chain-select').value    = d.chain;
+            document.getElementById('store-name').value      = d.storeName;
+            document.getElementById('street-type').value     = d.streetType;
+            document.getElementById('street-address').value  = d.streetAddress;
+            document.getElementById('building-number').value = d.buildingNumber;
+            document.getElementById('zip-code').value        = d.zipCode;
+            document.getElementById('district-name').value   = d.district;
+            document.getElementById('city-name').value       = d.city;
+            document.getElementById('geo-zone').value        = d.geoZone;
+        }
+
+        // ── Popup de confirmación de guardado ────────────────────────────────────
+        const saveOverlay  = document.getElementById('save-overlay');
+        const btnSave      = document.getElementById('btn-save');
+        const btnCancelSave  = document.getElementById('btn-cancel-save');
+        const btnConfirmSave = document.getElementById('btn-confirm-save');
+        const form         = document.getElementById('store-form');
+
+        btnSave.addEventListener('click', () => {
+            // Primero validar el formulario nativo
+            if (!form.checkValidity()) {
+                form.reportValidity();
+                return;
+            }
+            saveOverlay.classList.add('active');
+        });
+
+        btnCancelSave.addEventListener('click', () => {
+            saveOverlay.classList.remove('active');
+        });
+
+        // Cerrar al pulsar fuera del popup
+        saveOverlay.addEventListener('click', (e) => {
+            if (e.target === saveOverlay) saveOverlay.classList.remove('active');
+        });
+
+        btnConfirmSave.addEventListener('click', () => {
+            // Aquí iría la llamada al servidor (fetch/submit).
+            // Por ahora redirigimos directamente a la lista.
+            window.location.href = 'InformacionTienda.html';
+        });
+
+    });
+</script>
 
 </body>
 </html>

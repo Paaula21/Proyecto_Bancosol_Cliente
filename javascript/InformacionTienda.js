@@ -31,13 +31,20 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     // ─── Referencias al DOM ──────────────────────────────────────────────────
-    const tbody       = document.querySelector('.data-table tbody');
-    const detailPanel = document.getElementById('detail-panel');
-    const filterForm  = document.querySelector('form');
-    const overlay     = document.getElementById('delete-overlay');
-    const targetName  = document.getElementById('delete-target-name');
-    const btnCancel   = document.getElementById('btn-cancel-del');
-    const btnConfirm  = document.getElementById('btn-confirm-del');
+    const tbody        = document.querySelector('.data-table tbody');
+    const detailPanel  = document.getElementById('detail-panel');
+    const filterForm   = document.querySelector('form');
+    const overlay      = document.getElementById('delete-overlay');
+    const targetName   = document.getElementById('delete-target-name');
+    const btnCancel    = document.getElementById('btn-cancel-del');
+    const btnConfirm   = document.getElementById('btn-confirm-del');
+    const tableWrapper = document.querySelector('.table-wrapper');
+
+    // Crear el elemento del contador de resultados (debajo de la tabla)
+    const resultCount = document.createElement('p');
+    resultCount.id = 'result-count';
+    resultCount.style.cssText = 'margin: 12px 0 0 0; font-size: 0.8125rem; color: #6b7280;';
+    tableWrapper?.insertAdjacentElement('afterend', resultCount);
 
     let pendingRow = null;
 
@@ -70,6 +77,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 detailPanel.classList.add('empty');
             }
             pendingRow.remove();
+            updateCounterAndScroll();
         }
         closeDeletePopup();
     });
@@ -140,10 +148,16 @@ document.addEventListener('DOMContentLoaded', () => {
             return;
         }
 
-        if (e.target.closest('.btn-icon')) {
-            const storeName = row.querySelector('td strong')?.textContent.trim();
-            alert(`Editar: ${storeName}\n(Funcionalidad pendiente de implementar)`);
-            return;
+        if (e.target.closest('.btn--secondary') && !e.target.closest('.btn-icon--danger')) {
+            // Distinguir botón Editar del botón Borrar por texto
+            const btn = e.target.closest('button');
+            if (btn && btn.textContent.trim() === 'Editar') {
+                const storeName = row.querySelector('td strong')?.textContent.trim();
+                if (storeName) {
+                    window.location.href = `NuevaTienda.html?edit=${encodeURIComponent(storeName)}`;
+                }
+                return;
+            }
         }
 
         // Selección de fila → actualizar panel de detalle
@@ -186,11 +200,32 @@ document.addEventListener('DOMContentLoaded', () => {
         return true;
     }
 
+    // ─── Actualiza contador y scroll vertical ────────────────────────────────
+
+    function updateCounterAndScroll() {
+        const allRows    = tbody?.querySelectorAll('tr') ?? [];
+        const visibleRows = [...allRows].filter(r => r.style.display !== 'none');
+        const count      = visibleRows.length;
+
+        // Contador de resultados
+        if (resultCount) {
+            resultCount.textContent = count === 1
+                ? '1 resultado'
+                : `${count} resultados`;
+        }
+
+        // Barra vertical solo si hay más de 4 filas visibles
+        if (tableWrapper) {
+            tableWrapper.classList.toggle('scrollable', count > 4);
+        }
+    }
+
     function applyFilters() {
         const f = getFilterValues();
         tbody?.querySelectorAll('tr').forEach(row => {
             row.style.display = rowMatchesFilters(row, f) ? '' : 'none';
         });
+        updateCounterAndScroll();
     }
 
     document.querySelectorAll('.filters input, .filters select').forEach(el => {
@@ -210,5 +245,8 @@ document.addEventListener('DOMContentLoaded', () => {
         const firstName = firstRow.querySelector('td strong')?.textContent.trim();
         if (firstName) updateDetailPanel(firstName);
     }
+
+    // Inicializar contador y scroll al cargar
+    updateCounterAndScroll();
 
 });
