@@ -22,19 +22,19 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedUsername = localStorage.getItem('savedUsername');
         const savedPassword = localStorage.getItem('savedPassword');
         if (savedUsername && savedPassword) {
-                document.getElementById('username').value = savedUsername;
-                document.getElementById('password').value = savedPassword;
-                document.getElementById('remember').checked = true;
+                document.querySelector('#username').value = savedUsername;
+                document.querySelector('#password').value = savedPassword;
+                document.querySelector('#remember').checked = true;
         }
 });
 
 // ----- EVENTOS DEL FORMULARIO -----
-document.getElementById('form-login').addEventListener('submit', async function (e) {
+document.querySelector('#form-login').addEventListener('submit', async function (e) {
         e.preventDefault();
 
-        const username = document.getElementById('username').value.trim();
-        const password = document.getElementById('password').value;
-        const message = document.getElementById('message');
+        const username = document.querySelector('#username').value.trim();
+        const password = document.querySelector('#password').value;
+        const message = document.querySelector('#message');
 
         message.textContent = 'Iniciando sesión...';
 
@@ -81,7 +81,7 @@ document.getElementById('form-login').addEventListener('submit', async function 
                 }
 
                 // Recordarme
-                const remember = document.getElementById('remember');
+                const remember = document.querySelector('#remember');
                 if (remember.checked) {
                         localStorage.setItem('savedUsername', username);
                         localStorage.setItem('savedPassword', password);
@@ -99,8 +99,8 @@ document.getElementById('form-login').addEventListener('submit', async function 
 });
 
 // ----- EVENTO DE OLVIDAR CONTRASEÑA -----
-document.getElementById('forgot-password').addEventListener('click', function (e) {
+document.querySelector('#forgot-password').addEventListener('click', function (e) {
         e.preventDefault();
-        const message = document.getElementById('message');
+        const message = document.querySelector('#message');
         message.textContent = 'Falta implementar';
 });
