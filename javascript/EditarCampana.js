@@ -1,105 +1,235 @@
+// =============================================================
+// EditarCampana.js
+// Script de la página de edición de una campaña.
+// Lee el ID de campaña de la URL, carga sus datos desde
+// json-server, rellena el formulario y gestiona el guardado.
+// Las cadenas participantes se cargan dinámicamente desde la db.
+// =============================================================
+
 // ----- CONFIGURACIÓN INICIAL -----
-
-// Obtenemos el ID directamente de la URL
-const parametrosURL = new URLSearchParams(window.location.search);
-const idCampana = parametrosURL.get('id_campana'); // Esto buscará "?id=X" en tu URL
-
-// Dirección del servidor (json-server)
 const API_ENDPOINT = 'http://localhost:3000';
 
-// Cargar datos de la campaña al iniciar
-document.addEventListener('DOMContentLoaded', async () => {
+// Leemos el ID de campaña de la URL al arrancar.
+// Ejemplo de URL: EditarCampana.html?id_campana=GR2025
+let parametrosURL = new URLSearchParams(window.location.search);
+let idCampana = parametrosURL.get('id_campana');
+
+// ----- EVENTO PRINCIPAL -----
+document.addEventListener('DOMContentLoaded', async function () {
+
         if (!idCampana) {
-                alert('No se ha proporcionado un ID de campaña en la URL.');
+                console.log("URL completa:", window.location.href);
+                console.log("Search parameters:", window.location.search);
+                alert(`No se ha proporcionado un ID de campaña en la URL.\nURL actual: ${window.location.href}`);
                 return;
         }
 
+        // Cargamos en paralelo los datos de la campaña, todas las cadenas
+        // disponibles y las cadenas que ya participan en esta campaña.
+        // Así solo hacemos una espera en lugar de tres seguidas
         try {
-                const response = await fetch(`${API_ENDPOINT}/campana?id_campana=${encodeURIComponent(idCampana)}`);
+                let resultados = await Promise.all([
+                        fetchDatos('campana?id_campana=' + encodeURIComponent(idCampana)),
+                        fetchDatos('cadena'),
+                        fetchDatos('campana_cadena?id_campana=' + encodeURIComponent(idCampana))
+                ]);
 
-                if (!response.ok) {
-                        alert('Error al conectar con el servidor.');
-                        return;
-                }
+                let datosCampana = resultados[0];   // Array con la campaña (1 elemento)
+                let todasLasCadenas = resultados[1];   // Array con todas las cadenas de la db
+                let cadenasEnCampana = resultados[2];   // Array con las relaciones campana_cadena
 
-                const data = await response.json();
+                // Rellenamos el formulario con los datos de la campaña
+                rellenarFormulario(datosCampana);
 
-                if (data.length === 0) {
-                        alert('No se encontró la campaña con el ID especificado.');
-                        return;
-                }
+                // Generamos los checkboxes con todas las cadenas y marcamos las participantes
+                generarCheckboxesCadenas(todasLasCadenas, cadenasEnCampana);
 
-                const campana = data[0];
-
-                // Rellenar el formulario
-                document.querySelector('#name-campanya').value = campana.nombre_campana || '';
-                document.querySelector('#initial-date').value = campana.fecha_inicio || '';
-                document.querySelector('#final-date').value = campana.fecha_fin || '';
-
-                if (campana.estado) {
-                        // El value en HTML para estado está en minúsculas y sin espacios, 
-                        // adaptamos según los options (pendiente, en-curso, finalizada, cancelada)
-                        // Aseguramos que coincide con una opción válida
-                        document.querySelector('#status').value = campana.estado.toLowerCase().replace(' ', '-');
-                }
         } catch (error) {
-                console.error('Error al cargar la campaña:', error);
+                console.error('Error al cargar los datos:', error);
                 alert('No se pudieron cargar los datos de la campaña.');
         }
+
+        // Escuchamos el submit del formulario para guardar los cambios
+        document.querySelector('#form-edit').addEventListener('submit', async function (e) {
+                e.preventDefault();
+                await guardarCampana();
+        });
 });
 
-document.querySelector('#form-edit').addEventListener('submit', async function (e) {
-        e.preventDefault();
+// ----- FUNCIÓN GENÉRICA DE FETCH -----
+// Reutilizamos esta función para no repetir la lógica de comprobación
+// de errores en cada petición (peticiones de red, tema 6)
+async function fetchDatos(recurso) {
+        let response = await fetch(`${API_ENDPOINT}/${recurso}`);
+        if (!response.ok) {
+                throw new Error('Error al obtener "' + recurso + '": ' + response.status);
+        }
+        return response.json();
+}
 
-        // Verificamos si realmente hay un ID en la URL
-        if (!idCampana) {
-                alert('Error: No se encontró el ID de la campaña.');
+// ----- RELLENO DEL FORMULARIO -----
+// Recibe el array que devuelve json-server y asigna cada campo
+// al input correspondiente del formulario
+function rellenarFormulario(datosCampana) {
+
+        if (datosCampana.length === 0) {
+                alert('No se encontró la campaña con el ID: ' + idCampana);
                 return;
         }
 
-        const name = document.querySelector('#name-campanya').value.trim();
-        const initialDate = document.querySelector('#initial-date').value;
-        const finalDate = document.querySelector('#final-date').value;
-        const status = document.querySelector('#status').value;
+        let campana = datosCampana[0];
 
-        // Tenemos que añadir el ID porque en el método PUT reescribimos la entrada
-        // al completo
-        const updatedData = {
-                id_campana: idCampana,
-                nombre_campana: name,
-                fecha_inicio: initialDate,
-                fecha_fin: finalDate,
-                estado: status
-        };
+        document.querySelector('#name-campanya').value = campana.nombre_campana || '';
+        document.querySelector('#initial-date').value = campana.fecha_inicio || '';
+        document.querySelector('#final-date').value = campana.fecha_fin || '';
 
-        // ----- PETICIÓN AL SERVIDOR -----
-        try {
-                // Usamos el método PUT para actualizar la campaña existente
-                const response = await fetch(`${API_ENDPOINT}/campana?id_campana=${encodeURIComponent(idCampana)}`, {
-                        method: "PUT",
-                        headers: {
-                                "Content-Type": "application/json"
-                        },
-                        body: JSON.stringify(updatedData)
+        // Para el select de estado convertimos el valor de la db al formato
+        // que usan los <option> del HTML (minúsculas, sin espacios)
+        if (campana.estado) {
+                let estadoSelect = document.querySelector('#status');
+                let estadoFormateado = campana.estado;
+
+                // Comprobamos que la opción exista en el select antes de asignarla
+                let existeOpcion = Array.from(estadoSelect.options).some(function (opt) {
+                        return opt.value === estadoFormateado;
                 });
 
-                if (!response.ok) {
-                        alert('Error de conexión con el servidor.');
+                if (existeOpcion) {
+                        estadoSelect.value = estadoFormateado;
+                }
+        }
+}
+
+// ----- GENERACIÓN DINÁMICA DE CHECKBOXES DE CADENAS -----
+// Recibe todas las cadenas de la db y las que ya participan en la campaña.
+// Crea un checkbox por cada cadena y marca las que ya están asignadas.
+// Los checkboxes se insertan en el contenedor con id "cadenas-container"
+function generarCheckboxesCadenas(todasLasCadenas, cadenasEnCampana) {
+        let contenedor = document.querySelector('#checkbox-list');
+
+        if (!contenedor) {
+                console.warn('No se encontró el elemento #checkbox-list en el HTML.');
+                return;
+        }
+
+        // Vaciamos el contenedor por si tuviera algo previo
+        while (contenedor.firstChild) {
+                contenedor.removeChild(contenedor.firstChild);
+        }
+
+        // Construimos un Set con los id_cadena que ya participan en la campaña
+        // para poder comprobar rápidamente si una cadena está incluida (O(1) vs O(n))
+        let cadenasParticipantes = new Set(cadenasEnCampana.map(function (rel) {
+                return rel.id_cadena;
+        }));
+
+        // Creamos un checkbox por cada cadena disponible en la db
+        todasLasCadenas.forEach(function (cadena) {
+
+                // Contenedor del checkbox + etiqueta (para poder aplicar estilos)
+                let divItem = document.createElement('div');
+                divItem.className = 'cadena-item';
+
+                // El checkbox en sí
+                let checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.id = 'cadena-' + cadena.id_cadena;   // ej: cadena-MERCADONA
+                checkbox.value = cadena.id_cadena;
+                checkbox.name = 'cadenas';
+
+                // Lo marcamos si esta cadena ya participa en la campaña actual
+                checkbox.checked = cadenasParticipantes.has(cadena.id_cadena);
+
+                // Etiqueta asociada al checkbox (el for apunta al id del input)
+                let label = document.createElement('label');
+                label.htmlFor = 'cadena-' + cadena.id_cadena;
+                label.textContent = cadena.nombre_cadena;
+
+                divItem.appendChild(checkbox);
+                divItem.appendChild(label);
+                contenedor.appendChild(divItem);
+        });
+}
+
+// ----- GUARDADO DE CAMBIOS -----
+// Recoge los valores del formulario y actualiza la campaña en la db.
+// También actualiza la tabla campana_cadena con las cadenas seleccionadas
+async function guardarCampana() {
+
+        // Leemos los campos del formulario
+        let nombre = document.querySelector('#name-campanya').value.trim();
+        let fechaInicio = document.querySelector('#initial-date').value;
+        let fechaFin = document.querySelector('#final-date').value;
+        let estado = document.querySelector('#status').value;
+
+        // Recogemos qué checkboxes de cadenas están marcados
+        let checkboxesMarcados = document.querySelectorAll('#checkbox-list input[type="checkbox"]:checked');
+        let cadenasSeleccionadas = Array.from(checkboxesMarcados).map(function (cb) {
+                return cb.value;   // El value de cada checkbox es el id_cadena
+        });
+
+        // Objeto con los datos actualizados de la campaña (PUT necesita el objeto completo)
+        let datosCampana = {
+                id_campana: idCampana,
+                nombre_campana: nombre,
+                fecha_inicio: fechaInicio,
+                fecha_fin: fechaFin,
+                estado: estado
+        };
+
+        try {
+                // ----- PASO 1: Actualizamos los datos básicos de la campaña -----
+                // Primero buscamos el id interno que usa json-server (distinto de id_campana)
+                let busqueda = await fetchDatos('campana?id_campana=' + encodeURIComponent(idCampana));
+
+                if (busqueda.length === 0) {
+                        alert('No se encontró la campaña para guardar.');
                         return;
                 }
 
-                const data = await response.json();
+                // json-server usa el campo "id" (numérico/autoincremental) para el PUT
+                let idInterno = busqueda[0].id;
 
-                // json-server devuelve array; comprobamos que haya resultado
-                if (data.length === 0) {
-                        alert('Campaña no encontrada.');
+                let responsePut = await fetch(`${API_ENDPOINT}/campana/${idInterno}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(datosCampana)
+                });
+
+                if (!responsePut.ok) {
+                        alert('Error al guardar la campaña.');
                         return;
                 }
 
+                // ----- PASO 2: Actualizamos las cadenas participantes -----
+                // Borramos todas las relaciones actuales de esta campaña
+                // y luego creamos las nuevas con las cadenas seleccionadas.
+                // json-server no tiene DELETE masivo, así que borramos una a una
+                let relacionesActuales = await fetchDatos(
+                        'campana_cadena?id_campana=' + encodeURIComponent(idCampana)
+                );
+
+                // Borramos cada relación existente
+                for (let relacion of relacionesActuales) {
+                        await fetch(`${API_ENDPOINT}/campana_cadena/${relacion.id}`, {
+                                method: 'DELETE'
+                        });
+                }
+
+                // Creamos una relación nueva por cada cadena seleccionada
+                for (let idCadena of cadenasSeleccionadas) {
+                        await fetch(`${API_ENDPOINT}/campana_cadena`, {
+                                method: 'POST',
+                                headers: { 'Content-Type': 'application/json' },
+                                body: JSON.stringify({ id_campana: idCampana, id_cadena: idCadena })
+                        });
+                }
+
+                // Si todo fue bien, volvemos a la lista de campañas
                 window.location.href = 'Campana.html';
 
         } catch (error) {
-                console.error('Error al actualizar la campaña:', error);
-                alert('Error al actualizar la campaña. Por favor, inténtalo de nuevo.');
+                console.error('Error al guardar los cambios:', error);
+                alert('Error al guardar los cambios. Por favor, inténtalo de nuevo.');
         }
-});
+}

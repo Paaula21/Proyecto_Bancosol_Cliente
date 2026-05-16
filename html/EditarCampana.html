@@ -1,16 +1,18 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/Administrador.css">
     <link rel="stylesheet" href="../css/EditarCampana.css">
-    
+
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/EditarCampana.js" defer></script>
     <title>Editar Campaña</title>
 </head>
+
 <body>
     <div class="main-container">
         <!-- Barra lateral -->
@@ -34,33 +36,35 @@
 
             <div class="form-container">
                 <form action="#" method="POST" class="form-edit" id="form-edit">
-                    
+
                     <div class="form-card">
                         <fieldset>
                             <legend>Datos de la campaña</legend>
-                            
+
                             <div class="form-group">
                                 <label for="name-campanya">Nombre de la campaña</label>
-                                <input type="text" id="name-campanya" name="name-campanya" value="Campaña Verano 2024" required>
+                                <input type="text" id="name-campanya" name="name-campanya" value="Campaña Verano 2024"
+                                    required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="initial-date">Fecha de Inicio</label>
                                 <input type="date" id="initial-date" name="initial-date" value="2024-05-15" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="final-date">Fecha de Finalización</label>
                                 <input type="date" id="final-date" name="final-date" value="2024-08-20" required>
                             </div>
-                            
+
                             <div class="form-group">
                                 <label for="status">Estado actual</label>
                                 <select id="status" name="status" required>
-                                    <option value="pendiente">Pendiente</option>
-                                    <option value="en-curso" selected>En curso</option>
-                                    <option value="finalizada">Finalizada</option>
-                                    <option value="cancelada">Cancelada</option>
+                                    <option value="Planificada">Planificada</option>
+                                    <option value="Activa" selected>Activa</option>
+                                    <option value="Completada">Completada</option>
+                                    <option value="Finalizada">Finalizada</option>
+                                    <option value="Cancelada">Cancelada</option>
                                 </select>
                             </div>
                         </fieldset>
@@ -74,23 +78,11 @@
                     <div class="form-card">
                         <fieldset>
                             <legend>Cadenas Participantes</legend>
-                            <p class="checkbox-section-title">Seleccione las cadenas que forman parte de esta campaña:</p>
-                            
-                            <div class="checkbox-list">
-                                <label class="checkbox-group">
-                                    <input type="checkbox" id="mercadona-elegido" name="mercadona-elegido" checked>
-                                    Mercadona
-                                </label>
-                                
-                                <label class="checkbox-group">
-                                    <input type="checkbox" id="carrefour-elegido" name="carrefour-elegido">
-                                    Carrefour
-                                </label>
-                                
-                                <label class="checkbox-group">
-                                    <input type="checkbox" id="dia-elegido" name="dia-elegido" checked>
-                                    Dia
-                                </label>
+                            <p class="checkbox-section-title">Seleccione las cadenas que forman parte de esta campaña:
+                            </p>
+
+                            <div class="checkbox-list" id="checkbox-list">
+                                <!-- Se rellena desde JS -->
                             </div>
                         </fieldset>
                     </div>
@@ -100,4 +92,5 @@
         </div>
     </div>
 </body>
+
 </html>

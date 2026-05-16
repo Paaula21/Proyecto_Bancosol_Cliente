@@ -1,106 +1,121 @@
 // ----- CONFIGURACIÓN INICIAL -----
-// Dirección del servidor (json-server)
+// Dirección base del servidor json-server
 const API_ENDPOINT = 'http://localhost:3000';
 
-// En la API tenemos 3 roles: ADMIN (1), COORDINADOR (2) y COLABORADOR (3)
-const ROL_ID = {
-        ADMIN: 1,
-        COORDINADOR: 2,
-        COLABORADOR: 3
-};
-
-// Diccionario para redirigir según id_rol
+// Diccionario que relaciona cada id_rol con su página de destino.
+// Cuando añadamos nuevas páginas, solo hay que actualizar este objeto
 const DIRECCION_POR_ROL = {
-        1: 'Administrador.html',
-        2: 'Coordinador.html',
-        3: 'Colaboradores.html'
+        1: 'Administrador.html',    // Rol admin
+        2: 'Coordinador.html',      // Rol coordinador
+        3: 'Colaboradores.html'     // Rol colaborador
 };
 
-// ----- RECUÉRDAME -----
-// Si el usuario marcó "Recordarme" completamos los campos
-document.addEventListener('DOMContentLoaded', () => {
-        const savedUsername = localStorage.getItem('savedUsername');
-        const savedPassword = localStorage.getItem('savedPassword');
-        if (savedUsername && savedPassword) {
-                document.querySelector('#username').value = savedUsername;
-                document.querySelector('#password').value = savedPassword;
+// ----- EVENTO: RECORDARME -----
+// Al cargar la página, si el usuario marcó "Recordarme" en la sesión anterior,
+// rellenamos los campos con los valores guardados en localStorage.
+// localStorage persiste entre sesiones (a diferencia de sessionStorage)
+document.addEventListener('DOMContentLoaded', function () {
+        let usuarioGuardado = localStorage.getItem('savedUsername');
+        let contraseniaGuardada = localStorage.getItem('savedPassword');
+
+        if (usuarioGuardado && contraseniaGuardada) {
+                document.querySelector('#username').value = usuarioGuardado;
+                document.querySelector('#password').value = contraseniaGuardada;
                 document.querySelector('#remember').checked = true;
         }
 });
 
-// ----- EVENTOS DEL FORMULARIO -----
+// ----- EVENTO: ENVÍO DEL FORMULARIO -----
+// Escuchamos el submit del formulario para interceptarlo antes de que recargue la página
 document.querySelector('#form-login').addEventListener('submit', async function (e) {
+
+        // Cancelamos el comportamiento por defecto (recarga de página)
         e.preventDefault();
 
-        const username = document.querySelector('#username').value.trim();
-        const password = document.querySelector('#password').value;
-        const message = document.querySelector('#message');
+        // Leemos los valores de los campos. Usamos trim() para eliminar
+        // espacios en blanco al principio y al final del nombre de usuario
+        let username = document.querySelector('#username').value.trim();
+        let password = document.querySelector('#password').value;
+        let mensaje = document.querySelector('#message');
 
-        message.textContent = 'Iniciando sesión...';
+        mensaje.textContent = 'Iniciando sesión...';
 
         // ----- PETICIÓN AL SERVIDOR -----
-        // Buscamos en la tabla "usuario" filtrando por nombre de usuario.
-        // La contraseña la comprobamos en cliente (solo válido para desarrollo con json-server).
-        // En la práctica, esto se haría con POST y el servidor devolvería un token real
+        // Buscamos en la tabla "usuario" filtrando por el campo usuario.
+        // json-server permite filtrar con ?campo=valor directamente en la URL.
+        // NOTA: En un sistema real, nunca se enviaría la contraseña en texto plano
+        // ni se comprobaría en el cliente. Esto es válido solo para desarrollo con json-server.
         try {
-                const response = await fetch(`${API_ENDPOINT}/usuario?usuario=${encodeURIComponent(username)}`);
+                let response = await fetch(`${API_ENDPOINT}/usuario?usuario=${encodeURIComponent(username)}`);
 
                 if (!response.ok) {
-                        message.textContent = 'Error de conexión con el servidor.';
+                        mensaje.textContent = 'Error de conexión con el servidor.';
                         return;
                 }
 
-                const data = await response.json();
+                // json-server siempre devuelve un array al filtrar
+                let datos = await response.json();
 
-                // json-server devuelve array; comprobamos que haya resultado
-                if (data.length === 0) {
-                        message.textContent = 'Usuario o contraseña incorrectos.';
+                // Si el array está vacío, no existe ningún usuario con ese nombre
+                if (datos.length === 0) {
+                        mensaje.textContent = 'Usuario o contraseña incorrectos.';
                         return;
                 }
 
-                const usuarioEncontrado = data[0];
+                let usuarioEncontrado = datos[0];
 
-                // Comprobamos la contraseña
-                // Aquí funciona porque json-server no tiene lógica de autenticación real.
+                // Comparamos la contraseña introducida con la almacenada en la DB.
+                // Las contraseñas están en texto plano en la DB de pruebas
                 if (usuarioEncontrado.contrasenia !== password) {
-                        message.textContent = 'Usuario o contraseña incorrectos.';
+                        mensaje.textContent = 'Usuario o contraseña incorrectos.';
                         return;
                 }
 
                 // ----- INICIO DE SESIÓN CORRECTO -----
-                // Guardamos datos de sesión
+                // Guardamos los datos de sesión en sessionStorage.
+                // sessionStorage se borra al cerrar la pestaña, lo que es más seguro
+                // que localStorage para datos de sesión (tema 8: almacenamiento en el cliente)
                 sessionStorage.setItem('id_rol', usuarioEncontrado.id_rol);
                 sessionStorage.setItem('id_usuario', usuarioEncontrado.id_usuario);
                 sessionStorage.setItem('username', username);
 
-                // Redirigimos según rol
-                const targetPage = DIRECCION_POR_ROL[usuarioEncontrado.id_rol];
-                if (!targetPage) {
-                        message.textContent = 'Rol desconocido: ' + usuarioEncontrado.id_rol;
+                // Buscamos la página de destino según el rol del usuario
+                let paginaDestino = DIRECCION_POR_ROL[usuarioEncontrado.id_rol];
+
+                // Si el rol no está contemplado en el diccionario, mostramos un error
+                if (!paginaDestino) {
+                        mensaje.textContent = 'Rol desconocido: ' + usuarioEncontrado.id_rol;
                         return;
                 }
 
-                // Recordarme
-                const remember = document.querySelector('#remember');
-                if (remember.checked) {
+                // ----- RECORDARME -----
+                // Si el checkbox está marcado, guardamos las credenciales en localStorage
+                // para rellenarlas automáticamente en la próxima visita
+                let recuerdame = document.querySelector('#remember');
+                if (recuerdame.checked) {
                         localStorage.setItem('savedUsername', username);
                         localStorage.setItem('savedPassword', password);
                 } else {
+                        // Si no está marcado, eliminamos cualquier valor guardado anteriormente
                         localStorage.removeItem('savedUsername');
                         localStorage.removeItem('savedPassword');
                 }
 
-                message.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
-                window.location.href = targetPage;
+                mensaje.textContent = 'Inicio de sesión exitoso. Redirigiendo...';
+
+                // Redirigimos al usuario a su página correspondiente
+                window.location.href = paginaDestino;
 
         } catch (error) {
-                message.textContent = 'Error de conexión: ' + error.message;
+                // Capturamos errores de red (servidor caído, sin conexión, etc.)
+                mensaje.textContent = 'Error de conexión: ' + error.message;
         }
 });
 
-// ----- EVENTO DE OLVIDAR CONTRASEÑA -----
+// ----- EVENTO: OLVIDAR CONTRASEÑA -----
+// Por ahora solo mostramos un mensaje. Está pendiente de implementar
 document.querySelector('#forgot-password').addEventListener('click', function (e) {
         e.preventDefault();
-        const message = document.querySelector('#message');
-        message.textContent = 'Falta implementar';
+        let mensaje = document.querySelector('#message');
+        mensaje.textContent = 'Falta implementar';
 });

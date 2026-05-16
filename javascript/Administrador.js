@@ -1,20 +1,27 @@
 // ----- CONFIGURACIÓN INICIAL -----
+// Dirección base del servidor json-server
 const API_ENDPOINT = 'http://localhost:3000';
 
-// Cargamos el contenido del dashboard al cargar la página
-document.addEventListener('DOMContentLoaded', () => {
+// ----- EVENTO PRINCIPAL -----
+// Esperamos a que el DOM esté cargado antes de hacer nada,
+// para asegurarnos de que todos los elementos HTML ya existen
+document.addEventListener('DOMContentLoaded', function () {
         cargarDashboard();
 });
 
-// ----- PETICIONES A LA DB -----
+// ----- CARGA GENERAL DEL DASHBOARD -----
+// Función principal que coordina todas las peticiones y renders.
+// Usamos async/await porque necesitamos esperar las respuestas del servidor
+// antes de poder mostrar los datos (JavaScript asíncrono, tema 5)
 async function cargarDashboard() {
         try {
-                // Hacemos todas las peticiones en paralelo para que cargue más rápido
-                const [campanas, establecimientos, colaboradores, coordinadores, zonas, divisiones, codigos_postales, direcciones, notificaciones, personas] = await Promise.all([
+                // Lanzamos todas las peticiones en paralelo con Promise.all
+                // para que no se esperen unas a otras y la página cargue más rápido
+                const resultados = await Promise.all([
                         fetchDatos('campana'),
                         fetchDatos('establecimiento'),
                         fetchDatos('colaborador'),
-                        fetchDatos('usuario?id_rol=2'),   // rol 2 = coordinador
+                        fetchDatos('usuario?id_rol=2'),      // id_rol 2 = coordinador
                         fetchDatos('zona_geografica'),
                         fetchDatos('division_territorial'),
                         fetchDatos('codigo_postal'),
@@ -23,33 +30,66 @@ async function cargarDashboard() {
                         fetchDatos('persona')
                 ]);
 
+                // Desestructuramos el array de resultados en variables con nombre
+                let campanas = resultados[0];
+                let establecimientos = resultados[1];
+                let colaboradores = resultados[2];
+                let coordinadores = resultados[3];
+                let zonas = resultados[4];
+                let divisiones = resultados[5];
+                let codigosPostales = resultados[6];
+                let direcciones = resultados[7];
+                let notificaciones = resultados[8];
+                let personas = resultados[9];
+
+                // Llamamos a cada función de renderizado con los datos que necesita
                 mostrarResumen(campanas, establecimientos, colaboradores, coordinadores, zonas);
                 mostrarProximasCampanas(campanas);
-                mostrarCoberturaPorZona(establecimientos, direcciones, codigos_postales, divisiones, zonas);
+                mostrarCoberturaPorZona(establecimientos, direcciones, codigosPostales, divisiones, zonas);
                 mostrarActividadReciente(notificaciones, personas);
 
         } catch (error) {
+                // Si cualquiera de las peticiones falla, lo mostramos en consola
                 console.error('Error al cargar el dashboard:', error);
         }
 }
 
-// Función genérica para fetch
+// ----- FUNCIÓN GENÉRICA DE FETCH -----
+// Reutilizamos esta función en todas las peticiones para no repetir código.
+// Lanza un error si la respuesta del servidor no es correcta (status no 2xx)
 async function fetchDatos(recurso) {
-        const response = await fetch(`${API_ENDPOINT}/${recurso}`);
-        if (!response.ok) throw new Error(`Error al obtener ${recurso}`);
+        let response = await fetch(`${API_ENDPOINT}/${recurso}`);
+        if (!response.ok) {
+                throw new Error(`Error al obtener "${recurso}": ${response.status}`);
+        }
         return response.json();
 }
 
-// ----- TARJETAS DE RESUMEN -----
+// =============================================================
+// SECCIÓN 1: TARJETAS DE RESUMEN
+// =============================================================
+// Rellena los 4 contadores de la parte superior del dashboard
+// con datos reales calculados a partir de las colecciones recibidas
 function mostrarResumen(campanas, establecimientos, colaboradores, coordinadores, zonas) {
-        const campanasActivas = campanas.filter(c => c.estado === 'Planificada' || c.estado === 'Activa');
-        const nombresCampanas = campanasActivas.map(c => c.nombre_campana.replace(' 2025', '')).join(', ');
 
+        // Filtramos las campañas que están activas o planificadas
+        let campanasActivas = campanas.filter(function (c) {
+                return c.estado === 'Planificada' || c.estado === 'Activa';
+        });
+
+        // Construimos el subtítulo con los nombres de las campañas activas
+        // Quitamos el año para que quepa mejor en la tarjeta
+        let nombresCampanas = campanasActivas.map(function (c) {
+                return c.nombre_campana.replace(' 2025', '');
+        }).join(', ');
+
+        // Escribimos los valores en los elementos del DOM usando textContent
+        // (más seguro que innerHTML porque no interpreta HTML)
         document.querySelector('#stat-campaigns-value').textContent = campanasActivas.length;
         document.querySelector('#stat-campaigns-subtitle').textContent = nombresCampanas || 'Sin campañas activas';
 
         document.querySelector('#stat-stores-value').textContent = establecimientos.length;
-        document.querySelector('#stat-stores-subtitle').textContent = `En ${zonas.length} zonas geográficas`;
+        document.querySelector('#stat-stores-subtitle').textContent = 'En ' + zonas.length + ' zonas geográficas';
 
         document.querySelector('#stat-collaborators-value').textContent = colaboradores.length;
         document.querySelector('#stat-collaborators-subtitle').textContent = 'Entidades y organizaciones';
@@ -58,139 +98,265 @@ function mostrarResumen(campanas, establecimientos, colaboradores, coordinadores
         document.querySelector('#stat-coordinators-subtitle').textContent = 'Activos en campaña';
 }
 
-// ----- PRÓXIMAS CAMPAÑAS -----
+// =============================================================
+// SECCIÓN 2: PRÓXIMAS CAMPAÑAS
+// =============================================================
+// Renderiza la lista de campañas que no están completadas,
+// ordenadas por fecha de inicio (la más próxima primero)
 function mostrarProximasCampanas(campanas) {
-        const container = document.querySelector('#campaign-container');
-        container.innerHTML = '';
+        let contenedor = document.querySelector('#campaign-container');
 
-        // Mostramos las que no están completadas, ordenadas por fecha
-        const proximas = campanas
-                .filter(c => c.estado !== 'Completada')
-                .sort((a, b) => new Date(a.fecha_inicio) - new Date(b.fecha_inicio));
+        // Vaciamos el contenedor antes de insertar el nuevo contenido
+        while (contenedor.firstChild) {
+                contenedor.removeChild(contenedor.firstChild);
+        }
 
+        // Filtramos y ordenamos las campañas
+        let proximas = campanas.filter(function (c) {
+                return c.estado !== 'Completada';
+        }).sort(function (a, b) {
+                return new Date(a.fecha_inicio) - new Date(b.fecha_inicio);
+        });
+
+        // Si no hay campañas próximas, mostramos un mensaje informativo
         if (proximas.length === 0) {
-                container.innerHTML = '<p style="color:#6b7280; font-size:0.875rem;">No hay campañas próximas.</p>';
+                let parrafo = document.createElement('p');
+                parrafo.style.color = '#6b7280';
+                parrafo.style.fontSize = '0.875rem';
+                parrafo.textContent = 'No hay campañas próximas.';
+                contenedor.appendChild(parrafo);
                 return;
         }
 
-        proximas.forEach(campana => {
-                const fechaInicio = formatearFecha(campana.fecha_inicio);
-                const fechaFin = formatearFecha(campana.fecha_fin);
+        // Construimos un elemento de tarjeta por cada campaña próxima
+        proximas.forEach(function (campana) {
+                let fechaInicio = formatearFecha(campana.fecha_inicio);
+                let fechaFin = formatearFecha(campana.fecha_fin);
 
-                const item = document.createElement('div');
-                item.classList.add('campaign-item');
-                item.innerHTML = `
-            <div class="campaign-info">
-                <h4>${campana.nombre_campana}</h4>
-                <span>${fechaInicio} - ${fechaFin}</span>
-            </div>
-            <div class="campaign-stats">
-                <div class="stat">Estado <strong>${campana.estado}</strong> </div>
-            </div>
-        `;
-                container.appendChild(item);
+                // Creamos la estructura de la tarjeta manipulando el DOM
+                let item = document.createElement('div');
+                item.className = 'campaign-item';
+
+                let infoDiv = document.createElement('div');
+                infoDiv.className = 'campaign-info';
+
+                let titulo = document.createElement('h4');
+                titulo.textContent = campana.nombre_campana;
+
+                let fechas = document.createElement('span');
+                fechas.textContent = fechaInicio + ' - ' + fechaFin;
+
+                infoDiv.appendChild(titulo);
+                infoDiv.appendChild(fechas);
+
+                let statsDiv = document.createElement('div');
+                statsDiv.className = 'campaign-stats';
+
+                let statEstado = document.createElement('div');
+                statEstado.className = 'stat';
+
+                let estadoStrong = document.createElement('strong');
+                estadoStrong.textContent = campana.estado;
+
+                statEstado.appendChild(estadoStrong);
+                statsDiv.appendChild(statEstado);
+
+                item.appendChild(infoDiv);
+                item.appendChild(statsDiv);
+                contenedor.appendChild(item);
         });
 }
 
-// ----- COBERTURA POR ZONA -----
-// Construimos la cadena: establecimiento -> direccion -> codigo_postal -> division_territorial -> zona_geografica
-function mostrarCoberturaPorZona(establecimientos, direcciones, codigos_postales, divisiones, zonas) {
-        // Mapa: id_direccion -> id_zona
-        const cpAZona = {};
-        const divAZona = {};
-        divisiones.forEach(d => { divAZona[d.id_division] = d.id_zona; });
-        codigos_postales.forEach(cp => { cpAZona[cp.id_cp] = divAZona[cp.id_division]; });
+// =============================================================
+// SECCIÓN 3: COBERTURA POR ZONA
+// =============================================================
+// Calcula cuántas tiendas hay en cada zona geográfica recorriendo
+// la cadena: establecimiento → dirección → código_postal → división → zona
+// y renderiza las barras de progreso animadas
+function mostrarCoberturaPorZona(establecimientos, direcciones, codigosPostales, divisiones, zonas) {
 
-        const dirAZona = {};
-        direcciones.forEach(d => { dirAZona[d.id_direccion] = cpAZona[d.id_cp]; });
-
-        // Contar tiendas por zona
-        const conteo = {};
-        establecimientos.forEach(e => {
-                const idZona = dirAZona[e.id_direccion];
-                if (idZona) conteo[idZona] = (conteo[idZona] || 0) + 1;
+        // Paso 1: Construimos un mapa de id_division → id_zona
+        let divisionAZona = {};
+        divisiones.forEach(function (d) {
+                divisionAZona[d.id_division] = d.id_zona;
         });
 
-        // Ordenar de mayor a menor
-        const zonaOrdenada = zonas
-                .map(z => ({ ...z, tiendas: conteo[z.id_zona] || 0 }))
-                .filter(z => z.tiendas > 0)
-                .sort((a, b) => b.tiendas - a.tiendas);
+        // Paso 2: Construimos un mapa de id_cp → id_zona (usando el mapa anterior)
+        let cpAZona = {};
+        codigosPostales.forEach(function (cp) {
+                cpAZona[cp.id_cp] = divisionAZona[cp.id_division];
+        });
 
-        const maxTiendas = zonaOrdenada[0]?.tiendas || 1;
-        const container = document.querySelector('#shops-list');
-        container.innerHTML = '';
+        // Paso 3: Construimos un mapa de id_direccion → id_zona
+        let direccionAZona = {};
+        direcciones.forEach(function (d) {
+                direccionAZona[d.id_direccion] = cpAZona[d.id_cp];
+        });
 
-        zonaOrdenada.forEach((zona, index) => {
-                const porcentaje = Math.round((zona.tiendas / maxTiendas) * 100);
+        // Paso 4: Contamos cuántas tiendas pertenecen a cada zona
+        let conteo = {};
+        establecimientos.forEach(function (e) {
+                let idZona = direccionAZona[e.id_direccion];
+                if (idZona) {
+                        conteo[idZona] = (conteo[idZona] || 0) + 1;
+                }
+        });
 
-                const item = document.createElement('div');
-                item.classList.add('shops-item');
-                item.innerHTML = `
-            <div class="shop-labels">
-                <span>${zona.nombre_zona}</span>
-                <span>${zona.tiendas} tiendas</span>
-            </div>
-            <div class="progress-bar-container">
-                <div class="progress-bar" style="width: 0%;" data-width="${porcentaje}%"></div>
-            </div>
-        `;
-                container.appendChild(item);
+        // Paso 5: Añadimos el conteo a cada zona y filtramos las que tienen tiendas
+        let zonasOrdenadas = zonas.map(function (z) {
+                return {
+                        id_zona: z.id_zona,
+                        nombre_zona: z.nombre_zona,
+                        tiendas: conteo[z.id_zona] || 0
+                };
+        }).filter(function (z) {
+                return z.tiendas > 0;
+        }).sort(function (a, b) {
+                // Ordenamos de mayor a menor número de tiendas
+                return b.tiendas - a.tiendas;
+        });
 
-                // Animamos la barra al cargar, igual que en el PDF
-                // Usamos un pequeño delay escalonado por índice para que entren una a una
-                setTimeout(() => {
-                        item.querySelector('.progress-bar').style.width = porcentaje + '%';
-                }, 100 + index * 80);
+        // El valor máximo sirve para calcular el porcentaje de cada barra
+        let maxTiendas = zonasOrdenadas[0] ? zonasOrdenadas[0].tiendas : 1;
+
+        // Vaciamos el contenedor antes de renderizar
+        let contenedor = document.querySelector('#shops-list');
+        while (contenedor.firstChild) {
+                contenedor.removeChild(contenedor.firstChild);
+        }
+
+        // Creamos un elemento de barra por cada zona
+        zonasOrdenadas.forEach(function (zona, indice) {
+                let porcentaje = Math.round((zona.tiendas / maxTiendas) * 100);
+
+                // Estructura del item de zona
+                let item = document.createElement('div');
+                item.className = 'shops-item';
+
+                let etiquetas = document.createElement('div');
+                etiquetas.className = 'shop-labels';
+
+                let nombreSpan = document.createElement('span');
+                nombreSpan.textContent = zona.nombre_zona;
+
+                let tiendasSpan = document.createElement('span');
+                tiendasSpan.textContent = zona.tiendas + ' tiendas';
+
+                etiquetas.appendChild(nombreSpan);
+                etiquetas.appendChild(tiendasSpan);
+
+                let barraContenedor = document.createElement('div');
+                barraContenedor.className = 'progress-bar-container';
+
+                let barra = document.createElement('div');
+                barra.className = 'progress-bar';
+                barra.style.width = '0%';   // Empieza en 0 para poder animar
+
+                barraContenedor.appendChild(barra);
+                item.appendChild(etiquetas);
+                item.appendChild(barraContenedor);
+                contenedor.appendChild(item);
+
+                // Animamos la barra usando setTimeout con un retardo escalonado
+                // (JavaScript asíncrono, tema 5: temporizadores con setTimeout)
+                // Cada barra entra 80ms después de la anterior para un efecto en cascada
+                setTimeout(function () {
+                        barra.style.width = porcentaje + '%';
+                }, 100 + indice * 80);
         });
 }
 
-// ----- ACTIVIDAD RECIENTE -----
-// Usamos las notificaciones como actividad reciente
+// =============================================================
+// SECCIÓN 4: ACTIVIDAD RECIENTE
+// =============================================================
+// Muestra las últimas notificaciones del sistema como registro
+// de actividad reciente, mostrando a quién van dirigidas
 function mostrarActividadReciente(notificaciones, personas) {
-        const tbody = document.querySelector('#activity-tbody');
-        tbody.innerHTML = '';
+        let tbody = document.querySelector('#activity-tbody');
 
+        // Vaciamos la tabla
+        while (tbody.firstChild) {
+                tbody.removeChild(tbody.firstChild);
+        }
+
+        // Si no hay notificaciones, mostramos una fila informativa
         if (notificaciones.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#6b7280;">Sin actividad reciente.</td></tr>';
+                let tr = document.createElement('tr');
+                let td = document.createElement('td');
+                td.colSpan = 4;
+                td.style.textAlign = 'center';
+                td.style.color = '#6b7280';
+                td.textContent = 'Sin actividad reciente.';
+                tr.appendChild(td);
+                tbody.appendChild(tr);
                 return;
         }
 
-        // Mapa id_persona -> nombre
-        const personaMap = {};
-        personas.forEach(p => { personaMap[p.id_persona] = p.nombre_completo; });
+        // Construimos un diccionario id_persona → nombre_completo
+        // para poder mostrar el nombre en lugar del ID
+        let personaMap = {};
+        personas.forEach(function (p) {
+                personaMap[p.id_persona] = p.nombre_completo;
+        });
 
-        // Mostramos las últimas 8 notificaciones ordenadas por fecha
-        const recientes = [...notificaciones]
-                .sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion))
-                .slice(0, 8);
+        // Ordenamos las notificaciones por fecha (la más reciente primero)
+        // y nos quedamos solo con las últimas 8
+        let recientes = notificaciones.slice().sort(function (a, b) {
+                return new Date(b.fecha_creacion) - new Date(a.fecha_creacion);
+        }).slice(0, 8);
 
-        recientes.forEach(notif => {
-                const nombreDestino = personaMap[notif.id_persona_destino] || 'Sistema';
-                const estado = notif.leida ? 'Leída' : 'Sin leer';
-                const fecha = formatearFechaHora(notif.fecha_creacion);
+        // Creamos una fila de tabla por cada notificación
+        recientes.forEach(function (notif) {
+                let nombreDestino = personaMap[notif.id_persona_destino] || 'Sistema';
+                let estado = notif.leida ? 'Leída' : 'Sin leer';
 
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-            <td>${notif.id_tipo}</td>
-            <td>${notif.titulo}</td>
-            <td>${nombreDestino}</td>
-            <td>${estado}</td>
-        `;
+                let tr = document.createElement('tr');
+
+                // Columna 1: tipo de notificación
+                let td1 = document.createElement('td');
+                td1.textContent = notif.id_tipo;
+                tr.appendChild(td1);
+
+                // Columna 2: título / descripción
+                let td2 = document.createElement('td');
+                td2.textContent = notif.titulo;
+                tr.appendChild(td2);
+
+                // Columna 3: persona destinataria
+                let td3 = document.createElement('td');
+                td3.textContent = nombreDestino;
+                tr.appendChild(td3);
+
+                // Columna 4: si la notificación ha sido leída o no
+                let td4 = document.createElement('td');
+                td4.textContent = estado;
+                tr.appendChild(td4);
+
                 tbody.appendChild(tr);
         });
 }
 
-// ----- UTILIDADES -----
+// =============================================================
+// UTILIDADES
+// =============================================================
+
+// Convierte una fecha en formato ISO (YYYY-MM-DD) a un formato
+// legible en español: "22 Nov 2025"
 function formatearFecha(fechaISO) {
         if (!fechaISO) return '';
-        const [año, mes, dia] = fechaISO.split('-');
-        const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun', 'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
-        return `${dia} ${meses[parseInt(mes) - 1]} ${año}`;
+        let partes = fechaISO.split('-');
+        let año = partes[0];
+        let mes = partes[1];
+        let dia = partes[2];
+        let meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'];
+        return dia + ' ' + meses[parseInt(mes) - 1] + ' ' + año;
 }
 
+// Convierte una fecha y hora ISO a formato "dd/mm/yyyy hh:mm"
 function formatearFechaHora(fechaISO) {
         if (!fechaISO) return '';
-        const d = new Date(fechaISO);
-        return d.toLocaleDateString('es-ES') + ' ' + d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+        let d = new Date(fechaISO);
+        return d.toLocaleDateString('es-ES') + ' ' +
+                d.toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
 }

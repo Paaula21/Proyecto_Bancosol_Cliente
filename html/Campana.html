@@ -19,7 +19,6 @@
         </aside>
 
         <div class="right-container">
-            <!-- Usamos la misma estructura de cabecera que en administrador.html -->
             <header class="header-dashboard">
                 <img src="../images/icono.png" alt="App Icon" class="header-logo">
                 <div class="header-titles">
@@ -33,18 +32,17 @@
                 </div>
             </header>
 
-            <!-- Contenedor principal con el mismo comportamiento que dashboard-container -->
             <main class="campana-container">
                 <section class="filters">
                     <div class="filter-group" id="estado">
                         <label>Estado</label>
                         <select id="filter-state">
-                            <option value="todos">Todos</option>
-                            <option value="planificada">Planificada</option>
-                            <option value="en curso">En Curso</option>
-                            <option value="completada">Completada</option>
-                            <option value="finalizada">Finalizada</option>
-                            <option value="cancelada">Cancelada</option>
+                            <option value="Todos">Todos</option>
+                            <option value="Planificada">Planificada</option>
+                            <option value="Activa">Activa</option>
+                            <option value="Completada">Completada</option>
+                            <option value="Finalizada">Finalizada</option>
+                            <option value="Cancelada">Cancelada</option>
                         </select>
                     </div>
 
@@ -78,7 +76,7 @@
                                 </tr>
                             </thead>
                             <tbody id="table-campanas">
-                                <!-- Filas dinámicas generadas por JS -->
+                                <!-- Se rellena desde JS -->
                             </tbody>
                         </table>
                     </section>
