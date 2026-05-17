@@ -280,3 +280,21 @@ td small {
 .btn-rojo:hover {
     background-color: #ae3022 !important; 
 }
+
+#btn-abrir-registro{
+    flex: 1;
+    padding: 10px 15px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #420098;
+    border: none;
+    color: white;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+#btn-abrir-registro:hover {
+    background-color: #2d0068;
+    transition: background-color 0.3s, color 0.3s;
+}

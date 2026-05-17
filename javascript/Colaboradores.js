@@ -9,6 +9,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
     document.getElementById('btn-filter').addEventListener('click', aplicarFiltros);
     document.getElementById('input-search').addEventListener('input', aplicarFiltros);
+
+    const btnAnadir = document.getElementById('btn-abrir-registro');
+    if (btnAnadir) {
+        btnAnadir.addEventListener('click', () => {
+            // Cambia 'NuevoColaborador.html' por 'AnadirColaborador.html' si renombraste el archivo
+            window.location.href = 'AnadirColaborador.html'; 
+        });
+    }
 });
 
 // ----- OBTENER Y PROCESAR DATOS DE LA DB -----
