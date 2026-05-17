@@ -227,14 +227,14 @@ function renderizarTabla() {
 
         // Enlace para añadir voluntarios a la campaña
         let enlaceVoluntarios = document.createElement('a');
-        enlaceVoluntarios.href = 'RegistroVoluntarios.html';
+        enlaceVoluntarios.href = 'RegistroVoluntarios.html'; // Poner lista voluntarios
         enlaceVoluntarios.className = 'btn-edit';
         enlaceVoluntarios.textContent = 'Añadir voluntario';
 
         // Botón para borrar la campaña
         let btnBorrar = document.createElement('button');
         btnBorrar.className = 'btn-delete';
-        btnBorrar.textContent = 'Borrar';
+        btnBorrar.textContent = 'Eliminar';
 
         btnBorrar.addEventListener('click', function () {
             campanaSeleccionadaId = campana.id_campana;
