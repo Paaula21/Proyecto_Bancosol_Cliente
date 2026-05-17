@@ -252,3 +252,18 @@ td small {
     color: #ef4444;
     font-weight: 600;
 }
+
+/* --- BOTÓN BORRAR --- */
+.btn-delete {
+    background-color: #dc3545;
+    color: #ffffff;
+    border: 1px;
+    padding: 6px 12px;
+    border-radius: 4px;
+    font-size: 0.875rem;
+    cursor: pointer;
+}
+
+.btn-delete:hover {
+    background-color: #7f1d1d;
+}

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/Administrador.css">
     <link rel="stylesheet" href="../css/EditarCampana.css">
+    <link rel="stylesheet" href="../css/popUpRegistro.css">
 
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
@@ -88,6 +89,17 @@
                     </div>
 
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay-confirmar">
+        <div class="popup" id="popup-confirmar">
+            <h3>¿Confirmar cambios?</h3>
+            <p>¿Estás seguro de que deseas guardar los cambios realizados en esta campaña?</p>
+            <div class="popup-actions">
+                <button type="button" class="btn-add" id="btn-confirmar-edicion">Confirmar</button>
+                <button type="button" class="btn-cerrar-popup" id="btn-cancelar-edicion">Cancelar</button>
             </div>
         </div>
     </div>

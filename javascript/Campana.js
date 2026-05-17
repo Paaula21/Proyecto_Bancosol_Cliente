@@ -4,10 +4,88 @@ const API_ENDPOINT = 'http://localhost:3000';
 // Variable global donde guardamos todas las campañas cargadas.
 // La declaramos fuera de las funciones para que todas puedan acceder a ella
 let todasLasCampanas = [];
+let campanaSeleccionadaId = null;
 
 // ----- EVENTO PRINCIPAL -----
 // Esperamos a que el DOM esté cargado antes de hacer nada
 document.addEventListener('DOMContentLoaded', async function () {
+
+
+
+    // Escuchar eventos del popup
+    document.addEventListener('click', async function (e) {
+        if (e.target && e.target.id === 'btn-cancelar-eliminar') {
+            e.preventDefault();
+            document.getElementById('overlay-eliminar').classList.remove('active');
+            document.getElementById('popup-eliminar').classList.remove('active');
+        }
+
+        if (e.target && e.target.id === 'btn-confirmar-eliminar') {
+            e.preventDefault();
+
+            if (!campanaSeleccionadaId) {
+                alert("Error: No se ha seleccionado ninguna campaña.");
+                return;
+            }
+
+            const btnConfirmar = e.target;
+            const textoOriginal = btnConfirmar.textContent;
+
+            try {
+                btnConfirmar.textContent = "Eliminando...";
+                btnConfirmar.disabled = true;
+
+                // Buscamos la campaña para obtener su id interno
+                let response = await fetch(`${API_ENDPOINT}/campana?id_campana=${encodeURIComponent(campanaSeleccionadaId)}`);
+                let busqueda = await response.json();
+
+                if (busqueda.length === 0) {
+                    alert('No se encontró la campaña a borrar.');
+                    return;
+                }
+
+                let idInterno = busqueda[0].id;
+
+                // Borramos la campaña usando su id interno
+                let deleteResponse = await fetch(`${API_ENDPOINT}/campana/${idInterno}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!deleteResponse.ok) {
+                    throw new Error(`Error en el servidor: ${deleteResponse.status}`);
+                }
+
+                // Borramos también las relaciones en campana_cadena
+                let relResponse = await fetch(`${API_ENDPOINT}/campana_cadena?id_campana=${encodeURIComponent(campanaSeleccionadaId)}`);
+                let relacionesActuales = await relResponse.json();
+
+                for (let relacion of relacionesActuales) {
+                    await fetch(`${API_ENDPOINT}/campana_cadena/${relacion.id}`, {
+                        method: 'DELETE'
+                    });
+                }
+
+                document.getElementById('overlay-eliminar').classList.remove('active');
+                document.getElementById('popup-eliminar').classList.remove('active');
+
+                campanaSeleccionadaId = null;
+
+                await cargarCampanas();
+
+                alert("Campaña eliminada con éxito");
+
+            } catch (error) {
+                console.error("Error al intentar eliminar la campaña:", error);
+                alert("No se pudo eliminar la campaña. Inténtalo de nuevo.");
+            } finally {
+                btnConfirmar.textContent = textoOriginal;
+                btnConfirmar.disabled = false;
+            }
+        }
+    });
 
     // Cargamos las campañas del servidor al arrancar la página
     await cargarCampanas();
@@ -153,9 +231,22 @@ function renderizarTabla() {
         enlaceVoluntarios.className = 'btn-edit';
         enlaceVoluntarios.textContent = 'Añadir voluntario';
 
+        // Botón para borrar la campaña
+        let btnBorrar = document.createElement('button');
+        btnBorrar.className = 'btn-delete';
+        btnBorrar.textContent = 'Borrar';
+
+        btnBorrar.addEventListener('click', function () {
+            campanaSeleccionadaId = campana.id_campana;
+            document.getElementById('overlay-eliminar').classList.add('active');
+            document.getElementById('popup-eliminar').classList.add('active');
+        });
+
         td5.appendChild(enlaceEditar);
         td5.appendChild(document.createTextNode(' '));   // Separador entre botones
         td5.appendChild(enlaceVoluntarios);
+        td5.appendChild(document.createTextNode(' '));   // Separador entre botones
+        td5.appendChild(btnBorrar);
         tr.appendChild(td5);
 
         tbody.appendChild(tr);
@@ -192,6 +283,8 @@ function mostrarMensajeVacioEnTabla(mensaje) {
     tr.appendChild(td);
     tbody.appendChild(tr);
 }
+
+
 
 // =============================================================
 // UTILIDADES
