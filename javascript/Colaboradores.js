@@ -130,7 +130,6 @@ async function mostrarDetalle(c) {
     document.getElementById('ficha-zona').textContent = c.nombre_zona;
 
     document.getElementById('ficha-contacto-nombre').textContent = c.contacto_principal;
-    document.getElementById('ficha-contacto-cargo').textContent = c.contacto_cargo;
 
     // --- LÓGICA EMAIL ---
     const linkEmail = document.getElementById('ficha-contacto-email');

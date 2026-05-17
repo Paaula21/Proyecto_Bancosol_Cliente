@@ -71,7 +71,7 @@
 }
 
 .ficha-enlace-tel {
-    color: #4a69bd;
+    color: #420098;
     font-weight: bold;
     text-decoration: none;
 }
@@ -114,14 +114,14 @@
 }
 
 .btn-eliminar {
-    background-color: #f8f9fa;
-    color: #e74c3c;
+    background-color: #e74c3c;
+    color: #f8f9fa;
     border: 1px solid #e74c3c;
     transition: background-color 0.3s, color 0.3s;
 }
 
 .btn-eliminar:hover {
-    background-color: #e74c3c;
+    background-color: #ae3022;
     color: white;
     transition: background-color 0.3s, color 0.3s;
 }
