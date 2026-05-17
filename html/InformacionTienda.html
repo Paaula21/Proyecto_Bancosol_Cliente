@@ -1,13 +1,3 @@
-<!--DUDAS:
-AÑADIR: barra en la tabla para que aparezca??
-1) ¿Que significaba lineales en la bd?
-2) ¿asignacion-turno-colaborador que es lo que muestra realmente?-->
-
-<!--FUTURAS MODIFICACIONES:
-1) Añadir el numero de resultados que han aparecido
-2) Modificar la información que aparece en la tabla
-3) Refactorizar codigo-->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -18,8 +8,9 @@ AÑADIR: barra en la tabla para que aparezca??
     <link rel="stylesheet" href="../css/Sidebar.css">
     <link rel="stylesheet" href="../css/Common.css">
     <link rel="stylesheet" href="../css/popUpRegistro.css">
-    <script src="../javascript/InformacionTienda.js" defer></script>
+    <link rel="stylesheet" href="../css/DetalleColaborador.css">
     <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/InformacionTienda.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/popUpRegistro.js"></script>
 </head>
@@ -52,9 +43,6 @@ AÑADIR: barra en la tabla para que aparezca??
                             <label for="filter-chain">Cadena</label>
                             <select id="filter-chain" name="chain">
                                 <option value="">Todas las cadenas</option>
-                                <option value="mercadona">Mercadona</option>
-                                <option value="carrefour">Carrefour</option>
-                                <option value="dia">Dia</option>
                             </select>
                         </div>
 
@@ -67,10 +55,10 @@ AÑADIR: barra en la tabla para que aparezca??
                         <div class="filter-group small-box">
                             <label for="filter-type">Tipo de Vía</label>
                             <select id="filter-type" name="type">
-                                <option value="">Sin especificar</option>
-                                <option value="street">Calle</option>
-                                <option value="avenue">Avenida</option>
-                                <option value="square">Plaza</option>
+                                <option value="">Todas</option>
+                                <option value="Calle">Calle</option>
+                                <option value="Avenida">Avenida</option>
+                                <option value="Plaza">Plaza</option>
                             </select>
                         </div>
                         <div class="filter-group">
@@ -82,34 +70,32 @@ AÑADIR: barra en la tabla para que aparezca??
                             <input type="text" id="filter-code" name="code" minlength="5" maxlength="5" pattern="[0-9]{5}"
                                    title="Introduce exactamente 5 números" placeholder="29XXX">
                         </div>
-                        <div class="filter-group small-box">
-                            <label for="filter-district">Distrito</label>
-                            <input type="text" id="filter-district" name="district" minlength="1" maxlength="2" placeholder="Ej: 3" >
-                        </div>
                         <div class="filter-group">
                             <label for="filter-city">Localidad</label>
-                            <input type="text" id="filter-city" name="city" placeholder="Buscar localidad...">
+                            <select id="filter-city" name="city">
+                                <option value="">Todas las localidades</option>
+                            </select>
                         </div>
                         <div class="filter-group">
                             <label for="filter-zone">Zona Geográfica</label>
-                            <input type="text" id="filter-zone" name="zone" placeholder="Buscar zona...">
+                            <select id="filter-zone" name="zone">
+                                <option value="">Todas las zonas</option>
+                            </select>
                         </div>
                         <div class="filter-group small-box">
                             <label for="filter-gr">¿Gran Recogida?</label>
                             <select id="filter-gr" name="gr">
-                                <option value="yes">Si</option>
-                                <option value="no">No</option>
-                                <!--Para cuando queremos no marcar nada-->
                                 <option value="todas">Todas</option>
+                                <option value="yes">Sí</option>
+                                <option value="no">No</option>
                             </select>
                         </div>
                         <div class="filter-group small-box">
                             <label for="filter-primavera">¿Primavera?</label>
                             <select id="filter-primavera" name="primavera">
-                                <option value="yes">Si</option>
-                                <option value="no">No</option>
-                                <!--Para cuando queremos no marcar nada-->
                                 <option value="todas">Todas</option>
+                                <option value="yes">Sí</option>
+                                <option value="no">No</option>
                             </select>
                         </div>
 
@@ -117,13 +103,12 @@ AÑADIR: barra en la tabla para que aparezca??
                         <div class="filter-group">
                             <label for="filter-coordinator">Coordinador</label>
                             <select id="filter-coordinator" name="coordinator">
-                                <!--REVISAR ESTO-->
                                 <option value="">Todos</option>
                             </select>
                         </div>
 
                         <div class="filter-button">
-                            <button type="submit" class="btn btn--primary">Filtrar</button>
+                            <button type="button" id="btn-filter" class="btn btn--primary">Filtrar</button>
                         </div>
                     </section>
                 </form>
@@ -135,8 +120,8 @@ AÑADIR: barra en la tabla para que aparezca??
                             <a href="NuevaTienda.html">
                                 <button type="button" class="btn btn--primary">+ Añadir</button>
                             </a>
+                            <p id="contador-establecimientos">Cargando...</p>
                         </div>
-                        <!--MIRAR BTN-DANGER CSS es btn secundary--->
                         <div class="table-wrapper">
                             <table class="data-table">
                                 <thead>
@@ -144,199 +129,53 @@ AÑADIR: barra en la tabla para que aparezca??
                                     <th>Nombre</th>
                                     <th>Localidad</th>
                                     <th>Coordinador</th>
-                                    <th>¿Gran Recogida?</th>
-                                    <th>¿Primavera?</th>
-                                    <th class="col-actions">Acciones</th>
                                 </tr>
                                 </thead>
-                                <tbody>
-                                <tr>
-                                    <td><strong>Carrefour Hiper</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Express</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-no">No</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td><strong>Carrefour Market</strong></td>
-                                    <td>Rincón de la Victoria</td>
-                                    <td>J.M. Cobos</td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td><span class="badge badge-yes">Sí</span></td>
-                                    <td class="col-actions">
-                                        <button type="button" class="btn btn--secondary">Editar</button>
-                                        <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                    </td>
-                                </tr>
+                                <tbody id="tabla-establecimientos">
+                                <tr><td colspan="3" style="text-align: center; padding: 20px;">Cargando...</td></tr>
                                 </tbody>
                             </table>
-                        </div> <!-- /.table-wrapper -->
+                        </div>
                     </div>
 
-
-                    <!--INFORMACION-->
-                    <aside class="detail-panel" id="detail-panel">
-                        <div class="detail-panel-header">
-                            <h3>Carrefour Hiper</h3>
-                            <p>Rincón de la Victoria · Málaga</p>
+                    <aside class="detail-panel">
+                        <div id="estado-vacio-panel" class="estado-vacio">
+                            <h3>Detalle de Establecimiento</h3>
+                            <p>Haga clic en un establecimiento de la lista para ver sus detalles.</p>
                         </div>
-                        <div class="detail-fields">
-                            <div class="detail-field">
-                                <span class="field-label">Cadena</span>
-                                <span class="field-value">Carrefour</span>
+                        <div id="datos-establecimiento" class="datos-colaborador" style="display: none;">
+                            <h3 class="ficha-titulo-principal">Ficha del Establecimiento</h3>
+                            <div class="ficha-cabecera">
+                                <div class="ficha-titulos">
+                                    <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
+                                    <span id="ficha-cadena" class="ficha-etiqueta-codigo">---</span>
+                                </div>
                             </div>
-                            <div class="detail-field">
-                                <span class="field-label">Alias</span>
-                                <span class="field-value">Carrefour Hiper</span>
+                            <div class="ficha-grid">
+                                <div class="ficha-tarjeta-info">
+                                    <h5>UBICACIÓN</h5>
+                                    <p><strong>Localidad:</strong> <span id="ficha-localidad">---</span></p>
+                                    <p><strong>Zona Geográfica:</strong> <span id="ficha-zona">---</span></p>
+                                </div>
+                                <div class="ficha-tarjeta-info">
+                                    <h5>DIRECCIÓN POSTAL</h5>
+                                    <p id="ficha-direccion">---</p>
+                                    <p><strong>Código Postal:</strong> <span id="ficha-cp">---</span></p>
+                                </div>
+                                <div class="ficha-tarjeta-info">
+                                    <h5>INFORMACIÓN GENERAL</h5>
+                                    <p><strong>Lineales:</strong> <span id="ficha-lineales">---</span></p>
+                                    <p><strong>Coordinador:</strong> <span id="ficha-coordinador">---</span></p>
+                                </div>
+                                <div class="ficha-tarjeta-info">
+                                    <h5>Campañas</h5>
+                                    <p><strong>Gran Recogida:</strong> <span id="ficha-gr">---</span></p>
+                                    <p><strong>Primavera:</strong> <span id="ficha-primavera">---</span></p>
+                                </div>
                             </div>
-                            <div class="detail-field">
-                                <span class="field-label">Lineales</span>
-                                <span class="field-value">1</span>
-                            </div>
-                            <div class="detail-field">
-                                <span class="field-label">Coordinador</span>
-                                <span class="field-value">J.M. Cobos</span>
-                            </div>
-                            <div class="detail-field">
-                                <span class="field-label">Dirección</span>
-                                <span class="field-value">C/ Arroyo de Totalán, 36</span>
-                            </div>
-                            <div class="detail-field">
-                                <span class="field-label">Colaborador</span>
-                                <span class="field-value">Cristóbal</span>
-                            </div>
-                            <div class="detail-field">
-                                <span class="field-label">Primavera</span>
-                                <span class="field-value"><span class="badge badge-yes">Sí</span></span>
-                            </div>
-                            <div class="detail-field">
-                                <span class="field-label">Gran Recogida</span>
-                                <span class="field-value"><span class="badge badge-yes">Sí</span></span>
+                            <div class="ficha-acciones">
+                                <button type="button" id="btn-editar-establecimiento" class="btn-ficha btn-editar">Editar</button>
+                                <button type="button" id="btn-eliminar-establecimiento" class="btn-ficha btn-eliminar">Eliminar</button>
                             </div>
                         </div>
                     </aside>
@@ -345,27 +184,17 @@ AÑADIR: barra en la tabla para que aparezca??
         </div>
     </div>
 </div>
-
-<!-- Pop-up confirmación borrado -->
-<div class="delete-overlay" id="delete-overlay">
-    <div class="delete-popup">
-        <div class="delete-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
-                <path d="M10 11v6M14 11v6"></path>
-                <path d="M9 6V4h6v2"></path>
-            </svg>
-        </div>
-        <h3>¿Eliminar establecimiento?</h3>
-        <p>Vas a eliminar <strong id="delete-target-name"></strong>. Esta acción no se puede deshacer.</p>
-        <div class="delete-popup-actions">
-            <button class="btn-cancel-del" id="btn-cancel-del">Cancelar</button>
-            <button class="btn-confirm-del" id="btn-confirm-del">Eliminar</button>
+    <div class="overlay" id="overlay-eliminar">
+        <div class="popup" id="popup-eliminar">
+            <h3>¿Eliminar establecimiento?</h3>
+            <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este establecimiento de la base de datos?</p>
+            <div class="popup-actions">
+                <form action="">
+                    <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
+                    <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+                </form>
+            </div>
         </div>
     </div>
-</div>
-
 </body>
 </html>

@@ -1,9 +1,5 @@
-/* ===================================================
-   Formularios.css — NuevaCadena.html y NuevaTienda.html
-   Depende de: Common.css
-   =================================================== */
+/*CSS de NuevaTienda y NuevaCadena*/
 
-/* ─── Zona central del formulario ─── */
 .form-container-centered {
     flex: 1;
     display: flex;
@@ -23,7 +19,6 @@
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1);
 }
 
-/* ─── Cabecera del modal ─── */
 .modal-header {
     display: flex;
     justify-content: space-between;
@@ -57,17 +52,16 @@
     color: #555;
 }
 
-/* ─── Campos del formulario ─── */
 .field-group {
     display: flex;
     flex-direction: column;
-    gap: 6px;
+    gap: 8px;
 }
 
 .field-group label {
-    font-size: 0.8125rem;
-    font-weight: 700;
-    color: #333;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
 }
 
 .field-group input,
@@ -87,45 +81,36 @@
     border-color: #420098;
 }
 
-/* ─── Filas del formulario ─── */
+form[id$="-form"] {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
 .form-row {
     display: flex;
     gap: 16px;
-    margin-bottom: 20px;
+    margin-bottom: 0;
 }
 
 .form-row.columns-2 .field-group {
     flex: 1;
 }
 
-/* Ancho fijo para campos pequeños en NuevaTienda */
-.form-row .box-tipo-via {
-    flex: 0 0 150px;
-}
+.form-row .box-tipo-via  { flex: 0 0 150px; }
+.form-row .box-numero    { flex: 0 0 90px;  }
+.form-row .box-cp        { flex: 0 0 110px; }
+.form-row .box-distrito  { flex: 0 0 90px;  }
 
-.form-row .box-numero {
-    flex: 0 0 90px;
-}
-
-.form-row .box-cp {
-    flex: 0 0 110px;
-}
-
-.form-row .box-distrito {
-    flex: 0 0 90px;
-}
-
-/* Campo único ocupa todo el ancho */
 .field-group:only-child {
     flex: 1;
 }
 
-/* ─── Acciones del formulario ─── */
 .form-actions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
-    margin-top: 30px;
+    margin-top: 0;
 }
 
 .btn-cancel {
@@ -159,5 +144,19 @@
 }
 
 .btn-save:hover {
+    background: #310073;
+}
+
+.popup-icon--save {
+    background: #e0f2fe;
+    color: #0369a1;
+}
+
+.btn-confirm-del {
+    background: #420098;
+    transition: background 0.2s;
+}
+
+.btn-confirm-del:hover {
     background: #310073;
 }

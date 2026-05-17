@@ -19,7 +19,7 @@
 
     <div class="right-content">
 
-        <!-- Cabecera -->
+        <!-- CABECERA -->
         <header class="main-header">
             <nav>
                 <div class="header-branding">
@@ -29,8 +29,7 @@
                         <p>Gestión de establecimientos participantes en las campañas</p>
                     </div>
                 </div>
-                <button class="btn btn--secondary" id="btn-notifications">
-                    🔔 Notificaciones
+                <button class="btn btn--secondary" id="btn-notifications">Notificaciones
                 </button>
             </nav>
         </header>
@@ -41,7 +40,6 @@
 
                 <div class="modal-header">
                     <div>
-                        <!-- El título cambia dinámicamente: "Nueva Tienda" o "Editar Tienda" -->
                         <h1 id="form-title">Nueva Tienda</h1>
                         <p id="form-subtitle">Añade un nuevo establecimiento a la base de datos</p>
                     </div>
@@ -52,7 +50,6 @@
 
                 <form id="store-form">
 
-                    <!-- Cadena + Nombre -->
                     <div class="form-row columns-2">
                         <div class="field-group">
                             <label for="chain-select">Cadena</label>
@@ -124,10 +121,8 @@
                         <a href="InformacionTienda.html">
                             <button type="button" class="btn-cancel">Cancelar</button>
                         </a>
-                        <!-- type="button" para interceptar el click antes de validar el form -->
                         <button type="button" class="btn-save" id="btn-save">Guardar tienda</button>
                     </div>
-
                 </form>
             </div>
         </div>
@@ -135,7 +130,7 @@
 
 </div>
 
-<!-- ── Pop-up confirmación de guardado ── -->
+<!--POP-UP-->
 <div class="delete-overlay" id="save-overlay">
     <div class="delete-popup">
         <div class="delete-icon" style="background:#e0f2fe; color:#0369a1;">
@@ -156,90 +151,7 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-        // ── Datos de ejemplo (en producción vendrían del servidor) ──────────────
-        // Deben coincidir con los de InformacionTienda.js
-        const storeData = {
-            'Carrefour Hiper': {
-                chain: 'carrefour', storeName: 'Carrefour Hiper',
-                streetType: 'street', streetAddress: 'Arroyo de Totalán',
-                buildingNumber: '36', zipCode: '', district: '',
-                city: 'Rincón de la Victoria', geoZone: 'Málaga',
-            },
-            'Carrefour Express': {
-                chain: 'carrefour', storeName: 'Carrefour Express',
-                streetType: 'avenue', streetAddress: 'del Mediterráneo',
-                buildingNumber: '12', zipCode: '', district: '',
-                city: 'Rincón de la Victoria', geoZone: 'Málaga',
-            },
-            'Carrefour Market': {
-                chain: 'carrefour', storeName: 'Carrefour Market',
-                streetType: 'square', streetAddress: 'Mayor',
-                buildingNumber: '5', zipCode: '', district: '',
-                city: 'Rincón de la Victoria', geoZone: 'Málaga',
-            },
-        };
-
-        // ── Detectar modo edición por parámetro URL: ?edit=NombreTienda ─────────
-        const params   = new URLSearchParams(window.location.search);
-        const editName = params.get('edit');
-        const isEdit   = Boolean(editName && storeData[editName]);
-
-        if (isEdit) {
-            // Cambiar títulos
-            document.getElementById('form-title').textContent     = 'Editar Tienda';
-            document.getElementById('form-subtitle').textContent  = `Modificando datos de "${editName}"`;
-            document.getElementById('save-popup-title').textContent = '¿Guardar cambios?';
-            document.getElementById('save-popup-msg').textContent   = `Se actualizarán los datos de "${editName}".`;
-
-            // Precargar campos
-            const d = storeData[editName];
-            document.getElementById('chain-select').value    = d.chain;
-            document.getElementById('store-name').value      = d.storeName;
-            document.getElementById('street-type').value     = d.streetType;
-            document.getElementById('street-address').value  = d.streetAddress;
-            document.getElementById('building-number').value = d.buildingNumber;
-            document.getElementById('zip-code').value        = d.zipCode;
-            document.getElementById('district-name').value   = d.district;
-            document.getElementById('city-name').value       = d.city;
-            document.getElementById('geo-zone').value        = d.geoZone;
-        }
-
-        // ── Popup de confirmación de guardado ────────────────────────────────────
-        const saveOverlay  = document.getElementById('save-overlay');
-        const btnSave      = document.getElementById('btn-save');
-        const btnCancelSave  = document.getElementById('btn-cancel-save');
-        const btnConfirmSave = document.getElementById('btn-confirm-save');
-        const form         = document.getElementById('store-form');
-
-        btnSave.addEventListener('click', () => {
-            // Primero validar el formulario nativo
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-            saveOverlay.classList.add('active');
-        });
-
-        btnCancelSave.addEventListener('click', () => {
-            saveOverlay.classList.remove('active');
-        });
-
-        // Cerrar al pulsar fuera del popup
-        saveOverlay.addEventListener('click', (e) => {
-            if (e.target === saveOverlay) saveOverlay.classList.remove('active');
-        });
-
-        btnConfirmSave.addEventListener('click', () => {
-            // Aquí iría la llamada al servidor (fetch/submit).
-            // Por ahora redirigimos directamente a la lista.
-            window.location.href = 'InformacionTienda.html';
-        });
-
-    });
-</script>
+<script src="../javascript/NuevaTienda.js"></script>
 
 </body>
 </html>

@@ -1,6 +1,3 @@
-<!--COSAS PENDIENTES:
-2) Refactorizar código-->
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -107,63 +104,7 @@
     </div>
 </div>
 
-<script>
-    document.addEventListener('DOMContentLoaded', () => {
-
-        // ── Datos de ejemplo (en producción vendrían del servidor) ─────────────
-        const chainData = {
-            'Carrefour':  { name: 'Carrefour',  primavera: 'yes', gr: 'yes' },
-            'Mercadona':  { name: 'Mercadona',  primavera: 'no',  gr: 'yes' },
-            'Dia':        { name: 'Dia',         primavera: 'yes', gr: 'yes' },
-        };
-
-        // ── Detectar modo edición por parámetro URL: ?edit=NombreCadena ───────
-        const params    = new URLSearchParams(window.location.search);
-        const editName  = params.get('edit');
-        const isEdit    = Boolean(editName && chainData[editName]);
-
-        if (isEdit) {
-            document.getElementById('form-title').textContent      = 'Editar Cadena';
-            document.getElementById('form-subtitle').textContent   = `Modificando datos de "${editName}"`;
-            document.getElementById('save-popup-title').textContent = '¿Guardar cambios?';
-            document.getElementById('save-popup-msg').textContent   = `Se actualizarán los datos de "${editName}".`;
-
-            const d = chainData[editName];
-            document.getElementById('chain-name').value            = d.name;
-            document.getElementById('spring-participation').value  = d.primavera;
-            document.getElementById('gr-participation').value      = d.gr;
-        }
-
-        // ── Popup de confirmación de guardado ──────────────────────────────────
-        const saveOverlay    = document.getElementById('save-overlay');
-        const btnSave        = document.getElementById('btn-save');
-        const btnCancelSave  = document.getElementById('btn-cancel-save');
-        const btnConfirmSave = document.getElementById('btn-confirm-save');
-        const form           = document.getElementById('chain-form');
-
-        btnSave.addEventListener('click', () => {
-            if (!form.checkValidity()) {
-                form.reportValidity();
-                return;
-            }
-            saveOverlay.classList.add('active');
-        });
-
-        btnCancelSave.addEventListener('click', () => {
-            saveOverlay.classList.remove('active');
-        });
-
-        saveOverlay.addEventListener('click', (e) => {
-            if (e.target === saveOverlay) saveOverlay.classList.remove('active');
-        });
-
-        btnConfirmSave.addEventListener('click', () => {
-            // Aquí iría la llamada al servidor. Por ahora redirigimos.
-            window.location.href = 'InformacionCadena.html';
-        });
-
-    });
-</script>
+<script src="../javascript/NuevaCadena.js"></script>
 
 </body>
 </html>

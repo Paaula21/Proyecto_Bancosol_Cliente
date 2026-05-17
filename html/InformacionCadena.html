@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/TablaEstilos.css">
     <link rel="stylesheet" href="../css/Common.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
+    <link rel="stylesheet" href="../css/popUpRegistro.css">
     <script src="../javascript/InformacionCadena.js" defer></script>
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
@@ -38,30 +39,27 @@
                         <div class="filter-group">
                             <label for="filter-chain">Nombre</label>
                             <select id="filter-chain" name="chain">
-                                <option value="">Todas las cadenas</option>
-                                <option value="mercadona">Mercadona</option>
-                                <option value="carrefour">Carrefour</option>
-                                <option value="dia">Dia</option>
+                                 <option value="">Todas las cadenas</option>
                             </select>
                         </div>
                         <div class="filter-group small-box">
                             <label for="filter-gr">¿Gran Recogida?</label>
                             <select id="filter-gr" name="gr">
-                                <option value="yes">Si</option>
-                                <option value="no">No</option>
                                 <option value="todas">Todas</option>
+                                <option value="yes">Sí</option>
+                                <option value="no">No</option>
                             </select>
                         </div>
                         <div class="filter-group small-box">
                             <label for="filter-primavera">¿Primavera?</label>
                             <select id="filter-primavera" name="primavera">
-                                <option value="yes">Si</option>
-                                <option value="no">No</option>
                                 <option value="todas">Todas</option>
+                                <option value="yes">Sí</option>
+                                <option value="no">No</option>
                             </select>
                         </div>
                         <div class="filter-button">
-                            <button type="submit" class="btn btn--primary">Filtrar</button>
+                            <button type="button" id="btn-filter" class="btn btn--primary">Filtrar</button>
                         </div>
                     </section>
                 </form>
@@ -72,6 +70,7 @@
                         <a href="NuevaCadena.html">
                             <button type="button" class="btn btn--primary">+ Añadir</button>
                         </a>
+                        <p id="contador-cadenas">Cargando...</p>
                     </div>
 
                     <div class="table-wrapper">
@@ -85,64 +84,26 @@
                                 <th class="col-actions">Acciones</th>
                             </tr>
                             </thead>
-                            <tbody>
-                            <tr>
-                                <td><strong>Carrefour</strong></td>
-                                <td>76</td>
-                                <td><span class="badge badge-yes">Sí</span></td>
-                                <td><span class="badge badge-yes">Sí</span></td>
-                                <td class="col-actions">
-                                    <button type="button" class="btn btn--secondary">Editar</button>
-                                    <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>Mercadona</strong></td>
-                                <td>67</td>
-                                <td><span class="badge badge-yes">Sí</span></td>
-                                <td><span class="badge badge-no">No</span></td>
-                                <td class="col-actions">
-                                    <button type="button" class="btn btn--secondary">Editar</button>
-                                    <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td><strong>Dia</strong></td>
-                                <td>32</td>
-                                <td><span class="badge badge-yes">Sí</span></td>
-                                <td><span class="badge badge-yes">Sí</span></td>
-                                <td class="col-actions">
-                                    <button type="button" class="btn btn--secondary">Editar</button>
-                                    <button type="button" class="btn btn--secondary btn-icon--danger">Borrar</button>
-                                </td>
-                            </tr>
+                            <tbody id="tabla-cadenas">
+                            <tr><td colspan="5" style="text-align:center;padding:20px;">Cargando...</td></tr>
                             </tbody>
                         </table>
                     </div>
-                    <!-- Contador de resultados — lo genera InformacionCadena.js -->
                 </div>
             </main>
         </div>
     </div>
 </div>
 
-<!-- Pop-up confirmación borrado — reutiliza estilos de TablaEstilos.css -->
-<div class="delete-overlay" id="delete-overlay">
-    <div class="delete-popup">
-        <div class="delete-icon">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none"
-                 viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-                <polyline points="3 6 5 6 21 6"></polyline>
-                <path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"></path>
-                <path d="M10 11v6M14 11v6"></path>
-                <path d="M9 6V4h6v2"></path>
-            </svg>
-        </div>
+<div class="overlay" id="overlay-eliminar">
+    <div class="popup" id="popup-eliminar">
         <h3>¿Eliminar cadena?</h3>
-        <p>Vas a eliminar <strong id="delete-target-name"></strong>. Esta acción no se puede deshacer.</p>
-        <div class="delete-popup-actions">
-            <button class="btn-cancel-del" id="btn-cancel-del">Cancelar</button>
-            <button class="btn-confirm-del" id="btn-confirm-del">Eliminar</button>
+        <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta cadena de la base de datos?</p>
+        <div class="popup-actions">
+            <form action="">
+                <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
+                <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+            </form>
         </div>
     </div>
 </div>

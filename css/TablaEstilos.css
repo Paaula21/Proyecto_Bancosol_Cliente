@@ -135,25 +135,22 @@ Copy
 
 /* ── Tabla mejorada ── */
 .data-table thead th {
-    font-size: 0.7rem;
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    color: #9ca3af;
-    padding: 10px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    text-transform: none;
+    letter-spacing: normal;
+    color: #111827;
+    padding: 12px 16px;
 }
 
 .data-table tbody tr {
     transition: background 0.15s;
 }
 
-/* Zebra striping: filas alternas blanco / gris muy suave */
-.data-table tbody tr:nth-child(odd) {
-    background-color: #ffffff;
-}
-
+/* Fondo blanco en todas las filas (sin cebra) */
+.data-table tbody tr:nth-child(odd),
 .data-table tbody tr:nth-child(even) {
-    background-color: #f8fafc;
+    background-color: #ffffff;
 }
 
 /* Sin efecto hover */
@@ -175,40 +172,3 @@ Copy
     color: #111827;
 }
 
-/* Indicador Sí / No con punto de color */
-.dot-yes,
-.dot-no {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    font-size: 0.875rem;
-    font-weight: 500;
-}
-
-.dot-yes::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #22c55e;
-    flex-shrink: 0;
-}
-
-.dot-no::before {
-    content: '';
-    display: inline-block;
-    width: 8px;
-    height: 8px;
-    border-radius: 50%;
-    background: #d1d5db;
-    flex-shrink: 0;
-}
-
-.dot-yes {
-    color: #15803d;
-}
-
-.dot-no {
-    color: #9ca3af;
-}

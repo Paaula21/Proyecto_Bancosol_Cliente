@@ -104,20 +104,4 @@ header.main-header nav {
     border-color: #9ca3af;
 }
 
-/* ─── Badges Sí/No ─── */
-.badge {
-    padding: 4px 8px;
-    border-radius: 999px;
-    font-size: 0.75rem;
-    font-weight: 600;
-}
 
-.badge-yes {
-    background-color: #dcfce7;
-    color: #166534;
-}
-
-.badge-no {
-    background-color: #f3f4f6;
-    color: #374151;
-}

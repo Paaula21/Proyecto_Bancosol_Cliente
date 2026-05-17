@@ -1,252 +1,318 @@
-/**
- * InformacionTienda.js
- * Funcionalidades:
- *  1. Panel de detalle dinámico al hacer clic en una fila
- *  2. Pop-up de confirmación antes de borrar
- *  3. Filtros en tiempo real sobre la tabla
- */
+// ----- INITIAL CONFIGURATION -----
+const API_BASE = 'http://localhost:3000';
+const VISIBLE_ROWS = 6;
 
-document.addEventListener('DOMContentLoaded', () => {
+let establishmentsData = [];
+let selectedEstablishmentId = null;
 
-    // ─── Datos de ejemplo ────────────────────────────────────────────────────
-    const storeData = {
-        'Carrefour Hiper': {
-            cadena: 'Carrefour', alias: 'Carrefour Hiper', lineales: 1,
-            coordinador: 'J.M. Cobos', direccion: 'C/ Arroyo de Totalán, 36',
-            colaborador: 'Cristóbal', localidad: 'Rincón de la Victoria',
-            zona: 'Málaga', granRecogida: true, primavera: true,
-        },
-        'Carrefour Express': {
-            cadena: 'Carrefour', alias: 'Carrefour Express', lineales: 2,
-            coordinador: 'J.M. Cobos', direccion: 'Av. del Mediterráneo, 12',
-            colaborador: 'Lucía Martín', localidad: 'Rincón de la Victoria',
-            zona: 'Málaga', granRecogida: true, primavera: false,
-        },
-        'Carrefour Market': {
-            cadena: 'Carrefour', alias: 'Carrefour Market', lineales: 3,
-            coordinador: 'J.M. Cobos', direccion: 'Plaza Mayor, 5',
-            colaborador: 'Antonio García', localidad: 'Rincón de la Victoria',
-            zona: 'Málaga', granRecogida: true, primavera: true,
-        },
+document.addEventListener("DOMContentLoaded", () => {
+    loadEstablishments();
+    document.getElementById('btn-filter').addEventListener('click', applyFilters);
+
+    document.getElementById('btn-editar-establecimiento').addEventListener('click', (e) => {
+        e.stopPropagation();
+        const est = establishmentsData.find(e => e.id_establecimiento === selectedEstablishmentId);
+        if (est) {
+            sessionStorage.setItem('establecimiento_editar', JSON.stringify(est));
+            window.location.href = 'NuevaTienda.html';
+        }
+    });
+
+    document.getElementById('btn-eliminar-establecimiento').addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (selectedEstablishmentId) {
+            document.getElementById('overlay-eliminar').classList.add('active');
+            document.getElementById('popup-eliminar').classList.add('active');
+        }
+    });
+
+    document.getElementById('btn-cancelar-eliminar').addEventListener('click', (e) => {
+        e.preventDefault();
+        hideDeletePopup();
+    });
+
+    document.getElementById('btn-confirmar-eliminar').addEventListener('click', async (e) => {
+        e.preventDefault();
+        await deleteEstablishment(e.target);
+    });
+});
+
+// ----- UTILITIES -----
+async function fetchJson(url) {
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Error ${res.status} en ${url}`);
+    return res.json();
+}
+
+function capitalize(str) {
+    if (!str) return str;
+    return str.charAt(0).toUpperCase() + str.slice(1);
+}
+
+function clearSelection() {
+    document.querySelectorAll('#tabla-establecimientos tr').forEach(r => r.classList.remove('selected'));
+}
+
+function updateScrollable(list) {
+    const wrapper = document.querySelector('.table-wrapper');
+    wrapper.classList.toggle('scrollable', list.length > VISIBLE_ROWS);
+}
+
+function buildAddress(dir) {
+    if (!dir) return "No disponible";
+    const via = dir.nombre_via || "";
+    let numStr = "";
+    if (dir.numero) {
+        numStr = `, ${dir.numero}`;
+    } else if (!via.toLowerCase().includes("s/n")) {
+        numStr = ", s/n";
+    }
+    return `${dir.tipo_via || ''} ${via}${numStr}`;
+}
+
+function populateChainSelect(chains) {
+    const select = document.getElementById('filter-chain');
+    while (select.options.length > 1) select.remove(1);
+    chains.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id_cadena;
+        opt.textContent = c.nombre_cadena;
+        select.appendChild(opt);
+    });
+}
+
+function populateCoordinatorSelect(users) {
+    const select = document.getElementById('filter-coordinator');
+    users.filter(u => u.id_rol === 2).forEach(u => {
+        const opt = document.createElement('option');
+        opt.value = u.id_usuario;
+        opt.textContent = capitalize(u.usuario);
+        select.appendChild(opt);
+    });
+}
+
+function populateCitySelect(divisions) {
+    const select = document.getElementById('filter-city');
+    const cities = [...new Set(divisions.map(d => d.nombre_division))].sort();
+    cities.forEach(l => {
+        const opt = document.createElement('option');
+        opt.value = l;
+        opt.textContent = l;
+        select.appendChild(opt);
+    });
+}
+
+function populateZoneSelect(zones) {
+    const select = document.getElementById('filter-zone');
+    const zoneNames = [...new Set(zones.map(z => z.nombre_zona))].sort();
+    zoneNames.forEach(z => {
+        const opt = document.createElement('option');
+        opt.value = z;
+        opt.textContent = z;
+        select.appendChild(opt);
+    });
+}
+
+function setTableState(state, message = '') {
+    const tbody = document.getElementById('tabla-establecimientos');
+    const counter = document.getElementById('contador-establecimientos');
+
+    if (state === 'loading') {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;">Cargando...</td></tr>`;
+        counter.textContent = 'Cargando...';
+    } else if (state === 'error') {
+        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;color:#dc2626;">${message}</td></tr>`;
+        counter.textContent = 'Error de conexión';
+    }
+}
+
+// ----- FETCH AND PROCESS DATA -----
+async function loadEstablishments() {
+    setTableState('loading');
+    try {
+        const [establishments, chains, direcciones, codigosPostales, divisions, zones, asignaciones, users] = await Promise.all([
+            fetchJson(`${API_BASE}/establecimiento`),
+            fetchJson(`${API_BASE}/cadena`),
+            fetchJson(`${API_BASE}/direccion`),
+            fetchJson(`${API_BASE}/codigo_postal`),
+            fetchJson(`${API_BASE}/division_territorial`),
+            fetchJson(`${API_BASE}/zona_geografica`),
+            fetchJson(`${API_BASE}/asignacion_coordinador`),
+            fetchJson(`${API_BASE}/usuario`)
+        ]);
+
+        populateChainSelect(chains);
+        populateCoordinatorSelect(users);
+        populateCitySelect(divisions);
+        populateZoneSelect(zones);
+
+        establishmentsData = establishments.map(est => {
+            const cadena = chains.find(c => c.id_cadena === est.id_cadena);
+            const dir = direcciones.find(d => d.id_direccion === est.id_direccion);
+            const cp = dir ? codigosPostales.find(c => c.id_cp === dir.id_cp) : null;
+            const div = cp ? divisions.find(d => d.id_division === cp.id_division) : null;
+            const zona = div ? zones.find(z => z.id_zona === div.id_zona) : null;
+
+            const asignacion = asignaciones.find(a => a.id_tienda === est.id_establecimiento);
+            const usuarioCoord = asignacion
+                ? users.find(u => u.id_usuario === asignacion.id_usuario_coordinador)
+                : null;
+
+            return {
+                ...est,
+                nombre_cadena: cadena ? cadena.nombre_cadena : est.id_cadena,
+                localidad: div ? div.nombre_division : "Desconocida",
+                nombre_zona: zona ? zona.nombre_zona : "Sin zona",
+                id_zona: zona ? zona.id_zona : null,
+                nombre_coordinador: usuarioCoord ? capitalize(usuarioCoord.usuario) : "Sin asignar",
+                id_coordinador: asignacion ? asignacion.id_usuario_coordinador : null,
+                gran_recogida: asignaciones.some(a => a.id_tienda === est.id_establecimiento && a.id_campana === "GR2025"),
+                primavera: asignaciones.some(a => a.id_tienda === est.id_establecimiento && a.id_campana === "PRIM2025"),
+                obj_direccion: dir,
+                obj_cp: cp
+            };
+        });
+
+        displayEstablishments(establishmentsData);
+        updateCounter(establishmentsData.length);
+
+    } catch (error) {
+        console.error('Error al cargar datos:', error);
+        setTableState('error', `Error al conectar con la base de datos. Asegúrate de que json-server esté corriendo en ${API_BASE}`);
+    }
+}
+
+// ----- FILTER LOGIC -----
+function applyFilters() {
+    const filters = {
+        cadena:   document.getElementById('filter-chain').value,
+        nombre:   document.getElementById('filter-name').value.toLowerCase().trim(),
+        tipoVia:  document.getElementById('filter-type').value,
+        calle:    document.getElementById('filter-street').value.toLowerCase().trim(),
+        codigo:   document.getElementById('filter-code').value.trim(),
+        localidad: document.getElementById('filter-city').value,
+        zona:     document.getElementById('filter-zone').value,
+        gr:       document.getElementById('filter-gr').value,
+        prim:     document.getElementById('filter-primavera').value,
+        coord:    document.getElementById('filter-coordinator').value
     };
 
-    // ─── Referencias al DOM ──────────────────────────────────────────────────
-    const tbody        = document.querySelector('.data-table tbody');
-    const detailPanel  = document.getElementById('detail-panel');
-    const filterForm   = document.querySelector('form');
-    const overlay      = document.getElementById('delete-overlay');
-    const targetName   = document.getElementById('delete-target-name');
-    const btnCancel    = document.getElementById('btn-cancel-del');
-    const btnConfirm   = document.getElementById('btn-confirm-del');
-    const tableWrapper = document.querySelector('.table-wrapper');
-
-    // Crear el elemento del contador de resultados (debajo de la tabla)
-    const resultCount = document.createElement('p');
-    resultCount.id = 'result-count';
-    resultCount.style.cssText = 'margin: 12px 0 0 0; font-size: 0.8125rem; color: #6b7280;';
-    tableWrapper?.insertAdjacentElement('afterend', resultCount);
-
-    let pendingRow = null;
-
-    // ─── Helpers popup ───────────────────────────────────────────────────────
-
-    function openDeletePopup(row) {
-        const name = row.querySelector('td strong')?.textContent.trim() ?? '';
-        targetName.textContent = `"${name}"`;
-        pendingRow = row;
-        overlay.classList.add('active');
-    }
-
-    function closeDeletePopup() {
-        overlay.classList.remove('active');
-        pendingRow = null;
-    }
-
-    btnCancel?.addEventListener('click', closeDeletePopup);
-
-    overlay?.addEventListener('click', (e) => {
-        if (e.target === overlay) closeDeletePopup();
-    });
-
-    btnConfirm?.addEventListener('click', () => {
-        if (pendingRow) {
-            const storeName = pendingRow.querySelector('td strong')?.textContent.trim();
-            const panelTitle = detailPanel?.querySelector('.detail-panel-header h3');
-            if (panelTitle?.textContent === storeName) {
-                detailPanel.innerHTML = '<p>Selecciona un establecimiento para ver su información.</p>';
-                detailPanel.classList.add('empty');
-            }
-            pendingRow.remove();
-            updateCounterAndScroll();
-        }
-        closeDeletePopup();
-    });
-
-    // ─── Panel de detalle ─────────────────────────────────────────────────────
-
-    function dotHTML(value) {
-        return value
-            ? '<span class="dot-yes">Sí</span>'
-            : '<span class="dot-no">No</span>';
-    }
-
-    function updateDetailPanel(storeName) {
-        const data = storeData[storeName];
-        if (!data || !detailPanel) return;
-
-        detailPanel.classList.remove('empty');
-        detailPanel.innerHTML = `
-            <div class="detail-panel-header">
-                <h3>${data.alias}</h3>
-                <p>${data.localidad} · ${data.zona}</p>
-            </div>
-            <div class="detail-fields">
-                <div class="detail-field">
-                    <span class="field-label">Cadena</span>
-                    <span class="field-value">${data.cadena}</span>
-                </div>
-                <div class="detail-field">
-                    <span class="field-label">Alias</span>
-                    <span class="field-value">${data.alias}</span>
-                </div>
-                <div class="detail-field">
-                    <span class="field-label">Lineales</span>
-                    <span class="field-value">${data.lineales}</span>
-                </div>
-                <div class="detail-field">
-                    <span class="field-label">Coordinador</span>
-                    <span class="field-value">${data.coordinador}</span>
-                </div>
-                <div class="detail-field">
-                    <span class="field-label">Dirección</span>
-                    <span class="field-value">${data.direccion}</span>
-                </div>
-                <div class="detail-field">
-                    <span class="field-label">Colaborador</span>
-                    <span class="field-value">${data.colaborador}</span>
-                </div>
-                <div class="detail-field">
-                    <span class="field-label">Primavera</span>
-                    <span class="field-value">${dotHTML(data.primavera)}</span>
-                </div>
-                <div class="detail-field">
-                    <span class="field-label">Gran Recogida</span>
-                    <span class="field-value">${dotHTML(data.granRecogida)}</span>
-                </div>
-            </div>
-        `;
-    }
-
-    // ─── Delegación de eventos en la tabla ───────────────────────────────────
-
-    tbody?.addEventListener('click', (e) => {
-        const row = e.target.closest('tr');
-        if (!row) return;
-
-        if (e.target.closest('.btn-icon--danger')) {
-            openDeletePopup(row);
-            return;
-        }
-
-        if (e.target.closest('.btn--secondary') && !e.target.closest('.btn-icon--danger')) {
-            // Distinguir botón Editar del botón Borrar por texto
-            const btn = e.target.closest('button');
-            if (btn && btn.textContent.trim() === 'Editar') {
-                const storeName = row.querySelector('td strong')?.textContent.trim();
-                if (storeName) {
-                    window.location.href = `NuevaTienda.html?edit=${encodeURIComponent(storeName)}`;
-                }
-                return;
-            }
-        }
-
-        // Selección de fila → actualizar panel de detalle
-        document.querySelectorAll('.data-table tbody tr').forEach(r => r.classList.remove('selected'));
-        row.classList.add('selected');
-        const storeName = row.querySelector('td strong')?.textContent.trim();
-        if (storeName) updateDetailPanel(storeName);
-    });
-
-    // ─── Filtros en tiempo real ───────────────────────────────────────────────
-
-    function getFilterValues() {
-        return {
-            name:        (document.getElementById('filter-name')?.value || '').toLowerCase(),
-            city:        (document.getElementById('filter-city')?.value || '').toLowerCase(),
-            coordinator: (document.getElementById('filter-coordinator')?.value || '').toLowerCase(),
-            gr:          document.getElementById('filter-gr')?.value || '',
-            primavera:   document.getElementById('filter-primavera')?.value || '',
-        };
-    }
-
-    function rowMatchesFilters(row, f) {
-        const cells = row.querySelectorAll('td');
-        if (!cells.length) return true;
-
-        const name        = cells[0]?.textContent.toLowerCase() ?? '';
-        const city        = cells[1]?.textContent.toLowerCase() ?? '';
-        const coordinator = cells[2]?.textContent.toLowerCase() ?? '';
-        const grText      = cells[3]?.textContent.trim().toLowerCase() ?? '';
-        const primText    = cells[4]?.textContent.trim().toLowerCase() ?? '';
-
-        if (f.name && !name.includes(f.name))               return false;
-        if (f.city && !city.includes(f.city))               return false;
-        if (f.coordinator && !coordinator.includes(f.coordinator)) return false;
-        if (f.gr === 'yes' && grText !== 'sí')              return false;
-        if (f.gr === 'no'  && grText !== 'no')              return false;
-        if (f.primavera === 'yes' && primText !== 'sí')     return false;
-        if (f.primavera === 'no'  && primText !== 'no')     return false;
-
+    const filtered = establishmentsData.filter(est => {
+        if (filters.cadena && est.id_cadena !== filters.cadena) return false;
+        if (filters.nombre && !est.nombre_resena.toLowerCase().includes(filters.nombre)
+                          && !est.nombre_cadena.toLowerCase().includes(filters.nombre)) return false;
+        if (filters.tipoVia && est.obj_direccion?.tipo_via !== filters.tipoVia) return false;
+        if (filters.calle && !est.obj_direccion?.nombre_via.toLowerCase().includes(filters.calle)) return false;
+        if (filters.codigo && est.obj_cp?.codigo !== filters.codigo) return false;
+        if (filters.localidad && est.localidad !== filters.localidad) return false;
+        if (filters.zona && est.nombre_zona !== filters.zona) return false;
+        if (filters.gr === 'yes' && !est.gran_recogida) return false;
+        if (filters.gr === 'no'  &&  est.gran_recogida) return false;
+        if (filters.prim === 'yes' && !est.primavera) return false;
+        if (filters.prim === 'no'  &&  est.primavera) return false;
+        if (filters.coord && est.id_coordinador != filters.coord) return false;
         return true;
+    });
+
+    displayEstablishments(filtered);
+    updateCounter(filtered.length);
+}
+
+// ----- TABLE RENDERING -----
+function createEstablishmentRow(est, onSelect) {
+    const tr = document.createElement('tr');
+    tr.style.cursor = 'pointer';
+
+    tr.innerHTML = `
+        <td>
+            <strong>${est.nombre_resena}</strong>
+            <br><small>${est.nombre_cadena}</small>
+        </td>
+        <td>${est.localidad}</td>
+        <td>${est.nombre_coordinador}</td>
+    `;
+
+    tr.addEventListener('click', () => {
+        onSelect(est, tr);
+    });
+
+    return tr;
+}
+
+function displayEstablishments(list) {
+    const tbody = document.getElementById('tabla-establecimientos');
+    tbody.innerHTML = '';
+    list.forEach(est => tbody.appendChild(
+        createEstablishmentRow(est, (e, tr) => {
+            clearSelection();
+            tr.classList.add('selected');
+            showDetail(e);
+        })
+    ));
+    updateScrollable(list);
+}
+
+function updateCounter(total) {
+    document.getElementById('contador-establecimientos').textContent =
+        `${total} establecimiento${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}`;
+}
+
+// ----- DETAIL PANEL -----
+function showDetail(est) {
+    selectedEstablishmentId = est.id_establecimiento;
+
+    document.getElementById('estado-vacio-panel').style.display = 'none';
+    document.getElementById('datos-establecimiento').style.display = 'block';
+
+    document.getElementById('ficha-nombre').textContent = est.nombre_resena;
+    document.getElementById('ficha-cadena').textContent = est.nombre_cadena;
+    document.getElementById('ficha-localidad').textContent = est.localidad;
+    document.getElementById('ficha-zona').textContent = est.nombre_zona;
+    document.getElementById('ficha-cp').textContent = est.obj_cp?.codigo ?? "No disponible";
+    document.getElementById('ficha-direccion').textContent = buildAddress(est.obj_direccion);
+    document.getElementById('ficha-lineales').textContent = est.lineales;
+    document.getElementById('ficha-coordinador').textContent = est.nombre_coordinador;
+    document.getElementById('ficha-gr').textContent = est.gran_recogida ? 'Sí' : 'No';
+    document.getElementById('ficha-primavera').textContent = est.primavera ? 'Sí' : 'No';
+}
+
+// ----- DELETE POPUP -----
+function hideDeletePopup() {
+    document.getElementById('overlay-eliminar').classList.remove('active');
+    document.getElementById('popup-eliminar').classList.remove('active');
+}
+
+async function deleteEstablishment(btn) {
+    if (!selectedEstablishmentId) {
+        alert("Error: No se ha seleccionado ningún establecimiento.");
+        return;
     }
 
-    // ─── Actualiza contador y scroll vertical ────────────────────────────────
+    const originalText = btn.textContent;
 
-    function updateCounterAndScroll() {
-        const allRows    = tbody?.querySelectorAll('tr') ?? [];
-        const visibleRows = [...allRows].filter(r => r.style.display !== 'none');
-        const count      = visibleRows.length;
+    try {
+        btn.textContent = "Eliminando...";
+        btn.disabled = true;
 
-        // Contador de resultados
-        if (resultCount) {
-            resultCount.textContent = count === 1
-                ? '1 resultado'
-                : `${count} resultados`;
-        }
-
-        // Barra vertical solo si hay más de 4 filas visibles
-        if (tableWrapper) {
-            tableWrapper.classList.toggle('scrollable', count > 4);
-        }
-    }
-
-    function applyFilters() {
-        const f = getFilterValues();
-        tbody?.querySelectorAll('tr').forEach(row => {
-            row.style.display = rowMatchesFilters(row, f) ? '' : 'none';
+        const response = await fetch(`${API_BASE}/establecimiento/${selectedEstablishmentId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
         });
-        updateCounterAndScroll();
+
+        if (!response.ok) {
+            throw new Error(`Error en el servidor: ${response.status}`);
+        }
+
+        hideDeletePopup();
+        selectedEstablishmentId = null;
+        await loadEstablishments();
+        alert("Establecimiento eliminado con éxito");
+
+    } catch (error) {
+        console.error("Error al intentar eliminar el establecimiento:", error);
+        alert("No se pudo eliminar el establecimiento. Asegúrate de que json-server esté corriendo.");
+    } finally {
+        btn.textContent = originalText;
+        btn.disabled = false;
     }
-
-    document.querySelectorAll('.filters input, .filters select').forEach(el => {
-        el.addEventListener('input', applyFilters);
-        el.addEventListener('change', applyFilters);
-    });
-
-    filterForm?.addEventListener('submit', (e) => {
-        e.preventDefault();
-        applyFilters();
-    });
-
-    // ─── Seleccionar la primera fila al cargar ────────────────────────────────
-    const firstRow = tbody?.querySelector('tr');
-    if (firstRow) {
-        firstRow.classList.add('selected');
-        const firstName = firstRow.querySelector('td strong')?.textContent.trim();
-        if (firstName) updateDetailPanel(firstName);
-    }
-
-    // Inicializar contador y scroll al cargar
-    updateCounterAndScroll();
-
-});
+}

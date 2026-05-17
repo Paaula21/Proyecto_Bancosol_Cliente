@@ -107,6 +107,39 @@ main {
 
 /* ─── Tabla ─── */
 
+/* Balancear anchos de columna */
+#tabla-establecimientos th:nth-child(1),
+#tabla-establecimientos td:nth-child(1) {
+    width: 15%;
+}
+
+#tabla-establecimientos th:nth-child(2),
+#tabla-establecimientos td:nth-child(2) {
+    width: 10%;
+}
+
+#tabla-establecimientos th:nth-child(3),
+#tabla-establecimientos td:nth-child(3) {
+    width: 10%;
+}
+
+/* Botones morados */
+td.col-actions .btn--secondary,
+td.col-actions .btn--danger,
+.content-wrapper .btn--secondary,
+.content-wrapper .btn--danger {
+    background-color: #420098;
+    color: white;
+    border-color: transparent;
+}
+
+td.col-actions .btn--secondary:hover,
+td.col-actions .btn--danger:hover,
+.content-wrapper .btn--secondary:hover,
+.content-wrapper .btn--danger:hover {
+    background-color: #310073;
+}
+
 /* Wrapper con scroll horizontal siempre, vertical solo cuando JS lo activa */
 .table-wrapper {
     overflow-x: auto;
@@ -115,8 +148,7 @@ main {
 }
 
 .table-wrapper.scrollable {
-    /* Altura de thead (~41px) + 4 filas (~57px c/u) + 2px de margen */
-    max-height: calc(41px + 4 * 57px + 2px);
+    max-height: 440px;
     overflow-y: auto;
 }
 
@@ -127,6 +159,9 @@ table {
 }
 
 thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
     background-color: #f8fafc;
 }
 
@@ -152,9 +187,16 @@ td.col-actions {
 }
 
 td.col-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
+    text-align: right;
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+td.col-actions .btn {
+    margin-left: 8px;
+}
+td.col-actions .btn:first-child {
+    margin-left: 0;
 }
 
 /* Fila seleccionada */
@@ -170,7 +212,7 @@ tbody tr:hover {
 
 /* ─── Panel de detalle lateral ─── */
 .detail-panel {
-    flex: 0 0 300px;
+    flex: 0 0 420px;
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
@@ -181,49 +223,29 @@ tbody tr:hover {
     gap: 16px;
 }
 
-.detail-panel-header h3 {
-    margin: 0;
+.ficha-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 15px;
+}
+
+.ficha-grid .ficha-tarjeta-info {
+    margin-bottom: 0;
+}
+
+.detail-panel .estado-vacio {
+    text-align: center;
+    color: #9ca3af;
+    padding: 40px 20px;
+}
+
+.detail-panel .estado-vacio h3 {
     font-size: 1.125rem;
     font-weight: 600;
     color: #111827;
+    margin: 0 0 8px 0;
 }
 
-.detail-panel-header p {
-    margin: 4px 0 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
-.detail-fields {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-}
-
-.detail-field {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.field-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    color: #6b7280;
-    text-transform: uppercase;
-    letter-spacing: 0.04em;
-}
-
-.field-value {
-    font-size: 0.875rem;
-    color: #111827;
-}
-
-/* Estado vacío del panel */
-.detail-panel.empty {
-    align-items: center;
-    justify-content: center;
-    color: #9ca3af;
-    font-size: 0.875rem;
-    text-align: center;
-}
+.detail-panel .estado-vacio p {
+    margin: 0;
+    font-size: 0.875rem;}

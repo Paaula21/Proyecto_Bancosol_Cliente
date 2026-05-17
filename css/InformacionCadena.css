@@ -80,8 +80,11 @@ main {
     border-radius: 8px;
     padding: 24px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    flex: 1;
     min-width: 0;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .list-header {
@@ -97,16 +100,81 @@ main {
     font-weight: 600;
 }
 
+/* ─── Estilos de tabla (como InformacionTienda) ─── */
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #f8fafc;
+}
+
+th {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+    padding: 16px;
+    font-size: 0.875rem;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+tbody tr.selected {
+    background-color: #f5f0ff;
+}
+
+tbody tr:hover {
+    background-color: inherit;
+    cursor: default;
+}
+
+/* ─── Botones ─── */
+td.col-actions .btn--secondary,
+.list-container .btn--secondary {
+    background-color: #420098;
+    color: white;
+    border-color: transparent;
+}
+
+td.col-actions .btn--secondary:hover,
+.list-container .btn--secondary:hover {
+    background-color: #310073;
+}
+
+td.col-actions .btn--danger,
+.list-container .btn--danger {
+    background-color: transparent;
+    border: 1px solid #e74c3c;
+    color: #e74c3c;
+}
+
+td.col-actions .btn--danger:hover,
+.list-container .btn--danger:hover {
+    background-color: #fde8e8;
+}
+
 /* ─── Tabla — wrapper con scroll ─── */
-/* Scroll horizontal siempre; vertical solo cuando JS añade .scrollable (>4 filas) */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
 .table-wrapper {
     overflow-x: auto;
     width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
 }
 
 .table-wrapper.scrollable {
-    max-height: calc(41px + 4 * 57px + 2px);
-    overflow-y: auto;
+    max-height: none;
 }
 
 /* th / td heredan de TablaEstilos.css (.data-table) y Common.css */
@@ -116,7 +184,22 @@ td.col-actions {
 }
 
 td.col-actions {
-    display: flex;
-    gap: 8px;
-    justify-content: flex-end;
+    text-align: right;
+    white-space: nowrap;
+    vertical-align: middle;
 }
+
+td.col-actions .btn {
+    margin-left: 8px;
+}
+td.col-actions .btn:first-child {
+    margin-left: 0;
+}
+
+/* ─── Contador ─── */
+#contador-cadenas {
+    margin: 0;
+    font-size: 0.875rem;
+    color: #6b7280;
+}
+
