@@ -9,7 +9,7 @@ body {
     color: #111827;
 }
 
-.btn {
+/*.btn {
     padding: 10px 12px;
     border-radius: 6px;
     font-size: 0.875rem;
@@ -19,9 +19,9 @@ body {
     display: inline-flex;
     align-items: center;
     justify-content: left;
-}
+} */
 
-/*Boton de añadir*/
+/*Boton de añadir
 .btn--primary {
     background-color: #420098;
     color: white;
@@ -30,9 +30,9 @@ body {
 .btn--primary:hover {
     background-color: #420098;
     border-color: #9ca3af;
-}
+}*/
 
-/*Boton de borrar,editar*/
+/*Boton de borrar,editar
 .btn--secondary {
     background-color: white;
     color: #374151;
@@ -41,7 +41,7 @@ body {
 .btn--secondary:hover {
     background-color: #f3f4f6;
     border-color: #9ca3af;
-}
+} */
 
 .app-container {
     display: flex;

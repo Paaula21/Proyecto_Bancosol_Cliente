@@ -8,10 +8,12 @@
     <link rel="stylesheet" href="../css/Sidebar.css">
 
     <script src="../javascript/Sidebar.js" defer></script>
+    <script src="../javascript/IncludeHTML.js"></script>
 </head>
 <body>
 
     <div class="app-container">
+
         <aside class="sidebar">
             <include-html src="../html/Sidebar.html"></include-html>
         </aside>
@@ -137,11 +139,14 @@
 
                                     <h3>Inscripción completada</h3>
                                     <p>Elija si desea añadir otro voluntario o finalizar la operación</p>
-                                    <form action="">
-                                        <!-- Lo pongo de esta manera para no cambiar en el css los inputs por button -->
-                                        <input type="button" id="btn-add" class="btn-add" value="Añadir otro voluntario" onclick="window.location.href='RegistroVoluntarios.html'">
-                                        <input type="button" id="btn-cerrar-popup" class="btn-cerrar-popup" value="Cerrar" onclick="window.location.href='InformacionCampana.html'">
-                                    </form>
+                                    <div class="botones">
+                                        <button class="btn-add" onclick="window.location.href='RegistroVoluntarios.html'">
+                                            Añadir
+                                        </button>
+                                        <button class="btn-close" onclick="window.location.href='InformacionCampana.html'">
+                                            Cerrar
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
 
@@ -150,8 +155,8 @@
 
                                     <h3>Error de inscripción</h3>
                                     <p>Faltan datos por completar en la inscripción</p>
-                                    <form action="">
-                                        <input type="button" id="btn-cerrar-popup2" class="btn-close" value="Cerrar" onclick="window.location.href='RegistroVoluntarios.html'">
+                                    <form action="botones" class="botones">
+                                        <input type="button" id="btn-cerrar-popup2" class="btn-cerrar-popup" value="Volver" onclick="window.location.href='RegistroVoluntarios.html'">
                                     </form>
                                 </div>
                             </div>
