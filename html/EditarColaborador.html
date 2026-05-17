@@ -1,0 +1,93 @@
+<div id="formulario-editar-colaborador" class="datos-colaborador" style="display: none;">
+    <h3 class="ficha-titulo-principal">Modificar Colaborador</h3>
+
+    <form id="form-edicion-colaborador">
+        
+        <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
+            <h5>Nombre de la Entidad / Colaborador</h5>
+            <input type="text" id="edit-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Cáritas Diocesana">
+        </div>
+
+        <div class="ficha-tarjeta-info">
+            <h5>Ubicación</h5>
+            <div class="campo-formulario-ficha">
+                <label for="edit-zona"><strong>Zona Geográfica:</strong></label>
+                <select id="edit-zona" class="select-ficha-lateral">
+                    <option value="1">Málaga</option>
+                    <option value="2">Costa del Sol Occidental</option>
+                    <option value="3">Axarquía</option>
+                    <option value="4">Guadalhorce</option>
+                    <option value="5">Antequera</option>
+                    <option value="6">Serranía de Ronda</option>
+                    <option value="7">Sierra de las Nieves</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="ficha-tarjeta-info">
+            <h5>Datos de Contacto</h5>
+            <div class="campo-formulario-ficha">
+                <label for="edit-contacto-nombre"><strong>Persona:</strong></label>
+                <input type="text" id="edit-contacto-nombre" class="input-ficha-lateral">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="edit-contacto-email"><strong>Email:</strong></label>
+                <input type="email" id="edit-contacto-email" class="input-ficha-lateral">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="edit-contacto-tel"><strong>Teléfono:</strong></label>
+                <input type="tel" id="edit-contacto-tel" class="input-ficha-lateral">
+            </div>
+        </div>
+
+        <div class="ficha-tarjeta-info sin-margen-inferior">
+            <h5>Dirección Postal</h5>
+            <div class="campo-formulario-ficha">
+                <label for="edit-direccion-via"><strong>Calle / Vía:</strong></label>
+                <input type="text" id="edit-direccion-via" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="edit-direccion-num"><strong>Número:</strong></label>
+                <input type="text" id="edit-direccion-num" class="input-ficha-lateral" placeholder="Ej. 12, 3ºB">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="edit-localidad"><strong>Localidad:</strong></label>
+                <input type="text" id="edit-localidad" class="input-ficha-lateral">
+            </div>
+        </div>
+
+        <div class="ficha-acciones">
+            <button type="submit" id="btn-guardar-cambios" class="btn-ficha btn-guardar">
+                Guardar Cambios
+            </button>
+            <button type="button" id="btn-cancelar-edicion" class="btn-ficha btn-cancelar-edit">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>
+<div class="overlay" id="overlay-exito">
+    <div class="popup" id="popup-exito">
+        <h3>¡Guardado con éxito!</h3>
+        <p>El colaborador y sus datos de contacto se han actualizado correctamente en el sistema.</p>
+
+        <div class="popup-actions">
+            <form action="">
+                <button class="btn-add" id="btn-aceptar-exito">Aceptar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="overlay-error">
+    <div class="popup" id="popup-error">
+        <h3>Ha ocurrido un error</h3>
+        <p id="texto-error-popup">No se pudieron guardar los cambios relacionales en el servidor.</p>
+
+        <div class="popup-actions">
+            <form action="">
+                <button class="btn-cerrar-popup" id="btn-aceptar-error">Aceptar</button>
+            </form>
+        </div>
+    </div>
+</div>

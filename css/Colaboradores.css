@@ -267,3 +267,16 @@ td small {
 .scrollbar-ui {
     display: none;
 }
+
+.btn-rojo {
+    background-color: #e74c3c !important; 
+    color: #ffffff !important;          
+    border: none !important;              
+    cursor: pointer !important;           
+    transition: background-color 0.3s ease !important;
+}
+
+
+.btn-rojo:hover {
+    background-color: #ae3022 !important; 
+}
