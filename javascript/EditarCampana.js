@@ -49,10 +49,45 @@ document.addEventListener('DOMContentLoaded', async function () {
                 alert('No se pudieron cargar los datos de la campaña.');
         }
 
-        // Escuchamos el submit del formulario para guardar los cambios
-        document.querySelector('#form-edit').addEventListener('submit', async function (e) {
+        // El submit del formulario abre el popup de confirmación
+        // en lugar de guardar directamente
+        document.querySelector('#form-edit').addEventListener('submit', function (e) {
                 e.preventDefault();
-                await guardarCampana();
+                document.getElementById('overlay-confirmar').classList.add('active');
+                document.getElementById('popup-confirmar').classList.add('active');
+        });
+
+        // ----- LÓGICA POPUP CONFIRMACIÓN DE EDICIÓN -----
+        document.addEventListener('click', async function (e) {
+
+                // Cancelar: cierra el popup sin hacer nada
+                if (e.target && e.target.id === 'btn-cancelar-edicion') {
+                        e.preventDefault();
+                        document.getElementById('overlay-confirmar').classList.remove('active');
+                        document.getElementById('popup-confirmar').classList.remove('active');
+                }
+
+                // Confirmar: cierra el popup y guarda los cambios
+                if (e.target && e.target.id === 'btn-confirmar-edicion') {
+                        e.preventDefault();
+
+                        const btnConfirmar = e.target;
+                        const textoOriginal = btnConfirmar.textContent;
+
+                        try {
+                                btnConfirmar.textContent = 'Guardando...';
+                                btnConfirmar.disabled = true;
+
+                                document.getElementById('overlay-confirmar').classList.remove('active');
+                                document.getElementById('popup-confirmar').classList.remove('active');
+
+                                await guardarCampana();
+
+                        } finally {
+                                btnConfirmar.textContent = textoOriginal;
+                                btnConfirmar.disabled = false;
+                        }
+                }
         });
 });
 
@@ -108,7 +143,7 @@ function generarCheckboxesCadenas(todasLasCadenas, cadenasEnCampana) {
         let contenedor = document.querySelector('#checkbox-list');
 
         if (!contenedor) {
-                console.warn('No se encontró el elemento #checkbox-list en el HTML.');
+                console.log('No se encontró el elemento #checkbox-list en el HTML.');
                 return;
         }
 

@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/Campana.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
+    <link rel="stylesheet" href="../css/popUpRegistro.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/Campana.js" defer></script>
@@ -82,6 +83,19 @@
                     </section>
                 </div>
             </main>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay-eliminar">
+        <div class="popup" id="popup-eliminar">
+            <h3>¿Eliminar Campaña?</h3>
+            <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta campaña de la base de datos?</p>
+            <div class="popup-actions">
+                <form action="" onsubmit="return false;">
+                    <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
+                    <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+                </form>
+            </div>
         </div>
     </div>
 </body>
