@@ -1,11 +1,3 @@
-// =============================================================
-// EditarCampana.js
-// Script de la página de edición de una campaña.
-// Lee el ID de campaña de la URL, carga sus datos desde
-// json-server, rellena el formulario y gestiona el guardado.
-// Las cadenas participantes se cargan dinámicamente desde la db.
-// =============================================================
-
 // ----- CONFIGURACIÓN INICIAL -----
 const API_ENDPOINT = 'http://localhost:3000';
 
@@ -13,6 +5,10 @@ const API_ENDPOINT = 'http://localhost:3000';
 // Ejemplo de URL: EditarCampana.html?id_campana=GR2025
 let parametrosURL = new URLSearchParams(window.location.search);
 let idCampana = parametrosURL.get('id_campana');
+
+// Snapshot de los datos originales cargados desde la API.
+// Se usa para revertir los cambios al pulsar "Descartar".
+let datosOriginales = null;
 
 // ----- EVENTO PRINCIPAL -----
 document.addEventListener('DOMContentLoaded', async function () {
@@ -44,6 +40,19 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Generamos los checkboxes con todas las cadenas y marcamos las participantes
                 generarCheckboxesCadenas(todasLasCadenas, cadenasEnCampana);
 
+                // Guardamos un snapshot de los valores originales para poder
+                // revertirlos si el usuario pulsa "Descartar"
+                if (datosCampana.length > 0) {
+                        let campana = datosCampana[0];
+                        datosOriginales = {
+                                nombre: campana.nombre_campana || '',
+                                fechaInicio: campana.fecha_inicio || '',
+                                fechaFin: campana.fecha_fin || '',
+                                estado: campana.estado || '',
+                                cadenas: new Set(cadenasEnCampana.map(function (rel) { return rel.id_cadena; }))
+                        };
+                }
+
         } catch (error) {
                 console.error('Error al cargar los datos:', error);
                 alert('No se pudieron cargar los datos de la campaña.');
@@ -55,6 +64,24 @@ document.addEventListener('DOMContentLoaded', async function () {
                 e.preventDefault();
                 document.getElementById('overlay-confirmar').classList.add('active');
                 document.getElementById('popup-confirmar').classList.add('active');
+        });
+
+        // ----- BOTÓN DESCARTAR -----
+        // Revierte todos los campos del formulario y los checkboxes
+        // a los valores que se cargaron originalmente desde la API.
+        document.getElementById('btn-descartar').addEventListener('click', function () {
+                if (!datosOriginales) return;   // Todavía no se cargaron los datos
+
+                // Restauramos los campos de texto y el select
+                document.querySelector('#name-campanya').value = datosOriginales.nombre;
+                document.querySelector('#initial-date').value = datosOriginales.fechaInicio;
+                document.querySelector('#final-date').value = datosOriginales.fechaFin;
+                document.querySelector('#status').value = datosOriginales.estado;
+
+                // Restauramos el estado de cada checkbox de cadena
+                document.querySelectorAll('#checkbox-list input[type="checkbox"]').forEach(function (cb) {
+                        cb.checked = datosOriginales.cadenas.has(cb.value);
+                });
         });
 
         // ----- LÓGICA POPUP CONFIRMACIÓN DE EDICIÓN -----
