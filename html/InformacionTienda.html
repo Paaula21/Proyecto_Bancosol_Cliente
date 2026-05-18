@@ -9,6 +9,7 @@
     <link rel="stylesheet" href="../css/Common.css">
     <link rel="stylesheet" href="../css/popUpRegistro.css">
     <link rel="stylesheet" href="../css/DetalleColaborador.css">
+    <link rel="stylesheet" href="../css/EditarColaborador.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/InformacionTienda.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
@@ -38,77 +39,74 @@
                 <!--FILTROS-->
                 <form>
                     <section class="filters">
-                        <!--TIENDA-->
-                        <div class="filter-group">
-                            <label for="filter-chain">Cadena</label>
-                            <select id="filter-chain" name="chain">
-                                <option value="">Todas las cadenas</option>
-                            </select>
+                        <!-- Fila 1: Identidad y Gestión -->
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label for="filter-chain">Cadena</label>
+                                <select id="filter-chain" name="chain">
+                                    <option value="">Todas las cadenas</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-name">Nombre</label>
+                                <input type="text" id="filter-name" name="name" placeholder="Ej: Carrefour Hiper">
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-coordinator">Coordinador</label>
+                                <select id="filter-coordinator" name="coordinator">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-campanas">Campañas</label>
+                                <select id="filter-campanas" name="campanas">
+                                    <option value="">Todas las campañas</option>
+                                </select>
+                            </div>
                         </div>
 
-                        <div class="filter-group">
-                            <label for="filter-name">Nombre</label>
-                            <input type="text" id="filter-name" name="name" placeholder="Ej: Carrefour Hiper">
-                        </div>
+                        <!-- Fila 2: Ubicación Geográfica + Botón -->
+                        <div class="filter-row">
+                            <div class="filter-group filter-group--small">
+                                <label for="filter-type">Tipo de Vía</label>
+                                <select id="filter-type" name="type">
+                                    <option value="">Todas</option>
+                                    <option value="Calle">Calle</option>
+                                    <option value="Avenida">Avenida</option>
+                                    <option value="Plaza">Plaza</option>
+                                </select>
+                            </div>
 
-                        <!--DIRECCIONES-->
-                        <div class="filter-group small-box">
-                            <label for="filter-type">Tipo de Vía</label>
-                            <select id="filter-type" name="type">
-                                <option value="">Todas</option>
-                                <option value="Calle">Calle</option>
-                                <option value="Avenida">Avenida</option>
-                                <option value="Plaza">Plaza</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="filter-street">Calle</label>
-                            <input type="text" id="filter-street" name="street" placeholder="Nombre">
-                        </div>
-                        <div class="filter-group small-box">
-                            <label for="filter-code">Cód. Postal</label>
-                            <input type="text" id="filter-code" name="code" minlength="5" maxlength="5" pattern="[0-9]{5}"
-                                   title="Introduce exactamente 5 números" placeholder="29XXX">
-                        </div>
-                        <div class="filter-group">
-                            <label for="filter-city">Localidad</label>
-                            <select id="filter-city" name="city">
-                                <option value="">Todas las localidades</option>
-                            </select>
-                        </div>
-                        <div class="filter-group">
-                            <label for="filter-zone">Zona Geográfica</label>
-                            <select id="filter-zone" name="zone">
-                                <option value="">Todas las zonas</option>
-                            </select>
-                        </div>
-                        <div class="filter-group small-box">
-                            <label for="filter-gr">¿Gran Recogida?</label>
-                            <select id="filter-gr" name="gr">
-                                <option value="todas">Todas</option>
-                                <option value="yes">Sí</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-                        <div class="filter-group small-box">
-                            <label for="filter-primavera">¿Primavera?</label>
-                            <select id="filter-primavera" name="primavera">
-                                <option value="todas">Todas</option>
-                                <option value="yes">Sí</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
+                            <div class="filter-group">
+                                <label for="filter-street">Calle</label>
+                                <input type="text" id="filter-street" name="street" placeholder="Nombre">
+                            </div>
 
-                        <!--COORDINADOR-->
-                        <div class="filter-group">
-                            <label for="filter-coordinator">Coordinador</label>
-                            <select id="filter-coordinator" name="coordinator">
-                                <option value="">Todos</option>
-                            </select>
-                        </div>
+                            <div class="filter-group filter-group--small">
+                                <label for="filter-code">Cód. Postal</label>
+                                <input type="text" id="filter-code" name="code" minlength="5" maxlength="5" pattern="[0-9]{5}"
+                                       title="Introduce exactamente 5 números" placeholder="29XXX">
+                            </div>
 
-                        <div class="filter-button">
-                            <button type="button" id="btn-filter" class="btn btn--primary">Filtrar</button>
+                            <div class="filter-group">
+                                <label for="filter-city">Localidad</label>
+                                <input type="text" id="filter-city" name="city" placeholder="Ej: Málaga">
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-zone">Zona Geográfica</label>
+                                <select id="filter-zone" name="zone">
+                                    <option value="">Todas las zonas</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group filter-group--btn">
+                                <label>&nbsp;</label>
+                                <button type="button" id="btn-filter" class="btn btn--primary">Filtrar</button>
+                            </div>
                         </div>
                     </section>
                 </form>
@@ -117,9 +115,7 @@
                     <div class="list-container">
                         <div class="list-header">
                             <h2>Listado de Establecimientos</h2>
-                            <a href="NuevaTienda.html">
-                                <button type="button" class="btn btn--primary">+ Añadir</button>
-                            </a>
+                            <button type="button" id="btn-add-establecimiento" class="btn btn--primary">+ Añadir</button>
                             <p id="contador-establecimientos">Cargando...</p>
                         </div>
                         <div class="table-wrapper">
@@ -139,44 +135,114 @@
                     </div>
 
                     <aside class="detail-panel">
-                        <div id="estado-vacio-panel" class="estado-vacio">
-                            <h3>Detalle de Establecimiento</h3>
-                            <p>Haga clic en un establecimiento de la lista para ver sus detalles.</p>
+                        <div class="detail-content">
+                            <div id="estado-vacio-panel" class="estado-vacio">
+                                <h3>Detalle de Establecimiento</h3>
+                                <p>Haga clic en un establecimiento de la lista para ver sus detalles.</p>
+                            </div>
+                            <div id="datos-establecimiento" class="datos-colaborador" style="display: none;">
+                                <h3 class="ficha-titulo-principal">Ficha del Establecimiento</h3>
+                                <div class="ficha-cabecera">
+                                    <div class="ficha-titulos">
+                                        <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
+                                        <span id="ficha-cadena" class="ficha-etiqueta-codigo">---</span>
+                                    </div>
+                                </div>
+                                <div class="ficha-grid">
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>UBICACIÓN</h5>
+                                        <p><strong>Localidad:</strong> <span id="ficha-localidad">---</span></p>
+                                        <p><strong>Zona Geográfica:</strong> <span id="ficha-zona">---</span></p>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>DIRECCIÓN POSTAL</h5>
+                                        <p id="ficha-direccion">---</p>
+                                        <p><strong>Código Postal:</strong> <span id="ficha-cp">---</span></p>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>INFORMACIÓN GENERAL</h5>
+                                        <p><strong>Número de cajas:</strong> <span id="ficha-lineales">---</span></p>
+                                        <p><strong>Coordinador:</strong> <span id="ficha-coordinador">---</span></p>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Campañas</h5>
+                                        <div id="ficha-campanas-contenido"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="formulario-establecimiento" class="datos-colaborador" style="display: none;">
+                                <h3 class="ficha-titulo-principal" id="form-titulo">Nuevo Establecimiento</h3>
+                                <form id="form-establecimiento">
+                                    <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
+                                        <h5>Nombre del Establecimiento</h5>
+                                        <input type="text" id="form-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour Hiper Centro">
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Cadena</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-cadena"><strong>Cadena comercial:</strong></label>
+                                            <select id="form-cadena" class="select-ficha-lateral" required>
+                                                <option value="">Selecciona una cadena...</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Dirección Postal</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-tipo-via"><strong>Tipo de Vía:</strong></label>
+                                            <select id="form-tipo-via" class="select-ficha-lateral">
+                                                <option value="">Selecciona...</option>
+                                                <option value="Calle">Calle</option>
+                                                <option value="Avenida">Avenida</option>
+                                                <option value="Plaza">Plaza</option>
+                                            </select>
+                                        </div>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-via"><strong>Nombre de la Vía:</strong></label>
+                                            <input type="text" id="form-via" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
+                                        </div>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-numero"><strong>Número:</strong></label>
+                                            <input type="text" id="form-numero" class="input-ficha-lateral" placeholder="Ej. 12">
+                                        </div>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-cp"><strong>Código Postal:</strong></label>
+                                            <input type="text" id="form-cp" class="input-ficha-lateral" placeholder="Ej. 29001">
+                                        </div>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Información General</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-lineales"><strong>Lineales:</strong></label>
+                                            <input type="number" id="form-lineales" class="input-ficha-lateral" placeholder="Número de lineales" min="0">
+                                        </div>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-coordinador"><strong>Coordinador:</strong></label>
+                                            <select id="form-coordinador" class="select-ficha-lateral">
+                                                <option value="">Sin asignar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Campañas</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-campanas"><strong>Participación en campañas:</strong></label>
+                                            <select id="form-campanas" class="select-ficha-lateral" multiple size="4">
+                                            </select>
+                                            <small style="color:#6b7280; font-size:0.75rem; margin-top:4px;">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                        <div id="datos-establecimiento" class="datos-colaborador" style="display: none;">
-                            <h3 class="ficha-titulo-principal">Ficha del Establecimiento</h3>
-                            <div class="ficha-cabecera">
-                                <div class="ficha-titulos">
-                                    <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
-                                    <span id="ficha-cadena" class="ficha-etiqueta-codigo">---</span>
-                                </div>
-                            </div>
-                            <div class="ficha-grid">
-                                <div class="ficha-tarjeta-info">
-                                    <h5>UBICACIÓN</h5>
-                                    <p><strong>Localidad:</strong> <span id="ficha-localidad">---</span></p>
-                                    <p><strong>Zona Geográfica:</strong> <span id="ficha-zona">---</span></p>
-                                </div>
-                                <div class="ficha-tarjeta-info">
-                                    <h5>DIRECCIÓN POSTAL</h5>
-                                    <p id="ficha-direccion">---</p>
-                                    <p><strong>Código Postal:</strong> <span id="ficha-cp">---</span></p>
-                                </div>
-                                <div class="ficha-tarjeta-info">
-                                    <h5>INFORMACIÓN GENERAL</h5>
-                                    <p><strong>Lineales:</strong> <span id="ficha-lineales">---</span></p>
-                                    <p><strong>Coordinador:</strong> <span id="ficha-coordinador">---</span></p>
-                                </div>
-                                <div class="ficha-tarjeta-info">
-                                    <h5>Campañas</h5>
-                                    <p><strong>Gran Recogida:</strong> <span id="ficha-gr">---</span></p>
-                                    <p><strong>Primavera:</strong> <span id="ficha-primavera">---</span></p>
-                                </div>
-                            </div>
-                            <div class="ficha-acciones">
-                                <button type="button" id="btn-editar-establecimiento" class="btn-ficha btn-editar">Editar</button>
-                                <button type="button" id="btn-eliminar-establecimiento" class="btn-ficha btn-eliminar">Eliminar</button>
-                            </div>
+
+                        <div class="detail-actions-sticky" id="acciones-detalle">
+                            <button type="button" id="btn-editar-establecimiento" class="btn-ficha btn-editar" disabled>Editar</button>
+                            <button type="button" id="btn-eliminar-establecimiento" class="btn-ficha btn-eliminar" disabled>Eliminar</button>
+                        </div>
+                        <div class="detail-actions-sticky" id="acciones-formulario" style="display: none;">
+                            <button type="submit" form="form-establecimiento" id="btn-guardar-establecimiento" class="btn-ficha btn-guardar">Guardar</button>
+                            <button type="button" id="btn-cancelar-formulario" class="btn-ficha btn-cancelar-edit">Cancelar</button>
                         </div>
                     </aside>
                 </div>
@@ -184,17 +250,17 @@
         </div>
     </div>
 </div>
-    <div class="overlay" id="overlay-eliminar">
-        <div class="popup" id="popup-eliminar">
-            <h3>¿Eliminar establecimiento?</h3>
-            <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este establecimiento de la base de datos?</p>
-            <div class="popup-actions">
-                <form action="">
-                    <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
-                    <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
-                </form>
-            </div>
+<div class="overlay" id="overlay-eliminar">
+    <div class="popup" id="popup-eliminar">
+        <h3>¿Eliminar establecimiento?</h3>
+        <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este establecimiento de la base de datos?</p>
+        <div class="popup-actions">
+            <form action="">
+                <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
+                <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+            </form>
         </div>
     </div>
+</div>
 </body>
 </html>

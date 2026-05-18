@@ -4,18 +4,20 @@ const VISIBLE_ROWS = 6;
 
 let establishmentsData = [];
 let selectedEstablishmentId = null;
+let campaignsData = [];
 
 document.addEventListener("DOMContentLoaded", () => {
     loadEstablishments();
     document.getElementById('btn-filter').addEventListener('click', applyFilters);
 
+    document.getElementById('btn-add-establecimiento').addEventListener('click', () => {
+        showForm(null);
+    });
+
     document.getElementById('btn-editar-establecimiento').addEventListener('click', (e) => {
         e.stopPropagation();
         const est = establishmentsData.find(e => e.id_establecimiento === selectedEstablishmentId);
-        if (est) {
-            sessionStorage.setItem('establecimiento_editar', JSON.stringify(est));
-            window.location.href = 'NuevaTienda.html';
-        }
+        if (est) showForm(est);
     });
 
     document.getElementById('btn-eliminar-establecimiento').addEventListener('click', (e) => {
@@ -34,6 +36,15 @@ document.addEventListener("DOMContentLoaded", () => {
     document.getElementById('btn-confirmar-eliminar').addEventListener('click', async (e) => {
         e.preventDefault();
         await deleteEstablishment(e.target);
+    });
+
+    document.getElementById('btn-cancelar-formulario').addEventListener('click', () => {
+        hideForm();
+    });
+
+    document.getElementById('form-establecimiento').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        await guardarEstablecimiento();
     });
 });
 
@@ -81,8 +92,41 @@ function populateChainSelect(chains) {
     });
 }
 
-function populateCoordinatorSelect(users) {
-    const select = document.getElementById('filter-coordinator');
+function populateCampaignSelect(campaigns) {
+    const select = document.getElementById('filter-campanas');
+    while (select.options.length > 1) select.remove(1);
+    campaigns.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id_campana;
+        opt.textContent = c.nombre_campana || c.id_campana;
+        select.appendChild(opt);
+    });
+}
+
+function populateFormCampaignSelect(campaigns) {
+    const select = document.getElementById('form-campanas');
+    select.innerHTML = '';
+    campaigns.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id_campana;
+        opt.textContent = c.nombre_campana || c.id_campana;
+        select.appendChild(opt);
+    });
+}
+
+function populateFormChainSelect(chains) {
+    const select = document.getElementById('form-cadena');
+    while (select.options.length > 1) select.remove(1);
+    chains.forEach(c => {
+        const opt = document.createElement('option');
+        opt.value = c.id_cadena;
+        opt.textContent = c.nombre_cadena;
+        select.appendChild(opt);
+    });
+}
+
+function populateFormCoordinatorSelect(users) {
+    const select = document.getElementById('form-coordinador');
     users.filter(u => u.id_rol === 2).forEach(u => {
         const opt = document.createElement('option');
         opt.value = u.id_usuario;
@@ -91,13 +135,12 @@ function populateCoordinatorSelect(users) {
     });
 }
 
-function populateCitySelect(divisions) {
-    const select = document.getElementById('filter-city');
-    const cities = [...new Set(divisions.map(d => d.nombre_division))].sort();
-    cities.forEach(l => {
+function populateCoordinatorSelect(users) {
+    const select = document.getElementById('filter-coordinator');
+    users.filter(u => u.id_rol === 2).forEach(u => {
         const opt = document.createElement('option');
-        opt.value = l;
-        opt.textContent = l;
+        opt.value = u.id_usuario;
+        opt.textContent = capitalize(u.usuario);
         select.appendChild(opt);
     });
 }
@@ -130,7 +173,7 @@ function setTableState(state, message = '') {
 async function loadEstablishments() {
     setTableState('loading');
     try {
-        const [establishments, chains, direcciones, codigosPostales, divisions, zones, asignaciones, users] = await Promise.all([
+        const [establishments, chains, direcciones, codigosPostales, divisions, zones, asignaciones, users, campaigns] = await Promise.all([
             fetchJson(`${API_BASE}/establecimiento`),
             fetchJson(`${API_BASE}/cadena`),
             fetchJson(`${API_BASE}/direccion`),
@@ -138,13 +181,19 @@ async function loadEstablishments() {
             fetchJson(`${API_BASE}/division_territorial`),
             fetchJson(`${API_BASE}/zona_geografica`),
             fetchJson(`${API_BASE}/asignacion_coordinador`),
-            fetchJson(`${API_BASE}/usuario`)
+            fetchJson(`${API_BASE}/usuario`),
+            fetchJson(`${API_BASE}/campana`)
         ]);
+
+        campaignsData = campaigns;
 
         populateChainSelect(chains);
         populateCoordinatorSelect(users);
-        populateCitySelect(divisions);
         populateZoneSelect(zones);
+        populateCampaignSelect(campaigns);
+        populateFormChainSelect(chains);
+        populateFormCoordinatorSelect(users);
+        populateFormCampaignSelect(campaigns);
 
         establishmentsData = establishments.map(est => {
             const cadena = chains.find(c => c.id_cadena === est.id_cadena);
@@ -168,6 +217,9 @@ async function loadEstablishments() {
                 id_coordinador: asignacion ? asignacion.id_usuario_coordinador : null,
                 gran_recogida: asignaciones.some(a => a.id_tienda === est.id_establecimiento && a.id_campana === "GR2025"),
                 primavera: asignaciones.some(a => a.id_tienda === est.id_establecimiento && a.id_campana === "PRIM2025"),
+                campanasIds: asignaciones
+                    .filter(a => a.id_tienda === est.id_establecimiento)
+                    .map(a => a.id_campana),
                 obj_direccion: dir,
                 obj_cp: cp
             };
@@ -185,31 +237,27 @@ async function loadEstablishments() {
 // ----- FILTER LOGIC -----
 function applyFilters() {
     const filters = {
-        cadena:   document.getElementById('filter-chain').value,
-        nombre:   document.getElementById('filter-name').value.toLowerCase().trim(),
-        tipoVia:  document.getElementById('filter-type').value,
-        calle:    document.getElementById('filter-street').value.toLowerCase().trim(),
-        codigo:   document.getElementById('filter-code').value.trim(),
-        localidad: document.getElementById('filter-city').value,
-        zona:     document.getElementById('filter-zone').value,
-        gr:       document.getElementById('filter-gr').value,
-        prim:     document.getElementById('filter-primavera').value,
-        coord:    document.getElementById('filter-coordinator').value
+        cadena:    document.getElementById('filter-chain').value,
+        nombre:    document.getElementById('filter-name').value.toLowerCase().trim(),
+        tipoVia:   document.getElementById('filter-type').value,
+        calle:     document.getElementById('filter-street').value.toLowerCase().trim(),
+        codigo:    document.getElementById('filter-code').value.trim(),
+        localidad: document.getElementById('filter-city').value.toLowerCase().trim(),
+        zona:      document.getElementById('filter-zone').value,
+        campana:   document.getElementById('filter-campanas').value,
+        coord:     document.getElementById('filter-coordinator').value
     };
 
     const filtered = establishmentsData.filter(est => {
         if (filters.cadena && est.id_cadena !== filters.cadena) return false;
         if (filters.nombre && !est.nombre_resena.toLowerCase().includes(filters.nombre)
-                          && !est.nombre_cadena.toLowerCase().includes(filters.nombre)) return false;
+                           && !est.nombre_cadena.toLowerCase().includes(filters.nombre)) return false;
         if (filters.tipoVia && est.obj_direccion?.tipo_via !== filters.tipoVia) return false;
         if (filters.calle && !est.obj_direccion?.nombre_via.toLowerCase().includes(filters.calle)) return false;
         if (filters.codigo && est.obj_cp?.codigo !== filters.codigo) return false;
-        if (filters.localidad && est.localidad !== filters.localidad) return false;
+        if (filters.localidad && !est.localidad.toLowerCase().includes(filters.localidad)) return false;
         if (filters.zona && est.nombre_zona !== filters.zona) return false;
-        if (filters.gr === 'yes' && !est.gran_recogida) return false;
-        if (filters.gr === 'no'  &&  est.gran_recogida) return false;
-        if (filters.prim === 'yes' && !est.primavera) return false;
-        if (filters.prim === 'no'  &&  est.primavera) return false;
+        if (filters.campana && (!est.campanasIds || !est.campanasIds.includes(filters.campana))) return false;
         if (filters.coord && est.id_coordinador != filters.coord) return false;
         return true;
     });
@@ -261,8 +309,14 @@ function updateCounter(total) {
 function showDetail(est) {
     selectedEstablishmentId = est.id_establecimiento;
 
+    document.getElementById('formulario-establecimiento').style.display = 'none';
+    document.getElementById('acciones-formulario').style.display = 'none';
+    document.getElementById('acciones-detalle').style.display = 'flex';
     document.getElementById('estado-vacio-panel').style.display = 'none';
     document.getElementById('datos-establecimiento').style.display = 'block';
+
+    document.getElementById('btn-editar-establecimiento').disabled = false;
+    document.getElementById('btn-eliminar-establecimiento').disabled = false;
 
     document.getElementById('ficha-nombre').textContent = est.nombre_resena;
     document.getElementById('ficha-cadena').textContent = est.nombre_cadena;
@@ -272,8 +326,264 @@ function showDetail(est) {
     document.getElementById('ficha-direccion').textContent = buildAddress(est.obj_direccion);
     document.getElementById('ficha-lineales').textContent = est.lineales;
     document.getElementById('ficha-coordinador').textContent = est.nombre_coordinador;
-    document.getElementById('ficha-gr').textContent = est.gran_recogida ? 'Sí' : 'No';
-    document.getElementById('ficha-primavera').textContent = est.primavera ? 'Sí' : 'No';
+    const campanasContainer = document.getElementById('ficha-campanas-contenido');
+    campanasContainer.innerHTML = '';
+    campaignsData.forEach(c => {
+        const participa = est.campanasIds && est.campanasIds.includes(c.id_campana);
+        const p = document.createElement('p');
+        p.innerHTML = `<strong>${c.nombre_campana || c.id_campana}:</strong> ${participa ? 'Sí' : 'No'}`;
+        campanasContainer.appendChild(p);
+    });
+}
+
+// ----- INLINE FORM -----
+function showForm(est) {
+    document.getElementById('estado-vacio-panel').style.display = 'none';
+    document.getElementById('datos-establecimiento').style.display = 'none';
+    document.getElementById('formulario-establecimiento').style.display = 'block';
+    document.getElementById('acciones-detalle').style.display = 'none';
+    document.getElementById('acciones-formulario').style.display = 'flex';
+
+    if (est) {
+        document.getElementById('form-titulo').textContent = 'Editar Establecimiento';
+        document.getElementById('form-nombre').value = est.nombre_resena || '';
+        document.getElementById('form-cadena').value = est.id_cadena || '';
+        document.getElementById('form-tipo-via').value = est.obj_direccion?.tipo_via || '';
+        document.getElementById('form-via').value = est.obj_direccion?.nombre_via || '';
+        document.getElementById('form-numero').value = est.obj_direccion?.numero || '';
+        document.getElementById('form-cp').value = est.obj_cp?.codigo || '';
+        document.getElementById('form-lineales').value = est.lineales || '';
+        document.getElementById('form-coordinador').value = est.id_coordinador || '';
+
+        if (est.campanasIds) {
+            const select = document.getElementById('form-campanas');
+            Array.from(select.options).forEach(opt => {
+                opt.selected = est.campanasIds.includes(opt.value);
+            });
+        }
+    } else {
+        document.getElementById('form-titulo').textContent = 'Nuevo Establecimiento';
+        document.getElementById('form-establecimiento').reset();
+        Array.from(document.getElementById('form-campanas').options).forEach(o => o.selected = false);
+    }
+
+    selectedEstablishmentId = est ? est.id_establecimiento : 'new';
+}
+
+function hideForm() {
+    document.getElementById('formulario-establecimiento').style.display = 'none';
+    document.getElementById('acciones-formulario').style.display = 'none';
+    document.getElementById('acciones-detalle').style.display = 'flex';
+
+    if (selectedEstablishmentId === 'new') {
+        document.getElementById('estado-vacio-panel').style.display = 'block';
+    } else if (selectedEstablishmentId) {
+        document.getElementById('datos-establecimiento').style.display = 'block';
+        document.getElementById('btn-editar-establecimiento').disabled = false;
+        document.getElementById('btn-eliminar-establecimiento').disabled = false;
+    } else {
+        document.getElementById('estado-vacio-panel').style.display = 'block';
+    }
+}
+
+async function guardarEstablecimiento() {
+    const btn = document.getElementById('btn-guardar-establecimiento');
+    const textoOriginal = btn.textContent;
+
+    try {
+        btn.textContent = 'Guardando...';
+        btn.disabled = true;
+
+        const nombre = document.getElementById('form-nombre').value.trim();
+        const idCadena = document.getElementById('form-cadena').value;
+        const tipoVia = document.getElementById('form-tipo-via').value;
+        const nombreVia = document.getElementById('form-via').value.trim();
+        const numero = document.getElementById('form-numero').value.trim();
+        const codigoCp = document.getElementById('form-cp').value.trim();
+        const lineales = parseInt(document.getElementById('form-lineales').value) || 0;
+        const idCoordinador = document.getElementById('form-coordinador').value;
+        const campanasSeleccionadas = Array.from(
+            document.getElementById('form-campanas').selectedOptions
+        ).map(o => o.value);
+
+        if (selectedEstablishmentId && selectedEstablishmentId !== 'new') {
+            const estOriginal = establishmentsData.find(e => e.id_establecimiento === selectedEstablishmentId);
+            if (!estOriginal) throw new Error('Establecimiento no encontrado');
+
+            if (estOriginal.obj_direccion) {
+                await fetch(`${API_BASE}/direccion/${estOriginal.obj_direccion.id}`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        ...estOriginal.obj_direccion,
+                        tipo_via: tipoVia,
+                        nombre_via: nombreVia,
+                        numero: numero || null
+                    })
+                });
+            }
+
+            await fetch(`${API_BASE}/establecimiento/${estOriginal.id}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...estOriginal,
+                    nombre_resena: nombre,
+                    id_cadena: idCadena,
+                    lineales: lineales
+                })
+            });
+
+            if (codigoCp) {
+                const cpExistente = await fetchJson(`${API_BASE}/codigo_postal`);
+                let cpObj = cpExistente.find(c => c.codigo === codigoCp);
+                if (!cpObj) {
+                    const maxIdCp = cpExistente.reduce((max, c) => Math.max(max, c.id_cp || 0), 0);
+                    cpObj = {
+                        id: Math.random().toString(36).substring(2, 11),
+                        id_cp: maxIdCp + 1,
+                        codigo: codigoCp
+                    };
+                    await fetch(`${API_BASE}/codigo_postal`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(cpObj)
+                    });
+                }
+                if (estOriginal.obj_direccion) {
+                    await fetch(`${API_BASE}/direccion/${estOriginal.obj_direccion.id}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            ...estOriginal.obj_direccion,
+                            id_cp: cpObj.id_cp
+                        })
+                    });
+                }
+            }
+
+            const asignaciones = await fetchJson(`${API_BASE}/asignacion_coordinador`);
+            const asignacionesEst = asignaciones.filter(a => a.id_tienda === selectedEstablishmentId);
+            for (const a of asignacionesEst) {
+                await fetch(`${API_BASE}/asignacion_coordinador/${a.id}`, { method: 'DELETE' });
+            }
+
+            for (const idCampana of campanasSeleccionadas) {
+                await fetch(`${API_BASE}/asignacion_coordinador`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: Math.random().toString(36).substring(2, 11),
+                        id_tienda: selectedEstablishmentId,
+                        id_usuario_coordinador: idCoordinador ? parseInt(idCoordinador) : null,
+                        id_campana: idCampana
+                    })
+                });
+            }
+            if (idCoordinador && campanasSeleccionadas.length === 0) {
+                await fetch(`${API_BASE}/asignacion_coordinador`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: Math.random().toString(36).substring(2, 11),
+                        id_tienda: selectedEstablishmentId,
+                        id_usuario_coordinador: parseInt(idCoordinador),
+                        id_campana: null
+                    })
+                });
+            }
+        } else {
+            const todasDirecciones = await fetchJson(`${API_BASE}/direccion`);
+            const maxIdDir = todasDirecciones.reduce((max, d) => Math.max(max, d.id_direccion || 0), 0);
+
+            let cpObj = null;
+            if (codigoCp) {
+                const cpExistente = await fetchJson(`${API_BASE}/codigo_postal`);
+                cpObj = cpExistente.find(c => c.codigo === codigoCp);
+                if (!cpObj) {
+                    const maxIdCp = cpExistente.reduce((max, c) => Math.max(max, c.id_cp || 0), 0);
+                    cpObj = {
+                        id: Math.random().toString(36).substring(2, 11),
+                        id_cp: maxIdCp + 1,
+                        codigo: codigoCp
+                    };
+                    await fetch(`${API_BASE}/codigo_postal`, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(cpObj)
+                    });
+                }
+            }
+
+            const nuevaDir = {
+                id: Math.random().toString(36).substring(2, 11),
+                id_direccion: maxIdDir + 1,
+                tipo_via: tipoVia,
+                nombre_via: nombreVia,
+                numero: numero || null,
+                id_cp: cpObj ? cpObj.id_cp : null
+            };
+            const resDir = await fetch(`${API_BASE}/direccion`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevaDir)
+            });
+            const dirCreada = await resDir.json();
+
+            const todosEst = await fetchJson(`${API_BASE}/establecimiento`);
+            const maxIdEst = todosEst.reduce((max, e) => Math.max(max, e.id_establecimiento || 0), 0);
+            const nuevoEst = {
+                id: Math.random().toString(36).substring(2, 11),
+                id_establecimiento: maxIdEst + 1,
+                nombre_resena: nombre,
+                id_cadena: idCadena,
+                lineales: lineales,
+                id_direccion: dirCreada.id_direccion
+            };
+            await fetch(`${API_BASE}/establecimiento`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(nuevoEst)
+            });
+
+            const nuevoIdEst = nuevoEst.id_establecimiento;
+            for (const idCampana of campanasSeleccionadas) {
+                await fetch(`${API_BASE}/asignacion_coordinador`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: Math.random().toString(36).substring(2, 11),
+                        id_tienda: nuevoIdEst,
+                        id_usuario_coordinador: idCoordinador ? parseInt(idCoordinador) : null,
+                        id_campana: idCampana
+                    })
+                });
+            }
+            if (idCoordinador && campanasSeleccionadas.length === 0) {
+                await fetch(`${API_BASE}/asignacion_coordinador`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        id: Math.random().toString(36).substring(2, 11),
+                        id_tienda: nuevoIdEst,
+                        id_usuario_coordinador: parseInt(idCoordinador),
+                        id_campana: null
+                    })
+                });
+            }
+        }
+
+        hideForm();
+        selectedEstablishmentId = null;
+        await loadEstablishments();
+
+    } catch (error) {
+        console.error('Error al guardar:', error);
+        alert('Error al guardar el establecimiento. Revisa la consola.');
+    } finally {
+        btn.textContent = textoOriginal;
+        btn.disabled = false;
+    }
 }
 
 // ----- DELETE POPUP -----
@@ -305,6 +615,15 @@ async function deleteEstablishment(btn) {
 
         hideDeletePopup();
         selectedEstablishmentId = null;
+
+        document.getElementById('btn-editar-establecimiento').disabled = true;
+        document.getElementById('btn-eliminar-establecimiento').disabled = true;
+        document.getElementById('datos-establecimiento').style.display = 'none';
+        document.getElementById('formulario-establecimiento').style.display = 'none';
+        document.getElementById('acciones-formulario').style.display = 'none';
+        document.getElementById('acciones-detalle').style.display = 'flex';
+        document.getElementById('estado-vacio-panel').style.display = 'block';
+
         await loadEstablishments();
         alert("Establecimiento eliminado con éxito");
 
