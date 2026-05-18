@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Información del Colaborador</title>
+  <link rel="stylesheet" href="../css/Colaboradores.css">
+  <link rel="stylesheet" href="../css/Sidebar.css">
+  <link rel="stylesheet" href="../css/popUpRegistro.css">
+  <link rel="stylesheet" href="../css/AnadirColaborador.css">
+  <script src="../javascript/IncludeHTML.js"></script>
+  <script src="../javascript/AnadirColaborador.js"></script>
+</head>
+
+<body class="bg-light">
+  <div class="main-layout">
+    <aside class="sidebar"><include-html src="Sidebar.html"></include-html></aside>
+
+    <div class="right-column">
+      <header class="header-simple">
+        <div class="header-left">
+          <h1>Colaboradores</h1>
+          <p>Gestión de entidades colaboradoras y voluntarios</p>
+        </div>
+      </header>
+
+      <main class="content-form">
+        <form id="form-nuevo-colaborador" class="formulario-estirado">
+
+          <!--- INFORMACIÓN COLABORADOR --->
+          <section class="form-card flex-grow-1">
+            <h3>Información del Colaborador</h3>
+            <div class="fila-flex">
+              <div class="form-group flex-3">
+                <label>Nombre de la entidad</label>
+                <input type="text" id="nuevo-nombre" required placeholder="Nombre completo">
+              </div>
+              <div class="form-group flex-2">
+                <label>Zona Geográfica</label>
+                <select id="nuevo-zona" required></select>
+              </div>
+            </div>
+          </section>
+
+          <!--- PERSONA DE CONTACTO --->
+          <section class="form-card flex-grow-1">
+            <h3>Persona de contacto</h3>
+            <div class="form-group">
+              <label>Nombre completo</label>
+              <input type="text" id="nuevo-contacto-nombre" placeholder="Nombre">
+            </div>
+            <div class="fila-flex">
+              <div class="form-group flex-1">
+                <label>Email</label>
+                <input type="email" id="nuevo-contacto-email" placeholder="ejemplo@correo.com">
+              </div>
+              <div class="form-group flex-1">
+                <label>Teléfono</label>
+                <input type="tel" id="nuevo-contacto-tel" placeholder="600 000 000">
+              </div>
+            </div>
+          </section>
+
+          <!--- DIRECCIÓN POSTAL --->
+          <section class="form-card flex-grow-2">
+            <h3>Dirección Postal</h3>
+            <div class="fila-flex">
+              <div class="form-group flex-1">
+                <label>Tipo Vía</label>
+                <select id="nuevo-tipo-via">
+                  <option value="">Ninguno</option>
+                  <option value="Calle">Calle</option>
+                  <option value="Avenida">Avenida</option>
+                  <option value="Plaza">Plaza</option>
+                </select>
+              </div>
+              <div class="form-group flex-3">
+                <label>Calle / Vía</label>
+                <input type="text" id="nuevo-direccion-via" required>
+              </div>
+              <div class="form-group flex-1">
+                <label>Núm.</label>
+                <input type="text" id="nuevo-direccion-num">
+              </div>
+            </div>
+            <div class="fila-flex">
+              <div class="form-group flex-1">
+                <label>Código Postal</label>
+                <input type="text" id="nuevo-cp" required maxlength="5">
+              </div>
+              <div class="form-group flex-3">
+                <label>Localidad / Municipio</label>
+                <input type="text" id="nuevo-localidad" required>
+              </div>
+            </div>
+          </section>
+
+          <!--- OBSERVACIONES --->
+          <section class="form-card flex-grow-1">
+            <h3>Observaciones</h3>
+            <div class="form-group">
+              <input type="text" id="nuevo-observaciones" placeholder="Detalles adicionales...">
+            </div>
+          </section>
+
+          <div class="form-actions-footer">
+            <button type="button" class="btn-editar" id="btn-guardar">Guardar </button>
+            <button type="button" class="btn-editar" id="btn-cancelar">Cancelar</button>
+          </div>
+        </form>
+      </main>
+    </div>
+  </div>
+
+  <div class="overlay" id="overlay-confirmar">
+    <div class="popup" id="popup-confirmar">
+      <h3>¡Registrado!</h3>
+      <p>Colaborador guardado con éxito.</p>
+
+      <div class="popup-actions">
+        <form action="">
+          <button class="btn-add" id="btn-aceptar-exito">Aceptar</button>
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+
+</html>

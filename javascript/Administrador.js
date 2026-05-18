@@ -84,7 +84,6 @@ function mostrarResumen(campanas, establecimientos, colaboradores, coordinadores
         }).join(', ');
 
         // Escribimos los valores en los elementos del DOM usando textContent
-        // (más seguro que innerHTML porque no interpreta HTML)
         document.querySelector('#stat-campaigns-value').textContent = campanasActivas.length;
         document.querySelector('#stat-campaigns-subtitle').textContent = nombresCampanas || 'Sin campañas activas';
 
@@ -263,76 +262,6 @@ function mostrarCoberturaPorZona(establecimientos, direcciones, codigosPostales,
                 setTimeout(function () {
                         barra.style.width = porcentaje + '%';
                 }, 100 + indice * 80);
-        });
-}
-
-// =============================================================
-// SECCIÓN 4: ACTIVIDAD RECIENTE
-// =============================================================
-// Muestra las últimas notificaciones del sistema como registro
-// de actividad reciente, mostrando a quién van dirigidas
-function mostrarActividadReciente(notificaciones, personas) {
-        let tbody = document.querySelector('#activity-tbody');
-
-        // Vaciamos la tabla
-        while (tbody.firstChild) {
-                tbody.removeChild(tbody.firstChild);
-        }
-
-        // Si no hay notificaciones, mostramos una fila informativa
-        if (notificaciones.length === 0) {
-                let tr = document.createElement('tr');
-                let td = document.createElement('td');
-                td.colSpan = 4;
-                td.style.textAlign = 'center';
-                td.style.color = '#6b7280';
-                td.textContent = 'Sin actividad reciente.';
-                tr.appendChild(td);
-                tbody.appendChild(tr);
-                return;
-        }
-
-        // Construimos un diccionario id_persona → nombre_completo
-        // para poder mostrar el nombre en lugar del ID
-        let personaMap = {};
-        personas.forEach(function (p) {
-                personaMap[p.id_persona] = p.nombre_completo;
-        });
-
-        // Ordenamos las notificaciones por fecha (la más reciente primero)
-        // y nos quedamos solo con las últimas 8
-        let recientes = notificaciones.slice().sort(function (a, b) {
-                return new Date(b.fecha_creacion) - new Date(a.fecha_creacion);
-        }).slice(0, 8);
-
-        // Creamos una fila de tabla por cada notificación
-        recientes.forEach(function (notif) {
-                let nombreDestino = personaMap[notif.id_persona_destino] || 'Sistema';
-                let estado = notif.leida ? 'Leída' : 'Sin leer';
-
-                let tr = document.createElement('tr');
-
-                // Columna 1: tipo de notificación
-                let td1 = document.createElement('td');
-                td1.textContent = notif.id_tipo;
-                tr.appendChild(td1);
-
-                // Columna 2: título / descripción
-                let td2 = document.createElement('td');
-                td2.textContent = notif.titulo;
-                tr.appendChild(td2);
-
-                // Columna 3: persona destinataria
-                let td3 = document.createElement('td');
-                td3.textContent = nombreDestino;
-                tr.appendChild(td3);
-
-                // Columna 4: si la notificación ha sido leída o no
-                let td4 = document.createElement('td');
-                td4.textContent = estado;
-                tr.appendChild(td4);
-
-                tbody.appendChild(tr);
         });
 }
 

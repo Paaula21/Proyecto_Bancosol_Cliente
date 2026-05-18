@@ -9,9 +9,11 @@
     <link rel="stylesheet" href="../css/DetalleColaborador.css">
     <link rel="stylesheet" href="../css/popUpRegistro.css">
     <link rel="stylesheet" href="../css/EditarColaborador.css">
+    <link rel="stylesheet" href="../css/Header.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Colaboradores.js"></script>
     <script src="../javascript/EditarColaborador.js"></script>
+    <script src="../javascript/Header.js"></script>
 </head>
 
 <body>
@@ -22,11 +24,8 @@
 
         <div class="right-column">
             <!-- Cabecera -->
-            <header class="cabecera">
-                <nav>
-                    <h1>Colaboradores</h1>
-                    <p>Gestión de entidades colaboradoras y voluntarios</p>
-                </nav>
+            <header class="main-header">
+                <include-html src="../html/header.html"></include-html>
             </header>
 
             <main>
@@ -54,6 +53,9 @@
                         <header class="list-header">
                             <h2>Listado de Colaboradores</h2>
                             <p id="contador-colaboradores">Cargando...</p>
+                            <button class="btn-add-table" id="btn-abrir-registro">
+                                Añadir Colaborador
+                            </button>
                         </header>
 
                         <table>
