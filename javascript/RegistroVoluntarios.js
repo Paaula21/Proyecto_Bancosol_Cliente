@@ -38,6 +38,21 @@ document.getElementById('form-register').addEventListener('submit', async functi
     }
 });
 
+function Guardar(event) {
+    event.preventDefault();
+
+    let form = document.getElementById("form-voluntario");
+    let data = Object.fromEntries(new FormData(form));
+
+    let voluntarios = JSON.parse(localStorage.getItem("voluntarios")) || [];
+    voluntarios.push(data);
+
+    localStorage.setItem("voluntarios", JSON.stringify(voluntarios));
+
+    window.location.href = "AsignaciónTurnos.html";
+}
+
+
 
 
 
