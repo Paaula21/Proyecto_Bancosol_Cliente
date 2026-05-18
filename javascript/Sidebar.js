@@ -1,10 +1,15 @@
-document.addEventListener('click', function(e) {
-    // e.target.closest busca si hicimos clic directamente en el <li> o en algún hijo (como la etiqueta <a>)
-    const btnCerrarSesion = e.target.closest('#btn-logout');
-
-    if (btnCerrarSesion) {
-        e.preventDefault();        
+// Lógica Cerrar Sesión
+const btnLogout = document.querySelector('#btn-logout');
+if (btnLogout) {
+    btnLogout.addEventListener('click', () => {
         sessionStorage.clear();
-        window.location.href = '../html/Login.html'; 
-    }
+        window.location.href = '../html/Login.html';
+    });
+}
+
+const btnDashboard = document.querySelector('#dashboard');
+btnDashboard.addEventListener('click', () => {
+    window.location.href = '../html/Administrador.html';
+    btnDashboard.classList.add('active');
+    sessionStorage.setItem('seccionActiva', 'dashboard');
 });
