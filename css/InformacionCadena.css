@@ -39,11 +39,6 @@ main {
     min-width: 200px;
 }
 
-.filter-group.small-box {
-    flex: 0 1 138px;
-    min-width: 80px;
-}
-
 .filter-group label {
     font-size: 0.875rem;
     font-weight: 600;
@@ -71,6 +66,13 @@ main {
     display: flex;
     justify-content: flex-end;
     margin-top: 10px;
+}
+
+/* ─── Wrapper lista + panel de detalle ─── */
+.content-wrapper {
+    display: flex;
+    gap: 24px;
+    align-items: flex-start;
 }
 
 /* ─── Contenedor de la lista ─── */
@@ -149,13 +151,21 @@ td.col-actions .btn--secondary:hover,
 td.col-actions .btn--danger,
 .list-container .btn--danger {
     background-color: transparent;
-    border: 1px solid #e74c3c;
+    border: 1.5px solid #e74c3c;
     color: #e74c3c;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
 td.col-actions .btn--danger:hover,
 .list-container .btn--danger:hover {
-    background-color: #fde8e8;
+    background-color: #c0392b;
+    border-color: #c0392b;
+    color: #ffffff;
 }
 
 /* ─── Tabla — wrapper con scroll ─── */
@@ -174,7 +184,8 @@ table {
 }
 
 .table-wrapper.scrollable {
-    max-height: none;
+    max-height: 300px;
+    overflow-y: auto;
 }
 
 /* th / td heredan de TablaEstilos.css (.data-table) y Common.css */
@@ -194,6 +205,102 @@ td.col-actions .btn {
 }
 td.col-actions .btn:first-child {
     margin-left: 0;
+}
+
+/* ─── Panel de detalle lateral ─── */
+.detail-panel {
+    flex: 0 0 420px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    max-height: 600px;
+}
+
+.detail-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 24px 8px 24px;
+}
+
+.detail-actions-sticky {
+    position: sticky;
+    bottom: 0;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 24px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.detail-actions-sticky .btn-ficha:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.detail-panel .estado-vacio {
+    text-align: center;
+    color: #9ca3af;
+    padding: 40px 20px;
+}
+
+.detail-panel .estado-vacio h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 8px 0;
+}
+
+.detail-panel .estado-vacio p {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+.detail-panel .btn-eliminar {
+    background-color: transparent;
+    border: 1.5px solid #e74c3c;
+    color: #e74c3c;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.detail-panel .btn-eliminar:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+    color: #ffffff;
+}
+
+#form-campanas {
+    min-height: 80px;
+}
+
+#form-campanas option {
+    padding: 4px 6px;
+}
+
+#form-campanas option:checked {
+    background-color: #420098;
+    color: white;
+}
+
+.ficha-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ficha-grid .ficha-tarjeta-info {
+    margin-bottom: 0;
 }
 
 /* ─── Contador ─── */

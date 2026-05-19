@@ -157,13 +157,21 @@ td.col-actions .btn--secondary:hover,
 td.col-actions .btn-icon--danger,
 .content-wrapper .btn-icon--danger {
     background-color: transparent;
-    border: 1px solid #e74c3c;
+    border: 1.5px solid #e74c3c;
     color: #e74c3c;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
 td.col-actions .btn-icon--danger:hover,
 .content-wrapper .btn-icon--danger:hover {
-    background-color: #fde8e8;
+    background-color: #c0392b;
+    border-color: #c0392b;
+    color: #ffffff;
 }
 
 /* Wrapper con scroll horizontal siempre, vertical solo cuando JS lo activa */
@@ -317,11 +325,39 @@ tbody tr:hover {
 .detail-panel .btn-icon--danger,
 .detail-actions-sticky .btn-icon--danger {
     background-color: transparent;
-    border: 1px solid #e74c3c;
+    border: 1.5px solid #e74c3c;
     color: #e74c3c;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s;
 }
 
 .detail-panel .btn-icon--danger:hover,
 .detail-actions-sticky .btn-icon--danger:hover {
-    background-color: #fde8e8;
+    background-color: #c0392b;
+    border-color: #c0392b;
+    color: #ffffff;
+}
+
+.detail-panel .btn-eliminar,
+.detail-actions-sticky .btn-eliminar {
+    background-color: transparent;
+    border: 1.5px solid #e74c3c;
+    color: #e74c3c;
+    border-radius: 8px;
+    padding: 8px 18px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.detail-panel .btn-eliminar:hover,
+.detail-actions-sticky .btn-eliminar:hover {
+    background-color: #c0392b;
+    border-color: #c0392b;
+    color: #ffffff;
 }

@@ -5,6 +5,7 @@ const VISIBLE_ROWS = 6;
 let establishmentsData = [];
 let selectedEstablishmentId = null;
 let campaignsData = [];
+let chainsCatalog = [];
 
 document.addEventListener("DOMContentLoaded", () => {
     loadEstablishments();
@@ -186,12 +187,12 @@ async function loadEstablishments() {
         ]);
 
         campaignsData = campaigns;
+        chainsCatalog = chains;
 
         populateChainSelect(chains);
         populateCoordinatorSelect(users);
         populateZoneSelect(zones);
         populateCampaignSelect(campaigns);
-        populateFormChainSelect(chains);
         populateFormCoordinatorSelect(users);
         populateFormCampaignSelect(campaigns);
 
@@ -347,7 +348,7 @@ function showForm(est) {
     if (est) {
         document.getElementById('form-titulo').textContent = 'Editar Establecimiento';
         document.getElementById('form-nombre').value = est.nombre_resena || '';
-        document.getElementById('form-cadena').value = est.id_cadena || '';
+        document.getElementById('form-cadena').value = est.nombre_cadena || '';
         document.getElementById('form-tipo-via').value = est.obj_direccion?.tipo_via || '';
         document.getElementById('form-via').value = est.obj_direccion?.nombre_via || '';
         document.getElementById('form-numero').value = est.obj_direccion?.numero || '';
@@ -395,7 +396,24 @@ async function guardarEstablecimiento() {
         btn.disabled = true;
 
         const nombre = document.getElementById('form-nombre').value.trim();
-        const idCadena = document.getElementById('form-cadena').value;
+        const nombreCadena = document.getElementById('form-cadena').value.trim().toUpperCase();
+        let cadena = chainsCatalog.find(c => c.nombre_cadena.toUpperCase() === nombreCadena);
+        if (!cadena) {
+            const nuevoId = nombreCadena.replace(/\s+/g, '_').replace(/[^A-Z0-9_]/g, '');
+            cadena = {
+                id: Math.random().toString(36).substring(2, 11),
+                id_cadena: nuevoId,
+                nombre_cadena: document.getElementById('form-cadena').value.trim()
+            };
+            const res = await fetch(`${API_BASE}/cadena`, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(cadena)
+            });
+            if (!res.ok) throw new Error('Error al crear la cadena');
+            chainsCatalog.push(cadena);
+        }
+        const idCadena = cadena.id_cadena;
         const tipoVia = document.getElementById('form-tipo-via').value;
         const nombreVia = document.getElementById('form-via').value.trim();
         const numero = document.getElementById('form-numero').value.trim();

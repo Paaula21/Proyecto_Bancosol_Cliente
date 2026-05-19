@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../css/Common.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
     <link rel="stylesheet" href="../css/popUpRegistro.css">
+    <link rel="stylesheet" href="../css/DetalleColaborador.css">
+    <link rel="stylesheet" href="../css/EditarColaborador.css">
     <script src="../javascript/InformacionCadena.js" defer></script>
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
@@ -42,20 +44,10 @@
                                  <option value="">Todas las cadenas</option>
                             </select>
                         </div>
-                        <div class="filter-group small-box">
-                            <label for="filter-gr">¿Gran Recogida?</label>
-                            <select id="filter-gr" name="gr">
-                                <option value="todas">Todas</option>
-                                <option value="yes">Sí</option>
-                                <option value="no">No</option>
-                            </select>
-                        </div>
-                        <div class="filter-group small-box">
-                            <label for="filter-primavera">¿Primavera?</label>
-                            <select id="filter-primavera" name="primavera">
-                                <option value="todas">Todas</option>
-                                <option value="yes">Sí</option>
-                                <option value="no">No</option>
+                        <div class="filter-group">
+                            <label for="filter-campana">Campaña</label>
+                            <select id="filter-campana" name="campana">
+                                <option value="">Todas las campañas</option>
                             </select>
                         </div>
                         <div class="filter-button">
@@ -64,31 +56,82 @@
                     </section>
                 </form>
 
-                <div class="list-container">
-                    <div class="list-header">
-                        <h2>Listado de Cadenas</h2>
-                        <a href="NuevaCadena.html">
-                            <button type="button" class="btn btn--primary">+ Añadir</button>
-                        </a>
-                        <p id="contador-cadenas">Cargando...</p>
+                <div class="content-wrapper">
+                    <div class="list-container">
+                        <div class="list-header">
+                            <h2>Listado de Cadenas</h2>
+                            <button type="button" id="btn-add-cadena" class="btn btn--primary">+ Añadir</button>
+                            <p id="contador-cadenas">Cargando...</p>
+                        </div>
+
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Nº Establecimientos</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tabla-cadenas">
+                                <tr><td colspan="2" style="text-align:center;padding:20px;">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
 
-                    <div class="table-wrapper">
-                        <table class="data-table">
-                            <thead>
-                            <tr>
-                                <th>Nombre</th>
-                                <th>Nº Establecimientos</th>
-                                <th>¿Gran Recogida?</th>
-                                <th>¿Primavera?</th>
-                                <th class="col-actions">Acciones</th>
-                            </tr>
-                            </thead>
-                            <tbody id="tabla-cadenas">
-                            <tr><td colspan="5" style="text-align:center;padding:20px;">Cargando...</td></tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <aside class="detail-panel">
+                        <div class="detail-content">
+                            <div id="estado-vacio-panel" class="estado-vacio">
+                                <h3>Detalle de Cadena</h3>
+                                <p>Haga clic en una cadena de la lista para ver sus detalles.</p>
+                            </div>
+                            <div id="datos-cadena" class="datos-colaborador" style="display: none;">
+                                <h3 class="ficha-titulo-principal">Ficha de la Cadena</h3>
+                                <div class="ficha-cabecera">
+                                    <div class="ficha-titulos">
+                                        <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
+                                    </div>
+                                </div>
+                                <div class="ficha-grid">
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>INFORMACIÓN GENERAL</h5>
+                                        <p><strong>Nº Establecimientos:</strong> <span id="ficha-establecimientos">---</span></p>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Campañas</h5>
+                                        <div id="ficha-campanas-contenido"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="formulario-cadena" class="datos-colaborador" style="display: none;">
+                                <h3 class="ficha-titulo-principal" id="form-titulo">Nueva Cadena</h3>
+                                <form id="form-cadena">
+                                    <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
+                                        <h5>Nombre de la Cadena</h5>
+                                        <input type="text" id="form-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour">
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Campañas</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-campanas"><strong>Participación en campañas:</strong></label>
+                                            <select id="form-campanas" class="select-ficha-lateral" multiple size="4">
+                                            </select>
+                                            <small style="color:#6b7280; font-size:0.75rem; margin-top:4px;">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="detail-actions-sticky" id="acciones-detalle">
+                            <button type="button" id="btn-editar-cadena" class="btn-ficha btn-editar" disabled>Editar</button>
+                            <button type="button" id="btn-eliminar-cadena" class="btn-ficha btn-eliminar" disabled>Eliminar</button>
+                        </div>
+                        <div class="detail-actions-sticky" id="acciones-formulario" style="display: none;">
+                            <button type="submit" form="form-cadena" id="btn-guardar-cadena" class="btn-ficha btn-guardar">Guardar</button>
+                            <button type="button" id="btn-cancelar-formulario" class="btn-ficha btn-cancelar-edit">Cancelar</button>
+                        </div>
+                    </aside>
                 </div>
             </main>
         </div>
