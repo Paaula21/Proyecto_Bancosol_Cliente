@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="../css/popUpRegistro.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
 
+    <script src="../javascript/popUpRegistro.js" defer> </script>
     <script src="../javascript/RegistroVoluntarios.js" defer> </script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/IncludeHTML.js"></script>
@@ -64,7 +65,7 @@
                                     <p>Especifique la disponibilidad del voluntario para la campaña</p>
                                 </div>
 
-                                <table>
+                                <table class="tabla-registro">
                                     <thead>
                                     <tr>
                                         <th>
@@ -97,23 +98,23 @@
                                     <tbody>
                                     <tr>
                                         <td> Mañana</td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
+                                        <td><input type="checkbox" name="asistencia" value="lunes-mañana"></td>
+                                        <td><input type="checkbox" name="asistencia" value="martes-mañana"></td>
+                                        <td><input type="checkbox" name="asistencia" value="miercoles-mañana"></td>
+                                        <td><input type="checkbox" name="asistencia" value="jueves-mañana"></td>
+                                        <td><input type="checkbox" name="asistencia" value="viernes-mañana"></td>
+                                        <td><input type="checkbox" name="asistencia" value="sabado-mañana"></td>
+                                        <td><input type="checkbox" name="asistencia" value="domingo-mañana"></td>
                                     </tr>
                                     <tr>
                                         <td> Tarde</td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
-                                        <td><input type="checkbox" name="asistencia" value="si"></td>
+                                        <td><input type="checkbox" name="asistencia" value="lunes-tarde"></td>
+                                        <td><input type="checkbox" name="asistencia" value="martes-tarde"></td>
+                                        <td><input type="checkbox" name="asistencia" value="miercoles-tarde"></td>
+                                        <td><input type="checkbox" name="asistencia" value="jueves-tarde"></td>
+                                        <td><input type="checkbox" name="asistencia" value="viernes-tarde"></td>
+                                        <td><input type="checkbox" name="asistencia" value="sabado-tarde"></td>
+                                        <td><input type="checkbox" name="asistencia" value="domingo-tarde"></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -144,7 +145,7 @@
                                         <button class="btn-add" onclick="window.location.href='RegistroVoluntarios.html'">
                                             Añadir
                                         </button>
-                                        <button class="btn-close" onclick="window.location.href='InformacionCampana.html'">
+                                        <button class="btn-close" onclick="window.location.href='Campana.html'">
                                             Cerrar
                                         </button>
                                     </div>

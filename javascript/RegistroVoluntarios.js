@@ -1,8 +1,5 @@
-document.getElementById('form-register').addEventListener('submit', async function (e) {
-    e.preventDefault();
 
-    const formData = new FormData(e.target);
-    const datosVoluntario = Object.fromEntries(formData.entries());
+document.getElementById('form-voluntario').addEventListener('submit', async function (e) {
 
     // Capturamos los checkboxes marcados
     const asistencias = [];
@@ -10,14 +7,28 @@ document.getElementById('form-register').addEventListener('submit', async functi
         asistencias.push(checkbox.value);
     });
 
-    // Añadimos el array de horarios y borramos el campo individual duplicado
+    // VALIDACIÓN
+    if (asistencias.length === 0) {
+        e.preventDefault();
+        alert("Debes seleccionar al menos una disponibilidad.");
+        return;
+    }
+
+    e.preventDefault();
+
+    const formData = new FormData(e.target);
+    const datosVoluntario = Object.fromEntries(formData.entries());
+
+    // Añadimos el array de horarios
     datosVoluntario.horarios = asistencias;
+
+    // Eliminamos el campo duplicado
     delete datosVoluntario.asistencia;
 
     console.log("Enviando a json-server:", datosVoluntario);
 
     try {
-        // Conexión al servidor local en el puerto 3000
+
         const response = await fetch('http://localhost:3001/turnos', {
             method: 'POST',
             headers: {
@@ -32,25 +43,15 @@ document.getElementById('form-register').addEventListener('submit', async functi
         } else {
             alert("Error: El servidor no pudo procesar el registro.");
         }
+
     } catch (error) {
+
         console.error("Error de conexión:", error);
         alert("No se pudo conectar con el servidor. Revisa la terminal.");
+
     }
+
 });
-
-function Guardar(event) {
-    event.preventDefault();
-
-    let form = document.getElementById("form-voluntario");
-    let data = Object.fromEntries(new FormData(form));
-
-    let voluntarios = JSON.parse(localStorage.getItem("voluntarios")) || [];
-    voluntarios.push(data);
-
-    localStorage.setItem("voluntarios", JSON.stringify(voluntarios));
-
-    window.location.href = "AsignaciónTurnos.html";
-}
 
 
 

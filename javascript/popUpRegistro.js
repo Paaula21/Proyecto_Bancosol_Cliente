@@ -15,10 +15,10 @@ btnAbrirPopup.addEventListener('click', function (e) {
     if(formulario.checkValidity()) {
         overlay.classList.add('active');
         popup.classList.add('active');
-    } else {
-        overlay2.classList.add('active');
-        popup2.classList.add('active');
-    }
+    } // else {
+       // overlay2.classList.add('active');
+       // popup2.classList.add('active');
+    // }
 });
 
 btnCerrarPopup.addEventListener('click', function (e) {
