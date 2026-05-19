@@ -15,33 +15,34 @@
             <p class="user-name">J.M. Cobos</p>
             <p class="user-role">Administrador</p>
         </div>
-        </div>
+    </div>
 
-        <h2 class="menu-heading">MENÚ PRINCIPAL</h2>
+    <h2 class="menu-heading">MENÚ PRINCIPAL</h2>
+    <ul id="menu">
+        <!-- Para cada sección, se envián el título y subtítulo del header-->
+        <li id="dashboard"><a href="../html/Administrador.html" data-titulo="Dashboard"
+                data-subtitulo="Resumen general de la plataforma">Dashboard</a></li>
+        <li id="campana"><a href="../html/Campana.html" data-titulo="Campañas"
+                data-subtitulo="Gestión y planificación de campañas activas">Campañas</a></li>
+        <li id="cadena"><a href="../html/InformacionCadena.html" data-titulo="Cadenas"
+                data-subtitulo="Administración de cadenas de supermercados">Cadenas</a></li>
+        <!-- Cambiar Tiendas a Establecimientos-->
+        <li id="establecimientos"><a href="../html/InformacionTienda.html" data-titulo="Tiendas"
+                data-subtitulo="Gestión de establecimientos participantes">Tiendas</a></li>
+        <li id="colaboradores"><a href="../html/Colaboradores.html" data-titulo="Colaboradores"
+                data-subtitulo="Gestión de entidades colaboradoras y voluntarios">Colaboradores</a></li>
+        <!-- Cambiar Asignaciones a Voluntarios y cambiar hiperenlace -->
+        <li id="voluntarios"><a href="../html/AsignaciónTurnos.html" data-titulo="Asignaciones"
+                data-subtitulo="Control y asignación de voluntarios">Voluntarios</a></li>
+    </ul>
+
+    <div class="bottom-menu">
+
         <ul>
-            <!-- Para cada sección, se envián el título y subtítulo del header-->
-            <li><a href="../html/Administrador.html" data-titulo="Dashboard"
-                    data-subtitulo="Resumen general de la plataforma">Dashboard</a></li>
-            <li><a href="../html/Campana.html" data-titulo="Campañas"
-                    data-subtitulo="Gestión y planificación de campañas activas">Campañas</a></li>
-            <li><a href="../html/InformacionCadena.html" data-titulo="Cadenas"
-                    data-subtitulo="Administración de cadenas de supermercados">Cadenas</a></li>
-            <li><a href="../html/InformacionTienda.html" data-titulo="Tiendas"
-                    data-subtitulo="Gestión de establecimientos participantes">Tiendas</a></li>
-            <li class="active"><a href="../html/Colaboradores.html" data-titulo="Colaboradores"
-                    data-subtitulo="Gestión de entidades colaboradoras y voluntarios">Colaboradores</a></li>
-            <li><a href="../html/RegistroVoluntarios.html" data-titulo="Asignaciones"
-                    data-subtitulo="Control y asignación de voluntarios">Asignaciones</a></li>
-            <!-- Vista Voluntarios -->
+            <li id="btn-configuracion"><a href="#configuracion">Configuración</a></li>
+            <li id="btn-logout"><a href="#cerrar-sesion">Cerrar Sesión</a></li>
         </ul>
-
-        <div class="bottom-menu">
-
-            <ul>
-                <li id="btn-configuracion"><a href="#configuracion">Configuración</a></li>
-                <li id="btn-logout"><a href="#cerrar-sesion">Cerrar Sesión</a></li>
-            </ul>
-        </div>
+    </div>
 </body>
 
 </html>

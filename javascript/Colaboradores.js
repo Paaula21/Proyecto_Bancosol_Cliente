@@ -17,6 +17,23 @@ document.addEventListener("DOMContentLoaded", () => {
             window.location.href = 'AnadirColaborador.html'; 
         });
     }
+
+    const tbodyColaboradores = document.getElementById('tabla-colaboradores');
+
+    if (tbodyColaboradores) {
+
+        tbodyColaboradores.addEventListener('click', (e) => {
+            
+            const filaClicada = e.target.closest('tr');
+            
+            if (!filaClicada) return;
+
+            const todasLasFilas = tbodyColaboradores.querySelectorAll('tr');
+            todasLasFilas.forEach(fila => fila.classList.remove('selected'));
+
+            filaClicada.classList.add('selected');
+        });
+    }
 });
 
 // ----- OBTENER Y PROCESAR DATOS DE LA DB -----

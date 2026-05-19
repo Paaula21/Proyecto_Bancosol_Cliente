@@ -9,40 +9,6 @@ body {
     color: #111827;
 }
 
-/*.btn {
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid #d1d5db;
-    display: inline-flex;
-    align-items: center;
-    justify-content: left;
-} */
-
-/*Boton de añadir
-.btn--primary {
-    background-color: #420098;
-    color: white;
-    border: 1px solid transparent;;
-}
-.btn--primary:hover {
-    background-color: #420098;
-    border-color: #9ca3af;
-}*/
-
-/*Boton de borrar,editar
-.btn--secondary {
-    background-color: white;
-    color: #374151;
-}
-
-.btn--secondary:hover {
-    background-color: #f3f4f6;
-    border-color: #9ca3af;
-} */
-
 .app-container {
     display: flex;
     height: 100vh;
@@ -234,4 +200,23 @@ form {
     display: flex;
     flex-direction: column;
     gap: 24px;
+}
+
+.btn--secondary {
+    background-color: white;
+    color: #374151;
+
+    padding: 10px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    border: 1px solid #d1d5db;
+    background: transparent;
+    width: 150px;
+    display: block;
+    font-weight: 600;
+
+    width: auto;
+    min-width: 120px;
 }

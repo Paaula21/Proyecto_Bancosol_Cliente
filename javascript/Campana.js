@@ -227,7 +227,7 @@ function renderizarTabla() {
 
         // Enlace para añadir voluntarios a la campaña
         let enlaceVoluntarios = document.createElement('a');
-        enlaceVoluntarios.href = 'RegistroVoluntarios.html'; // Poner lista voluntarios
+        enlaceVoluntarios.href = 'AsignaciónTurnos.html'; // Poner lista voluntarios
         enlaceVoluntarios.className = 'btn-edit';
         enlaceVoluntarios.textContent = 'Añadir voluntario';
 
