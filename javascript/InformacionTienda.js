@@ -374,16 +374,18 @@ function showForm(est) {
 function hideForm() {
     document.getElementById('formulario-establecimiento').style.display = 'none';
     document.getElementById('acciones-formulario').style.display = 'none';
-    document.getElementById('acciones-detalle').style.display = 'flex';
 
     if (selectedEstablishmentId === 'new') {
         document.getElementById('estado-vacio-panel').style.display = 'block';
+        document.getElementById('acciones-detalle').style.display = 'none';
     } else if (selectedEstablishmentId) {
         document.getElementById('datos-establecimiento').style.display = 'block';
+        document.getElementById('acciones-detalle').style.display = 'flex';
         document.getElementById('btn-editar-establecimiento').disabled = false;
         document.getElementById('btn-eliminar-establecimiento').disabled = false;
     } else {
         document.getElementById('estado-vacio-panel').style.display = 'block';
+        document.getElementById('acciones-detalle').style.display = 'none';
     }
 }
 
@@ -634,12 +636,10 @@ async function deleteEstablishment(btn) {
         hideDeletePopup();
         selectedEstablishmentId = null;
 
-        document.getElementById('btn-editar-establecimiento').disabled = true;
-        document.getElementById('btn-eliminar-establecimiento').disabled = true;
         document.getElementById('datos-establecimiento').style.display = 'none';
         document.getElementById('formulario-establecimiento').style.display = 'none';
         document.getElementById('acciones-formulario').style.display = 'none';
-        document.getElementById('acciones-detalle').style.display = 'flex';
+        document.getElementById('acciones-detalle').style.display = 'none';
         document.getElementById('estado-vacio-panel').style.display = 'block';
 
         await loadEstablishments();

@@ -255,16 +255,18 @@ function showForm(cad) {
 function hideForm() {
     document.getElementById('formulario-cadena').style.display = 'none';
     document.getElementById('acciones-formulario').style.display = 'none';
-    document.getElementById('acciones-detalle').style.display = 'flex';
 
     if (selectedChainId === 'new') {
         document.getElementById('estado-vacio-panel').style.display = 'block';
+        document.getElementById('acciones-detalle').style.display = 'none';
     } else if (selectedChainId) {
         document.getElementById('datos-cadena').style.display = 'block';
+        document.getElementById('acciones-detalle').style.display = 'flex';
         document.getElementById('btn-editar-cadena').disabled = false;
         document.getElementById('btn-eliminar-cadena').disabled = false;
     } else {
         document.getElementById('estado-vacio-panel').style.display = 'block';
+        document.getElementById('acciones-detalle').style.display = 'none';
     }
 }
 
@@ -384,7 +386,7 @@ async function deleteChain(btn) {
         document.getElementById('datos-cadena').style.display = 'none';
         document.getElementById('formulario-cadena').style.display = 'none';
         document.getElementById('acciones-formulario').style.display = 'none';
-        document.getElementById('acciones-detalle').style.display = 'flex';
+        document.getElementById('acciones-detalle').style.display = 'none';
         document.getElementById('estado-vacio-panel').style.display = 'block';
 
         await loadChains();
