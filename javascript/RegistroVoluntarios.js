@@ -1,25 +1,26 @@
-
 document.getElementById('form-voluntario').addEventListener('submit', async function (e) {
+
+    // SIEMPRE evitamos el envío por defecto primero
+    e.preventDefault();
 
     // Capturamos los checkboxes marcados
     const asistencias = [];
+
     document.querySelectorAll('input[name="asistencia"]:checked').forEach((checkbox) => {
         asistencias.push(checkbox.value);
     });
 
-    // VALIDACIÓN
+    // VALIDACIÓN CHECKBOXES
     if (asistencias.length === 0) {
-        e.preventDefault();
         alert("Debes seleccionar al menos una disponibilidad.");
         return;
     }
 
-    e.preventDefault();
-
+    // Si llega aquí, TODO está correcto
     const formData = new FormData(e.target);
     const datosVoluntario = Object.fromEntries(formData.entries());
 
-    // Añadimos el array de horarios
+    // Añadimos horarios
     datosVoluntario.horarios = asistencias;
 
     // Eliminamos el campo duplicado
@@ -29,7 +30,7 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
 
     try {
 
-        const response = await fetch('http://localhost:3001/turnos', {
+        const response = await fetch('http://localhost:3000/voluntario', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -38,10 +39,17 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
         });
 
         if (response.ok) {
-            alert("¡Registro guardado en db.json con éxito!");
+
+            // AQUÍ muestras el popup
+            document.getElementById("overlay").classList.add("active");
+            document.getElementById("popup").classList.add("active");
+
             e.target.reset();
+
         } else {
+
             alert("Error: El servidor no pudo procesar el registro.");
+
         }
 
     } catch (error) {
@@ -52,8 +60,3 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
     }
 
 });
-
-
-
-
-

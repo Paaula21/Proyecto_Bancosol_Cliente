@@ -9,16 +9,20 @@ btnAbrirPopup.addEventListener('click', function (e) {
 
     e.preventDefault();
 
-    //Checkea que no se abra el pop up sin que los datos estén incompletos
     const formulario = document.getElementById("form-voluntario");
 
-    if(formulario.checkValidity()) {
-        overlay.classList.add('active');
-        popup.classList.add('active');
-    } // else {
-       // overlay2.classList.add('active');
-       // popup2.classList.add('active');
-    // }
+    if (!formulario.checkValidity()) {
+        return;
+    }
+
+    const asistencias = document.querySelectorAll('input[name="asistencia"]:checked');
+    if (asistencias.length === 0) {
+        alert("Debes seleccionar al menos una disponibilidad.");
+        return;
+    }
+
+    overlay.classList.add('active');
+    popup.classList.add('active');
 });
 
 btnCerrarPopup.addEventListener('click', function (e) {

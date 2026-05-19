@@ -3,172 +3,187 @@
 <head>
     <meta charset="UTF-8">
     <title>Registro de voluntarios</title>
+
     <link rel="stylesheet" href="../css/RegistroVoluntarios.css">
     <link rel="stylesheet" href="../css/popUpRegistro.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
 
-    <script src="../javascript/popUpRegistro.js" defer> </script>
-    <script src="../javascript/RegistroVoluntarios.js" defer> </script>
+    <script src="../javascript/RegistroVoluntarios.js" defer></script>
     <script src="../javascript/Sidebar.js" defer></script>
-    <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/IncludeHTML.js" defer></script>
+
 </head>
+
 <body>
 
-    <div class="app-container">
+<div class="app-container">
 
-        <aside class="sidebar">
-            <include-html src="../html/Sidebar.html"></include-html>
-        </aside>
+    <aside class="sidebar">
+        <include-html src="../html/Sidebar.html"></include-html>
+    </aside>
 
-        <div class="right-content">
+    <div class="right-content">
 
-            <header class="main-header">
-                <nav>
-                    <div class="header-branding">
-                        <img src="/images/icono.png" alt="App Icon" class="header-logo">
-                        <div class="header-titles">
-                            <h1>Voluntarios</h1>
-                            <p>Gestión de voluntarios participantes en las campañas</p>
+        <header class="main-header">
+            <nav>
+                <div class="header-branding">
+                    <img src="/images/icono.png" alt="App Icon" class="header-logo">
+
+                    <div class="header-titles">
+                        <h1>Voluntarios</h1>
+                        <p>Gestión de voluntarios participantes en las campañas</p>
+                    </div>
+                </div>
+
+                <button class="btn--secondary" id="btn-notifications">
+                    Notificaciones
+                </button>
+            </nav>
+        </header>
+
+        <div class="main-layout">
+
+            <main>
+
+                <form id="form-voluntario">
+
+                    <!-- INFORMACIÓN -->
+                    <div class="list-container">
+
+                        <div class="list-header">
+                            <h2>Información del Voluntario</h2>
+                            <br>
+                            <p>Añadir un nuevo voluntario a la base de datos</p>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="volunt-name">Nombre</label>
+                            <input type="text" id="volunt-name" name="volunt_name" required>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="volunt-email">Email</label>
+                            <input type="email" id="volunt-email" name="volunt_email" required>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="volunt-tel">Teléfono (opcional)</label>
+                            <input type="number" id="volunt-tel" name="volunt_tel">
+                        </div>
+
+                    </div>
+
+                    <!-- DISPONIBILIDAD -->
+                    <div class="list-container">
+
+                        <div class="list-header">
+                            <h2>Disponibilidad en la campaña</h2>
+                            <br>
+                            <p>Especifique la disponibilidad del voluntario para la campaña</p>
+                        </div>
+
+                        <table class="tabla-registro">
+
+                            <thead>
+                            <tr>
+                                <th>Mañana/Tarde</th>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miércoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                                <th>Sábado</th>
+                                <th>Domingo</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+                                <td>Mañana</td>
+
+                                <td><input type="checkbox" name="asistencia" value="lunes-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="martes-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="miercoles-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="jueves-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="viernes-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="sabado-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="domingo-mañana"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Tarde</td>
+
+                                <td><input type="checkbox" name="asistencia" value="lunes-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="martes-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="miercoles-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="jueves-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="viernes-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="sabado-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="domingo-tarde"></td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <!-- OBSERVACIONES -->
+                    <div class="list-container">
+
+                        <div class="list-header">
+                            <h2>Observaciones del voluntario</h2>
+                            <br>
+                            <p>
+                                Documente las observaciones del voluntario si es necesario
+                            </p>
+                        </div>
+
+                        <div class="field-group">
+                            <input type="text" id="volunt-obs" name="volunt_obs">
+                        </div>
+
+                    </div>
+
+                    <!-- BOTÓN -->
+                    <div class="contenedor">
+
+                        <article>
+                            <button type="submit" class="btn-abrir-popup">
+                                Guardar
+                            </button>
+                        </article>
+
+                        <!-- POPUP -->
+                        <div class="overlay" id="overlay">
+
+                            <div class="popup" id="popup">
+
+                                <h3>Inscripción completada</h3>
+
+                                <p>
+                                    Elija si desea añadir otro voluntario o finalizar la operación
+                                </p>
+
+                                <div class="botones">
+
+                                    <button type="button" class="btn-add" onclick="window.location.href='RegistroVoluntarios.html'">
+                                        Añadir
+                                    </button>
+
+                                    <button type="button" class="btn-close" onclick="window.location.href='Campana.html'">
+                                        Cerrar
+                                    </button>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <button class="btn--secondary" id="btn-notifications">Notificaciones</button>
-                </nav>
-            </header>
-
-            <div class="main-layout">
-                <main>
-                    <form id="form-voluntario">
-                            <div class="list-container">
-                                <div class="list-header">
-                                    <h2>Información del Voluntario</h2> <br>
-                                    <p>Añadir una nuevo voluntario a la base de datos</p>
-                                </div>
-
-                                <div class="field-group">
-                                    <label for="volunt-name">Nombre</label>
-                                    <input type="text" id="volunt-name" name="volunt_name" required>
-                                </div>
-                                <div class="field-group">
-                                        <label for="volunt-email">Email</label>
-                                        <input type="text" id="volunt-email" name="volunt_email" required>
-                                </div>
-                                <div class="field-group">
-                                    <label for="volunt-tel">Teléfono (opcional)</label>
-                                    <input type="number" id="volunt-tel" name="volunt_tel">
-                                </div>
-                            </div>
-
-
-                            <div class="list-container">
-                                <div class="list-header">
-                                    <h2>Disponibilidad en la campaña</h2> <br>
-                                    <p>Especifique la disponibilidad del voluntario para la campaña</p>
-                                </div>
-
-                                <table class="tabla-registro">
-                                    <thead>
-                                    <tr>
-                                        <th>
-                                            Mañana/Tarde
-                                        </th>
-                                        <th>
-                                            Lunes
-                                        </th>
-                                        <th>
-                                            Martes
-                                        </th>
-                                        <th>
-                                            Miércoles
-                                        </th>
-                                        <th>
-                                            Jueves
-                                        </th>
-                                        <th>
-                                            Viernes
-                                        </th>
-                                        <th>
-                                            Sábado
-                                        </th>
-                                        <th>
-                                            Domingo
-                                        </th>
-                                    </tr>
-                                    </thead>
-
-                                    <tbody>
-                                    <tr>
-                                        <td> Mañana</td>
-                                        <td><input type="checkbox" name="asistencia" value="lunes-mañana"></td>
-                                        <td><input type="checkbox" name="asistencia" value="martes-mañana"></td>
-                                        <td><input type="checkbox" name="asistencia" value="miercoles-mañana"></td>
-                                        <td><input type="checkbox" name="asistencia" value="jueves-mañana"></td>
-                                        <td><input type="checkbox" name="asistencia" value="viernes-mañana"></td>
-                                        <td><input type="checkbox" name="asistencia" value="sabado-mañana"></td>
-                                        <td><input type="checkbox" name="asistencia" value="domingo-mañana"></td>
-                                    </tr>
-                                    <tr>
-                                        <td> Tarde</td>
-                                        <td><input type="checkbox" name="asistencia" value="lunes-tarde"></td>
-                                        <td><input type="checkbox" name="asistencia" value="martes-tarde"></td>
-                                        <td><input type="checkbox" name="asistencia" value="miercoles-tarde"></td>
-                                        <td><input type="checkbox" name="asistencia" value="jueves-tarde"></td>
-                                        <td><input type="checkbox" name="asistencia" value="viernes-tarde"></td>
-                                        <td><input type="checkbox" name="asistencia" value="sabado-tarde"></td>
-                                        <td><input type="checkbox" name="asistencia" value="domingo-tarde"></td>
-                                    </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-
-                            <div class="list-container">
-                                <div class="list-header">
-                                    <h2>Observaciones del voluntario</h2> <br>
-                                    <p>Documente las observaciones del voluntario si es necesario (por ejemplo: preferencia de campaña)</p>
-                                </div>
-                                <div class="field-group">
-                                    <label for="volunt-obs"></label>
-                                    <input type="text" id="volunt-obs" name="volunt-obs">
-                                </div>
-                            </div>
-
-                        <div class="contenedor">
-                            <article>
-                                <button type="submit" id="btn-abrir-popup" class="btn-abrir-popup">Guardar</button>
-                            </article>
-
-                            <div class="overlay" id="overlay">
-                                <div class="popup" id="popup">
-
-                                    <h3>Inscripción completada</h3>
-                                    <p>Elija si desea añadir otro voluntario o finalizar la operación</p>
-                                    <div class="botones">
-                                        <button class="btn-add" onclick="window.location.href='RegistroVoluntarios.html'">
-                                            Añadir
-                                        </button>
-                                        <button class="btn-close" onclick="window.location.href='Campana.html'">
-                                            Cerrar
-                                        </button>
-                                    </div>
-                                </div>
-                            </div>
-
-                            <!--
-                            <div class="overlay" id="overlay2">
-                                <div class="popup" id="popup2">
-
-                                    <h3>Error de inscripción</h3>
-                                    <p>Faltan datos por completar en la inscripción</p>
-                                    <form action="botones" class="botones">
-                                        <input type="button" id="btn-cerrar-popup2" class="btn-cerrar-popup" value="Volver" onclick="window.location.href='RegistroVoluntarios.html'">
-                                    </form>
-                                </div>
-                            </div> -->
-                        </div>
-                    </form>
-                </main>
-            </div>
+                </form>
+            </main>
         </div>
     </div>
-<script src="../javascript/popUpRegistro.js"></script>
+</div>
+
 </body>
 </html>
