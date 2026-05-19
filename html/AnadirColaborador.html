@@ -1,127 +1,106 @@
-<!DOCTYPE html>
-<html lang="es">
+<div id="formulario-anadir-colaborador" class="datos-colaborador" style="display: none;">
+    <h3 class="ficha-titulo-principal">Nuevo Colaborador</h3>
 
-<head>
-  <meta charset="UTF-8">
-  <title>Información del Colaborador</title>
-  <link rel="stylesheet" href="../css/Colaboradores.css">
-  <link rel="stylesheet" href="../css/Sidebar.css">
-  <link rel="stylesheet" href="../css/popUpRegistro.css">
-  <link rel="stylesheet" href="../css/AnadirColaborador.css">
-  <link rel="stylesheet" href="../css/Header.css">
-  <script src="../javascript/IncludeHTML.js"></script>
-  <script src="../javascript/AnadirColaborador.js"></script>
-</head>
+    <form id="form-nuevo-colaborador-lateral">
+        
+        <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
+            <h5>Nombre de la Entidad / Colaborador</h5>
+            <input type="text" id="nuevo-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Banco de Alimentos">
+        </div>
 
-<body class="bg-light">
-  <div class="main-layout">
-    <aside class="sidebar"><include-html src="Sidebar.html"></include-html></aside>
-
-    <div class="right-column">
-      <header class="main-header">
-        <include-html src="Header.html"></include-html>
-      </header>
-
-      <main class="content-form">
-        <form id="form-nuevo-colaborador" class="formulario-estirado">
-
-          <!--- INFORMACIÓN COLABORADOR --->
-          <section class="form-card flex-grow-1">
-            <h3>Información del Colaborador</h3>
-            <div class="fila-flex">
-              <div class="form-group flex-3">
-                <label>Nombre de la entidad</label>
-                <input type="text" id="nuevo-nombre" required placeholder="Nombre completo">
-              </div>
-              <div class="form-group flex-2">
-                <label>Zona Geográfica</label>
-                <select id="nuevo-zona" required></select>
-              </div>
-            </div>
-          </section>
-
-          <!--- PERSONA DE CONTACTO --->
-          <section class="form-card flex-grow-1">
-            <h3>Persona de contacto</h3>
-            <div class="form-group">
-              <label>Nombre completo</label>
-              <input type="text" id="nuevo-contacto-nombre" placeholder="Nombre">
-            </div>
-            <div class="fila-flex">
-              <div class="form-group flex-1">
-                <label>Email</label>
-                <input type="email" id="nuevo-contacto-email" placeholder="ejemplo@correo.com">
-              </div>
-              <div class="form-group flex-1">
-                <label>Teléfono</label>
-                <input type="tel" id="nuevo-contacto-tel" placeholder="600 000 000">
-              </div>
-            </div>
-          </section>
-
-          <!--- DIRECCIÓN POSTAL --->
-          <section class="form-card flex-grow-2">
-            <h3>Dirección Postal</h3>
-            <div class="fila-flex">
-              <div class="form-group flex-1">
-                <label>Tipo Vía</label>
-                <select id="nuevo-tipo-via">
-                  <option value="">Ninguno</option>
-                  <option value="Calle">Calle</option>
-                  <option value="Avenida">Avenida</option>
-                  <option value="Plaza">Plaza</option>
+        <div class="ficha-tarjeta-info">
+            <h5>Ubicación</h5>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-zona"><strong>Zona Geográfica:</strong></label>
+                <select id="nuevo-zona" class="select-ficha-lateral" required>
+                    <option value="" disabled selected>Seleccione zona...</option>
                 </select>
-              </div>
-              <div class="form-group flex-3">
-                <label>Calle / Vía</label>
-                <input type="text" id="nuevo-direccion-via" required>
-              </div>
-              <div class="form-group flex-1">
-                <label>Núm.</label>
-                <input type="text" id="nuevo-direccion-num">
-              </div>
             </div>
-            <div class="fila-flex">
-              <div class="form-group flex-1">
-                <label>Código Postal</label>
-                <input type="text" id="nuevo-cp" required maxlength="5">
-              </div>
-              <div class="form-group flex-3">
-                <label>Localidad / Municipio</label>
-                <input type="text" id="nuevo-localidad" required>
-              </div>
-            </div>
-          </section>
+        </div>
 
-          <!--- OBSERVACIONES --->
-          <section class="form-card flex-grow-1">
-            <h3>Observaciones</h3>
-            <div class="form-group">
-              <input type="text" id="nuevo-observaciones" placeholder="Detalles adicionales...">
+        <div class="ficha-tarjeta-info">
+            <h5>Datos de Contacto</h5>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-contacto-nombre"><strong>Persona:</strong></label>
+                <input type="text" id="nuevo-contacto-nombre" class="input-ficha-lateral" placeholder="Nombre completo">
             </div>
-          </section>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-contacto-email"><strong>Email:</strong></label>
+                <input type="email" id="nuevo-contacto-email" class="input-ficha-lateral" placeholder="ejemplo@correo.com">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-contacto-tel"><strong>Teléfono:</strong></label>
+                <input type="tel" id="nuevo-contacto-tel" class="input-ficha-lateral" placeholder="600 000 000">
+            </div>
+        </div>
 
-          <div class="form-actions-footer">
-            <button type="button" class="btn-editar" id="btn-guardar">Guardar </button>
-            <button type="button" class="btn-editar" id="btn-cancelar">Cancelar</button>
-          </div>
-        </form>
-      </main>
+        <div class="ficha-tarjeta-info sin-margen-inferior">
+            <h5>Dirección Postal</h5>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-tipo-via"><strong>Tipo de Vía:</strong></label>
+                <select id="nuevo-tipo-via" class="select-ficha-lateral">
+                    <option value="">Ninguno</option>
+                    <option value="Calle">Calle</option>
+                    <option value="Avenida">Avenida</option>
+                    <option value="Plaza">Plaza</option>
+                </select>
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-direccion-via"><strong>Calle / Vía:</strong></label>
+                <input type="text" id="nuevo-direccion-via" class="input-ficha-lateral" required placeholder="Ej. Av. de Andalucía">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-direccion-num"><strong>Número:</strong></label>
+                <input type="text" id="nuevo-direccion-num" class="input-ficha-lateral" placeholder="Ej. 12, 3ºB">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-cp"><strong>Cód. Postal:</strong></label>
+                <input type="text" id="nuevo-cp" class="input-ficha-lateral" required maxlength="5" placeholder="29000">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="nuevo-localidad"><strong>Localidad:</strong></label>
+                <input type="text" id="nuevo-localidad" class="input-ficha-lateral" required placeholder="Ej. Málaga">
+            </div>
+        </div>
+
+        <div class="ficha-tarjeta-info sin-margen-inferior" style="margin-top: 15px;">
+            <h5>Observaciones</h5>
+            <input type="text" id="nuevo-observaciones" class="input-ficha-lateral" placeholder="Detalles adicionales...">
+        </div>
+
+        <div class="ficha-acciones">
+            <button type="submit" id="btn-guardar-nuevo" class="btn-ficha btn-guardar">
+                Guardar Colaborador
+            </button>
+            <button type="button" id="btn-cancelar-nuevo" class="btn-ficha btn-cancelar-edit">
+                Cancelar
+            </button>
+        </div>
+    </form>
+</div>
+
+<div class="overlay" id="overlay-exito-nuevo">
+    <div class="popup" id="popup-exito-nuevo">
+        <h3>¡Creado con éxito!</h3>
+        <p>El colaborador y sus datos de contacto se han creado correctamente en el sistema.</p>
+
+        <div class="popup-actions">
+            <form action="">
+                <button type="button" class="btn-add" id="btn-aceptar-exito-nuevo">Aceptar</button>
+            </form>
+        </div>
     </div>
-  </div>
+</div>
 
-  <div class="overlay" id="overlay-confirmar">
-    <div class="popup" id="popup-confirmar">
-      <h3>¡Registrado!</h3>
-      <p>Colaborador guardado con éxito.</p>
+<div class="overlay" id="overlay-error-nuevo">
+    <div class="popup" id="popup-error-nuevo">
+        <h3>Ha ocurrido un error</h3>
+        <p id="texto-error-popup-nuevo">No se pudieron crear las relaciones en el servidor.</p>
 
-      <div class="popup-actions">
-        <form action="">
-          <button class="btn-add" id="btn-aceptar-exito">Aceptar</button>
-        </form>
-      </div>
+        <div class="popup-actions">
+            <form action="">
+                <button type="button" class="btn-cerrar-popup" id="btn-aceptar-error-nuevo">Aceptar</button>
+            </form>
+        </div>
     </div>
-  </div>
-</body>
-
-</html>
+</div>

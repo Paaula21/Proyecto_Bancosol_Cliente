@@ -13,8 +13,16 @@ document.addEventListener("DOMContentLoaded", () => {
     const btnAnadir = document.getElementById('btn-abrir-registro');
     if (btnAnadir) {
         btnAnadir.addEventListener('click', () => {
-            // Cambia 'NuevoColaborador.html' por 'AnadirColaborador.html' si renombraste el archivo
-            window.location.href = 'AnadirColaborador.html'; 
+
+            document.getElementById('estado-vacio').style.display = 'none';
+            document.getElementById('datos-colaborador').style.display = 'none';
+            document.getElementById('formulario-editar-colaborador').style.display = 'none';
+            
+            const panelAnadir = document.getElementById('formulario-anadir-colaborador');
+            if(panelAnadir) panelAnadir.style.display = 'block';
+
+            const todasLasFilas = tbodyColaboradores.querySelectorAll('tr');
+            todasLasFilas.forEach(fila => fila.classList.remove('selected'));
         });
     }
 
@@ -59,12 +67,15 @@ async function cargarDatosColaboradores() {
 
         // Rellenar selector de zonas en el filtro
         const selectZona = document.getElementById('filter-zona');
-        zonas.forEach(z => {
-            const opt = document.createElement('option');
-            opt.value = z.id_zona;
-            opt.textContent = z.nombre_zona;
-            selectZona.appendChild(opt);
-        });
+        if (selectZona) {
+            selectZona.innerHTML = '<option value="Todas">Todas</option>';
+            zonas.forEach(z => {
+                const opt = document.createElement('option');
+                opt.value = z.id_zona;
+                opt.textContent = z.nombre_zona;
+                selectZona.appendChild(opt);
+            });
+        }
 
         // Mapear colaboradores con sus relaciones de dirección y contacto
         colaboradoresGlobal = colaboradores.map(colab => {
@@ -75,7 +86,10 @@ async function cargarDatosColaboradores() {
             const zona = div ? zonas.find(z => z.id_zona === div.id_zona) : null;
 
             // Persona de Contacto
-            const relacion = relaciones.find(r => r.id_colaborador === colab.id_colaborador && r.es_principal === true);
+            const relacion = relaciones.find(r =>
+                r.id_colaborador === colab.id_colaborador &&
+                (r.es_principal === true || r.es_principal === "true")
+            );
             const persona = relacion ? personas.find(p => p.id_persona === relacion.id_contacto) : null;
 
             return {
@@ -88,7 +102,8 @@ async function cargarDatosColaboradores() {
                 contacto_telefono: persona ? persona.telefono : null,
                 contacto_cargo: persona ? (persona.observacion || "Representante") : "Representante",
                 obj_direccion: dir,
-                obj_cp: cp
+                obj_cp: cp,
+                obj_division: div
             };
         });
 

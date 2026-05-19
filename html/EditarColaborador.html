@@ -12,14 +12,8 @@
             <h5>Ubicación</h5>
             <div class="campo-formulario-ficha">
                 <label for="edit-zona"><strong>Zona Geográfica:</strong></label>
-                <select id="edit-zona" class="select-ficha-lateral">
-                    <option value="1">Málaga</option>
-                    <option value="2">Costa del Sol Occidental</option>
-                    <option value="3">Axarquía</option>
-                    <option value="4">Guadalhorce</option>
-                    <option value="5">Antequera</option>
-                    <option value="6">Serranía de Ronda</option>
-                    <option value="7">Sierra de las Nieves</option>
+                <select id="edit-zona" class="select-ficha-lateral" required>
+                    <option value="" disabled selected>Seleccione zona...</option>
                 </select>
             </div>
         </div>
@@ -28,32 +22,50 @@
             <h5>Datos de Contacto</h5>
             <div class="campo-formulario-ficha">
                 <label for="edit-contacto-nombre"><strong>Persona:</strong></label>
-                <input type="text" id="edit-contacto-nombre" class="input-ficha-lateral">
+                <input type="text" id="edit-contacto-nombre" class="input-ficha-lateral" placeholder="Nombre completo">
             </div>
             <div class="campo-formulario-ficha">
                 <label for="edit-contacto-email"><strong>Email:</strong></label>
-                <input type="email" id="edit-contacto-email" class="input-ficha-lateral">
+                <input type="email" id="edit-contacto-email" class="input-ficha-lateral" placeholder="ejemplo@correo.com">
             </div>
             <div class="campo-formulario-ficha">
                 <label for="edit-contacto-tel"><strong>Teléfono:</strong></label>
-                <input type="tel" id="edit-contacto-tel" class="input-ficha-lateral">
+                <input type="tel" id="edit-contacto-tel" class="input-ficha-lateral" placeholder="600 000 000">
             </div>
         </div>
 
         <div class="ficha-tarjeta-info sin-margen-inferior">
             <h5>Dirección Postal</h5>
             <div class="campo-formulario-ficha">
+                <label for="edit-tipo-via"><strong>Tipo de Vía:</strong></label>
+                <select id="edit-tipo-via" class="select-ficha-lateral">
+                    <option value="">Ninguno</option>
+                    <option value="Calle">Calle</option>
+                    <option value="Avenida">Avenida</option>
+                    <option value="Plaza">Plaza</option>
+                </select>
+            </div>
+            <div class="campo-formulario-ficha">
                 <label for="edit-direccion-via"><strong>Calle / Vía:</strong></label>
-                <input type="text" id="edit-direccion-via" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
+                <input type="text" id="edit-direccion-via" class="input-ficha-lateral" required placeholder="Ej. Av. de Andalucía">
             </div>
             <div class="campo-formulario-ficha">
                 <label for="edit-direccion-num"><strong>Número:</strong></label>
                 <input type="text" id="edit-direccion-num" class="input-ficha-lateral" placeholder="Ej. 12, 3ºB">
             </div>
             <div class="campo-formulario-ficha">
-                <label for="edit-localidad"><strong>Localidad:</strong></label>
-                <input type="text" id="edit-localidad" class="input-ficha-lateral">
+                <label for="edit-cp"><strong>Cód. Postal:</strong></label>
+                <input type="text" id="edit-cp" class="input-ficha-lateral" required maxlength="5" placeholder="29000">
             </div>
+            <div class="campo-formulario-ficha">
+                <label for="edit-localidad"><strong>Localidad:</strong></label>
+                <input type="text" id="edit-localidad" class="input-ficha-lateral" required placeholder="Ej. Málaga">
+            </div>
+        </div>
+
+        <div class="ficha-tarjeta-info sin-margen-inferior" style="margin-top: 15px;">
+            <h5>Observaciones</h5>
+            <input type="text" id="edit-observaciones" class="input-ficha-lateral" placeholder="Detalles adicionales...">
         </div>
 
         <div class="ficha-acciones">
@@ -73,7 +85,7 @@
 
         <div class="popup-actions">
             <form action="">
-                <button class="btn-add" id="btn-aceptar-exito">Aceptar</button>
+                <button type="button" class="btn-add" id="btn-aceptar-edicion">Aceptar</button>
             </form>
         </div>
     </div>
@@ -86,7 +98,7 @@
 
         <div class="popup-actions">
             <form action="">
-                <button class="btn-cerrar-popup" id="btn-aceptar-error">Aceptar</button>
+                <button type="button" class="btn-cerrar-popup" id="btn-aceptar-error">Aceptar</button>
             </form>
         </div>
     </div>

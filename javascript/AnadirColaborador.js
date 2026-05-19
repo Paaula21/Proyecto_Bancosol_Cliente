@@ -1,174 +1,319 @@
-const API_BASE = 'http://localhost:3000';
-
+// Se cargan las zonas del select nada más seleccionar
 document.addEventListener("DOMContentLoaded", () => {
-    cargarZonas();
-    
-    // Boton guardar con el pop up
-    const btnGuardarForm = document.getElementById('btn-guardar');
-    if (btnGuardarForm) {
-        btnGuardarForm.addEventListener('click', (e) => {
-            e.preventDefault();
-            
-            // Campos obligatorios rellenos
-            const form = document.getElementById('form-nuevo-colaborador');
-            if (form && !form.reportValidity()) {
-                return; // Si falta algo, se para y sale el aviso rojo de HTML
-            }
-            
-            // Mostramos el pop up antes de guardar los datos para que no se recarge la página 
-            document.getElementById('overlay-confirmar').classList.add('active');
-            document.getElementById('popup-confirmar').classList.add('active');
-        });
-    }
-
-    // Botón aceptar del pop up, guarda los datos
-    const btnConfirmar = document.getElementById('btn-aceptar-exito');
-    if (btnConfirmar) {
-        btnConfirmar.addEventListener('click', async (e) => {
-            e.preventDefault();
-          
-            btnConfirmar.textContent = "Guardando...";
-            btnConfirmar.disabled = true;
-            
-            // Ejecutamos la función de guardar
-            await guardarColaborador(); 
-            
-            // Volvemos a la página de Colaboradores
-            window.location.href = 'Colaboradores.html'; 
-        });
-    }
-
-    // Botón cancelar registro
-    const btnCancelarGeneral = document.getElementById('btn-cancelar');
-    if (btnCancelarGeneral) {
-        btnCancelarGeneral.addEventListener('click', (e) => {
-            e.preventDefault(); 
-            window.location.href = 'Colaboradores.html'; 
-        });
-    }
+    setTimeout(cargarZonas, 0);
 });
 
-// Generar id aleatorio
-function generarId() { return Math.random().toString(36).substring(2, 12); }
+const HEADERS_JSON = { 'Content-Type': 'application/json' };
 
-// Función para comprobar que se ha seleccionado un colaborador existente
-function getVal(id) {
+// Se obtiene el valor del id
+function getValNuevo(id) {
     const el = document.getElementById(id);
     if (!el) {
-        console.error(`ERROR: No se encontró el elemento con ID: ${id}`);
+        console.error(`ERROR: No se encontro el elemento con ID: ${id}`);
         return "";
     }
     return el.value.trim();
 }
-// Obtener las zonas disponibles para el selector
-async function cargarZonas() {
-    try {
-        const res = await fetch(`${API_BASE}/zona_geografica`);
-        const zonas = await res.json();
-        const select = document.getElementById('nuevo-zona');
-        if (select) {
-            select.innerHTML = '<option value="" disabled selected>Seleccione zona...</option>';
-            zonas.forEach(z => {
-                const opt = document.createElement('option');
-                opt.value = z.id_zona;
-                opt.textContent = z.nombre_zona;
-                select.appendChild(opt);
-            });
-        }
-    } catch (e) { console.error("Error cargando zonas", e); }
+
+// Se genera un ID aleatorio para asociarlo al nuevo colaborador
+function generarId() {
+    return Math.random().toString(36).substring(2, 12);
 }
 
-//Para guardar el colaborador nuevo
-async function guardarColaborador(e) {
-    const btnSubmit = document.getElementById('btn-guardar');
-    btnSubmit.disabled = true;
-    btnSubmit.textContent = "Guardando...";
+// Se normalizan los valores
+function normalizarTexto(valor) {
+    return (valor ?? '').toString().trim();
+}
 
+function normalizarTextoComparacion(valor) {
+    return normalizarTexto(valor)
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+}
+
+function normalizarCodigoPostal(valor) {
+    return normalizarTexto(valor);
+}
+
+function maxNumero(lista, campo) {
+    return Math.max(0, ...lista.map(item => Number(item?.[campo]) || 0));
+}
+
+async function fetchJson(url, options = {}) {
+    const response = await fetch(url, options);
+    if (!response.ok) {
+        throw new Error(`Error ${response.status} en ${url}`);
+    }
+    const texto = await response.text();
+    return texto ? JSON.parse(texto) : null;
+}
+
+function crearRecurso(recurso, objeto) {
+    return fetchJson(`${API_BASE}/${recurso}`, {
+        method: 'POST',
+        headers: HEADERS_JSON,
+        body: JSON.stringify(objeto)
+    });
+}
+
+function actualizarRecurso(recurso, id, objeto) {
+    return fetchJson(`${API_BASE}/${recurso}/${id}`, {
+        method: 'PUT',
+        headers: HEADERS_JSON,
+        body: JSON.stringify(objeto)
+    });
+}
+
+function borrarRecurso(recurso, id) {
+    return fetchJson(`${API_BASE}/${recurso}/${id}`, { method: 'DELETE' });
+}
+
+async function cargarCatalogosColaborador() {
+    const [cps, divisiones, personas, direcciones, colaboradores] = await Promise.all([
+        fetchJson(`${API_BASE}/codigo_postal`),
+        fetchJson(`${API_BASE}/division_territorial`),
+        fetchJson(`${API_BASE}/persona`),
+        fetchJson(`${API_BASE}/direccion`),
+        fetchJson(`${API_BASE}/colaborador`)
+    ]);
+
+    return { cps, divisiones, personas, direcciones, colaboradores };
+}
+
+// Se obtiene la división territorial si existe ya en la bd para no realizar duplicados
+async function obtenerOCrearDivisionTerritorial(divisiones, localidadTxt, zonaId) {
+    const localidad = normalizarTexto(localidadTxt);
+    const zonaNumerica = Number(zonaId);
+
+    if (!localidad) {
+        throw new Error("La localidad es obligatoria.");
+    }
+
+    if (!zonaNumerica) {
+        throw new Error("La zona geografica es obligatoria.");
+    }
+
+    let divObj = divisiones.find(d =>
+        normalizarTextoComparacion(d.nombre_division) === normalizarTextoComparacion(localidad) &&
+        Number(d.id_zona) === zonaNumerica
+    );
+
+    if (divObj) {
+        return divObj;
+    }
+
+    const nuevaDivision = {
+        id: generarId(),
+        id_division: maxNumero(divisiones, 'id_division') + 1,
+        nombre_division: localidad,
+        id_zona: zonaNumerica,
+        tipo: true
+    };
+
+    divObj = await crearRecurso('division_territorial', nuevaDivision);
+    divisiones.push(divObj);
+    return divObj;
+}
+
+// Se obtiene el CP si existe ya en la bd para no realizar duplicados
+async function obtenerOCrearCodigoPostal(cps, divisiones, cpTxt, localidadTxt, zonaId) {
+    const cpNormalizado = normalizarCodigoPostal(cpTxt);
+
+    if (!/^\d{5}$/.test(cpNormalizado)) {
+        throw new Error("El codigo postal debe tener 5 digitos.");
+    }
+
+    let cpObj = cps.find(c => normalizarCodigoPostal(c.codigo) === cpNormalizado);
+    if (cpObj) {
+        return cpObj;
+    }
+
+    const divObj = await obtenerOCrearDivisionTerritorial(divisiones, localidadTxt, zonaId);
+    const nuevoCp = {
+        id: generarId(),
+        id_cp: maxNumero(cps, 'id_cp') + 1,
+        codigo: cpNormalizado,
+        id_division: divObj.id_division
+    };
+
+    cpObj = await crearRecurso('codigo_postal', nuevoCp);
+    cps.push(cpObj);
+    return cpObj;
+}
+
+function generarCodigoColaborador(colaboradores) {
+    const maxCodigoA = colaboradores.reduce((maximo, colaborador) => {
+        const match = String(colaborador.id_colaborador || '').match(/^A(\d+)$/i);
+        return match ? Math.max(maximo, Number(match[1]) || 0) : maximo;
+    }, 0);
+
+    return `A${String(maxCodigoA + 1).padStart(4, '0')}`;
+}
+
+// Se realiza la comprobación para que si se borra, no salga vacío y salga Sin asignar
+function hayDatosContacto(nombre, email, telefono) {
+    return Boolean(nombre || email || telefono);
+}
+
+function setPopupActivo(overlayId, popupId, activo) {
+    document.getElementById(overlayId)?.classList.toggle('active', activo);
+    document.getElementById(popupId)?.classList.toggle('active', activo);
+}
+
+function resetFormularioNuevoColaborador() {
+    const form = document.getElementById('form-nuevo-colaborador-lateral');
+    if (form) form.reset();
+}
+
+// Se cargan las zonas del select
+async function cargarZonas() {
     try {
-        // Datos para las relaciones de la base de datos
-        const [resCP, resDiv, resPers, resDir, resCol] = await Promise.all([
-            fetch(`${API_BASE}/codigo_postal`),
-            fetch(`${API_BASE}/division_territorial`),
-            fetch(`${API_BASE}/persona`),
-            fetch(`${API_BASE}/direccion`),
-            fetch(`${API_BASE}/colaborador`)
-        ]);
+        const select = document.getElementById('nuevo-zona');
+        if (!select) return;
 
-        const cps = await resCP.json();
-        const divisiones = await resDiv.json();
-        const personas = await resPers.json();
-        const direcciones = await resDir.json();
-        const colaboradores = await resCol.json();
+        const zonas = await fetchJson(`${API_BASE}/zona_geografica`);
+        select.innerHTML = '<option value="" disabled selected>Seleccione zona...</option>';
 
-        const zonaId = parseInt(getVal('nuevo-zona'));
-        const localidadTxt = getVal('nuevo-localidad');
-        const cpTxt = getVal('nuevo-cp');
+        zonas.forEach(z => {
+            const opt = document.createElement('option');
+            opt.value = z.id_zona;
+            opt.textContent = z.nombre_zona;
+            select.appendChild(opt);
+        });
+    } catch (e) {
+        console.error("Error cargando zonas", e);
+    }
+}
 
-        // División territorial
-        let divObj = divisiones.find(d => d.nombre_division.toLowerCase() === localidadTxt.toLowerCase() && d.id_zona === zonaId);
-        if (!divObj) {
-            const nuevoIdDiv = Math.max(...divisiones.map(d => d.id_division || 0), 0) + 1;
-            divObj = { id: generarId(), id_division: nuevoIdDiv, nombre_division: localidadTxt, id_zona: zonaId, tipo: true };
-            await fetch(`${API_BASE}/division_territorial`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(divObj) });
+document.addEventListener('click', async function(e) {
+    // Botón añadir colaborador
+    const btnAbrirRegistro = e.target.closest('#btn-abrir-registro');
+    if (btnAbrirRegistro) {
+        await cargarZonas();
+    }
+
+    const filaTabla = e.target.closest('#tabla-colaboradores tr');
+    if (filaTabla) {
+        const formAnadir = document.getElementById('formulario-anadir-colaborador');
+        if (formAnadir) formAnadir.style.display = 'none';
+    }
+    // Botón cancelar en el formulario lateral
+    const btnCancelar = e.target.closest('#btn-cancelar-nuevo');
+    if (btnCancelar) {
+        e.preventDefault();
+        document.getElementById('formulario-anadir-colaborador').style.display = 'none';
+        document.getElementById('estado-vacio')?.style.setProperty('display', 'block');
+        resetFormularioNuevoColaborador();
+    }
+
+    // Botón de aceptar en el popup 
+    // Se realiza aquí el proceso de guardado para que no se recarge antes del pop up
+    if (e.target && e.target.id === 'btn-aceptar-exito-nuevo') {
+        e.preventDefault();
+
+        const btnConfirmar = e.target;
+        const textoOriginal = btnConfirmar.textContent;
+
+        btnConfirmar.textContent = "Guardando...";
+        btnConfirmar.disabled = true;
+
+        try {
+            await guardarColaborador();
+
+            setPopupActivo('overlay-exito-nuevo', 'popup-exito-nuevo', false);
+            await cargarDatosColaboradores();
+
+            document.getElementById('formulario-anadir-colaborador').style.display = 'none';
+            document.getElementById('datos-colaborador')?.style.setProperty('display', 'none');
+            document.getElementById('estado-vacio')?.style.setProperty('display', 'block');
+            resetFormularioNuevoColaborador();
+        } catch (error) {
+            console.error("Error en el proceso de guardado:", error);
+            const textoError = document.getElementById('texto-error-popup-nuevo');
+            if (textoError) textoError.textContent = error.message || "No se pudo crear el colaborador.";
+            setPopupActivo('overlay-error-nuevo', 'popup-error-nuevo', true);
+        } finally {
+            btnConfirmar.textContent = textoOriginal;
+            btnConfirmar.disabled = false;
         }
+    }
 
-        // Código postal
-        let cpObj = cps.find(c => c.codigo === cpTxt);
-        if (!cpObj) {
-            const nuevoIdCPNum = Math.max(...cps.map(c => c.id_cp || 0), 0) + 1;
-            cpObj = { id: generarId(), id_cp: nuevoIdCPNum, codigo: cpTxt, id_division: divObj.id_division };
-            await fetch(`${API_BASE}/codigo_postal`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(cpObj) });
-        }
+    if (e.target && e.target.id === 'btn-aceptar-error-nuevo') {
+        e.preventDefault();
+        setPopupActivo('overlay-error-nuevo', 'popup-error-nuevo', false);
+    }
+});
 
-        // Se generan los nuevos valores correspondientes
-        const nuevoIdNum = Math.max(...personas.map(p => p.id_persona || 0), ...direcciones.map(d => d.id_direccion || 0), 0) + 1;
-        const numColab = colaboradores.length + 600;
-        const nuevoCodColab = "A" + numColab.toString().padStart(4, '0');
+// Botón de guardar
+document.addEventListener('submit', function(e) {
+    if (e.target && e.target.id === 'form-nuevo-colaborador-lateral') {
+        e.preventDefault();
+        setPopupActivo('overlay-exito-nuevo', 'popup-exito-nuevo', true);
+    }
+});
 
-        // Se crea cada uno de los objetos que se guardan en cada zona de la base de datos
+// Función para guardar el nuevo colaborador
+async function guardarColaborador() {
+    const catalogos = await cargarCatalogosColaborador();
+    const zonaId = Number(getValNuevo('nuevo-zona'));
+    const localidadTxt = getValNuevo('nuevo-localidad');
+    const cpTxt = getValNuevo('nuevo-cp');
+    const cpObj = await obtenerOCrearCodigoPostal(catalogos.cps, catalogos.divisiones, cpTxt, localidadTxt, zonaId);
+
+    const idDireccion = maxNumero(catalogos.direcciones, 'id_direccion') + 1;
+    const idPersona = maxNumero(catalogos.personas, 'id_persona') + 1;
+    const idColaborador = generarCodigoColaborador(catalogos.colaboradores);
+
+    const nombreContacto = getValNuevo('nuevo-contacto-nombre');
+    const emailContacto = getValNuevo('nuevo-contacto-email');
+    const telContacto = getValNuevo('nuevo-contacto-tel');
+
+    const direccionObj = {
+        id: generarId(),
+        id_direccion: idDireccion,
+        tipo_via: getValNuevo('nuevo-tipo-via') || null,
+        nombre_via: getValNuevo('nuevo-direccion-via'),
+        numero: getValNuevo('nuevo-direccion-num') || "s/n",
+        id_cp: cpObj.id_cp
+    };
+
+    const colaboradorObj = {
+        id: generarId(),
+        id_colaborador: idColaborador,
+        nombre_colaborador: getValNuevo('nuevo-nombre'),
+        id_direccion: idDireccion,
+        observaciones: getValNuevo('nuevo-observaciones') || null
+    };
+
+    const guardados = [
+        crearRecurso('direccion', direccionObj),
+        crearRecurso('colaborador', colaboradorObj)
+    ];
+
+    if (hayDatosContacto(nombreContacto, emailContacto, telContacto)) {
         const personaObj = {
             id: generarId(),
-            id_persona: nuevoIdNum,
-            nombre_completo: getVal('nuevo-contacto-nombre'),
-            email: getVal('nuevo-contacto-email') || null,
-            telefono: getVal('nuevo-contacto-tel') || null
-        };
-
-        const direccionObj = {
-            id: generarId(),
-            id_direccion: nuevoIdNum,
-            tipo_via: getVal('nuevo-tipo-via') || null,
-            nombre_via: getVal('nuevo-direccion-via'),
-            numero: getVal('nuevo-direccion-num') || "s/n",
-            id_cp: cpObj.id_cp
-        };
-
-        const colaboradorObj = {
-            id: generarId(),
-            id_colaborador: nuevoCodColab,
-            nombre_colaborador: getVal('nuevo-nombre'),
-            id_direccion: nuevoIdNum,
-            observaciones: getVal('nuevo-observaciones') || null
+            id_persona: idPersona,
+            nombre_completo: nombreContacto,
+            email: emailContacto || null,
+            telefono: telContacto || null,
+            observacion: null
         };
 
         const relacionObj = {
             id: generarId(),
-            id_colaborador: nuevoCodColab,
-            id_contacto: nuevoIdNum,
+            id_colaborador: idColaborador,
+            id_contacto: idPersona,
             es_principal: true
         };
 
-        await Promise.all([
-            fetch(`${API_BASE}/persona`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(personaObj) }),
-            fetch(`${API_BASE}/direccion`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(direccionObj) }),
-            fetch(`${API_BASE}/colaborador`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(colaboradorObj) }),
-            fetch(`${API_BASE}/contacto_colaborador`, { method: 'POST', headers: {'Content-Type': 'application/json'}, body: JSON.stringify(relacionObj) })
-        ]);
-
-    } catch (error) {
-        console.error("Error al guardar:", error);
-        alert("Hubo un error. Revisa que json-server esté encendido.");
-    } finally {
-        btnSubmit.disabled = false;
+        guardados.push(
+            crearRecurso('persona', personaObj),
+            crearRecurso('contacto_colaborador', relacionObj)
+        );
     }
+
+    await Promise.all(guardados);
 }
+
