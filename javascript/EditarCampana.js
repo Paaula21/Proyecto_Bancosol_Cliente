@@ -62,26 +62,26 @@ document.addEventListener('DOMContentLoaded', async function () {
         // en lugar de guardar directamente
         document.querySelector('#form-edit').addEventListener('submit', function (e) {
                 e.preventDefault();
-                document.getElementById('overlay-confirmar').classList.add('active');
-                document.getElementById('popup-confirmar').classList.add('active');
+                document.querySelector('#overlay-confirmar').classList.add('active');
+                document.querySelector('#popup-confirmar').classList.add('active');
         });
 
-        // ----- BOTÓN DESCARTAR -----
-        // Revierte todos los campos del formulario y los checkboxes
-        // a los valores que se cargaron originalmente desde la API.
-        document.getElementById('btn-descartar').addEventListener('click', function () {
-                if (!datosOriginales) return;   // Todavía no se cargaron los datos
+        // ----- BOTÓN CANCELAR (DESCARTAR CAMBIOS) -----
+        // Abre el popup de confirmación para descartar cambios
+        document.querySelector('#btn-cancelar').addEventListener('click', function () {
+                document.querySelector('#overlay-descartar').classList.add('active');
+                document.querySelector('#popup-descartar').classList.add('active');
+        });
 
-                // Restauramos los campos de texto y el select
-                document.querySelector('#name-campanya').value = datosOriginales.nombre;
-                document.querySelector('#initial-date').value = datosOriginales.fechaInicio;
-                document.querySelector('#final-date').value = datosOriginales.fechaFin;
-                document.querySelector('#status').value = datosOriginales.estado;
+        // Confirmar descarte (Sí): vuelve a la lista de campañas
+        document.querySelector('#btn-confirmar-descarte').addEventListener('click', function () {
+                window.location.href = 'Campana.html';
+        });
 
-                // Restauramos el estado de cada checkbox de cadena
-                document.querySelectorAll('#checkbox-list input[type="checkbox"]').forEach(function (cb) {
-                        cb.checked = datosOriginales.cadenas.has(cb.value);
-                });
+        // Cancelar descarte (No): cierra el popup sin hacer cambios
+        document.querySelector('#btn-cancelar-descarte').addEventListener('click', function () {
+                document.querySelector('#overlay-descartar').classList.remove('active');
+                document.querySelector('#popup-descartar').classList.remove('active');
         });
 
         // ----- LÓGICA POPUP CONFIRMACIÓN DE EDICIÓN -----
@@ -90,8 +90,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                 // Cancelar: cierra el popup sin hacer nada
                 if (e.target && e.target.id === 'btn-cancelar-edicion') {
                         e.preventDefault();
-                        document.getElementById('overlay-confirmar').classList.remove('active');
-                        document.getElementById('popup-confirmar').classList.remove('active');
+                        document.querySelector('#overlay-confirmar').classList.remove('active');
+                        document.querySelector('#popup-confirmar').classList.remove('active');
                 }
 
                 // Confirmar: cierra el popup y guarda los cambios
@@ -105,8 +105,8 @@ document.addEventListener('DOMContentLoaded', async function () {
                                 btnConfirmar.textContent = 'Guardando...';
                                 btnConfirmar.disabled = true;
 
-                                document.getElementById('overlay-confirmar').classList.remove('active');
-                                document.getElementById('popup-confirmar').classList.remove('active');
+                                document.querySelector('#overlay-confirmar').classList.remove('active');
+                                document.querySelector('#popup-confirmar').classList.remove('active');
 
                                 await guardarCampana();
 

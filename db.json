@@ -1324,6 +1324,16 @@
       "id_campana": "PRIM2025",
       "id_cadena": "SUMA",
       "id": "4ZWBaVyhDmA"
+    },
+    {
+      "id_campana": "GR2025",
+      "id_cadena": "ALCAMPO",
+      "id": "9bNv29I"
+    },
+    {
+      "id_campana": "GR2025",
+      "id_cadena": "CARREFOUR",
+      "id": "i6NLzyr"
     }
   ],
   "direccion": [
