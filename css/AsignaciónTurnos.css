@@ -114,11 +114,65 @@ main {
     color: #6b7280;
 }
 
+/* ======================================================== */
+/* MODIFICADO: CONTENEDOR Y SCROLL IDÉNTICO A LA FOTO      */
+/* ======================================================== */
+.table-wrapper {
+    max-height: 420px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-top: 30px;
+}
+
+/* Ancho general de la barra de scroll */
+.table-wrapper::-webkit-scrollbar {
+    width: 14px; /* Un poco más ancha para que se noten las flechas como en la foto */
+}
+
+/* Fondo del carril del scroll (gris muy suave y limpio) */
+.table-wrapper::-webkit-scrollbar-track {
+    background: #fcfcfc;
+    border-left: 1px solid #f1f1f1;
+}
+
+/* La pastilla / indicador (Gris oscuro y redondeada) */
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #aaaaaa;
+    border-radius: 20px;
+    border: 3px solid #fcfcfc; /* Crea un margen interior simulado alrededor de la pastilla */
+}
+
+/* Cambio de color sutil al pasar el ratón */
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #888888;
+}
+
+/* Botones de flecha (Arriba y Abajo) para que quede exactamente igual */
+.table-wrapper::-webkit-scrollbar-button:single-button {
+    background-color: #fcfcfc;
+    display: block;
+    background-size: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 14px;
+}
+
+/* Flecha hacia arriba */
+.table-wrapper::-webkit-scrollbar-button:single-button:vertical:decrement {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23555555'><polygon points='50,15 15,85 85,85'/></svg>");
+}
+
+/* Flecha hacia abajo */
+.table-wrapper::-webkit-scrollbar-button:single-button:vertical:increment {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23555555'><polygon points='15,15 85,15 50,85'/></svg>");
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     text-align: center;
-    margin-top: 30px;
+    margin-top: 0;
 }
 
 th {
@@ -127,6 +181,12 @@ th {
     font-weight: 600;
     color: #111827;
     border-bottom: 1px solid #e5e7eb;
+
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    z-index: 1;
+    box-shadow: inset 0 -1px 0 #e5e7eb;
 }
 
 td {
@@ -305,9 +365,9 @@ form {
     left: 0;
     width: 100vw;
     height: 100vh;
-    background-color: rgba(0, 0, 0, 0.55); /* Capa translúcida oscura */
-    display: none;                          /* Oculto por defecto */
-    z-index: 9998;                          /* Por debajo del popup pero encima de todo */
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+    z-index: 9998;
 }
 
 .popup-confirmacion {
@@ -320,14 +380,13 @@ form {
     border-radius: 8px;
     padding: 28px;
     box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
-    display: none;                          /* Oculto por defecto */
-    z-index: 9999;                          /* En primer plano absoluto */
+    display: none;
+    z-index: 9999;
     width: 90%;
     max-width: 460px;
     text-align: center;
 }
 
-/* Clases de activación controladas desde JavaScript (.classList.add('active')) */
 .overlay.active,
 .popup-confirmacion.active {
     display: block;
@@ -376,7 +435,7 @@ form {
     font-weight: 600;
     cursor: pointer;
     border: 1px solid transparent;
-    background-color: #ef4444; /* Rojo de advertencia de borrado */
+    background-color: #ef4444;
     color: #ffffff;
     transition: background-color 0.2s ease;
 }
