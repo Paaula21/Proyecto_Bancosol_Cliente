@@ -80,9 +80,27 @@
                     </section>
                     <!-- Panel de detalles del colaborador -->
                     <aside class="detail-panel">
-                        <include-html src="../html/DetalleColaborador.html"></include-html>
-                        <include-html src="../html/EditarColaborador.html"></include-html>
-                        <include-html src="../html/AnadirColaborador.html"></include-html>  
+                        <div class="detail-content">
+                            <include-html src="../html/DetalleColaborador.html"></include-html>
+                            <include-html src="../html/EditarColaborador.html"></include-html>
+                            <include-html src="../html/AnadirColaborador.html"></include-html>
+                        </div>
+                        <div class="detail-actions-sticky" id="acciones-detalle-colaborador" style="display: none;">
+                            <button type="button" id="btn-editar-colaborador" class="btn-ficha btn-editar">
+                                Editar Colaborador
+                            </button>
+                            <button type="button" id="btn-eliminar-colaborador" class="btn-ficha btn-eliminar">
+                                Eliminar
+                            </button>
+                        </div>
+                        <div class="detail-actions-sticky" id="acciones-edicion-colaborador" style="display: none;">
+                            <button type="submit" form="form-edicion-colaborador" id="btn-guardar-cambios" class="btn-ficha btn-guardar">
+                                Guardar Cambios
+                            </button>
+                            <button type="button" id="btn-cancelar-edicion" class="btn-ficha btn-cancelar-edit">
+                                Cancelar
+                            </button>
+                        </div>
                     </aside>
                 </div>
             </main>

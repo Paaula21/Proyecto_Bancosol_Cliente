@@ -210,6 +210,7 @@ document.addEventListener('click', async function(e) {
     if (filaTabla) {
         const formEditar = document.getElementById('formulario-editar-colaborador');
         if (formEditar) formEditar.style.display = 'none';
+        if (colaboradorSeleccionadoId) mostrarAccionesColaborador('detalle');
     }
     // Botón de editar en la ficha
     const btnEditar = e.target.closest('#btn-editar-colaborador');
@@ -253,6 +254,7 @@ document.addEventListener('click', async function(e) {
         document.getElementById('datos-colaborador').style.display = 'none';
         document.getElementById('formulario-anadir-colaborador')?.style.setProperty('display', 'none');
         document.getElementById('formulario-editar-colaborador').style.display = 'block';
+        mostrarAccionesColaborador('edicion');
     }
     // Botón cancelar en el formulario lateral
     const btnCancelar = e.target.closest('#btn-cancelar-edicion');
@@ -260,6 +262,7 @@ document.addEventListener('click', async function(e) {
         e.preventDefault();
         document.getElementById('formulario-editar-colaborador').style.display = 'none';
         document.getElementById('datos-colaborador').style.display = 'block';
+        mostrarAccionesColaborador('detalle');
     }
 
     if (e.target && e.target.id === 'btn-aceptar-edicion') {
@@ -278,6 +281,7 @@ document.addEventListener('click', async function(e) {
 
             const colabActualizado = colaboradoresGlobal.find(c => c.id == colaboradorSeleccionadoId || c.id_colaborador == colaboradorSeleccionadoId);
             document.getElementById('formulario-editar-colaborador').style.display = 'none';
+            mostrarAccionesColaborador(null);
 
             if (colabActualizado) {
                 document.getElementById('datos-colaborador').style.display = 'block';
@@ -285,6 +289,7 @@ document.addEventListener('click', async function(e) {
             } else {
                 document.getElementById('datos-colaborador').style.display = 'none';
                 document.getElementById('estado-vacio')?.style.setProperty('display', 'block');
+                mostrarAccionesColaborador(null);
             }
         } catch (error) {
             console.error("Error al intentar editar el colaborador:", error);
