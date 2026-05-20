@@ -24,6 +24,11 @@ function resaltarMenuActivo() {
         if (currentPath.includes('Administrador.html') && linkHref.includes('Administrador.html')) {
             li.classList.add('active');
         }
+
+        // Caso especial para los voluntarios
+        if(currentPath.includes('AsignacionTurnos.html') && linkHref.includes('AsignacionTurnos.html')) {
+            li.classList.add('active');
+        }
     });
 }
 

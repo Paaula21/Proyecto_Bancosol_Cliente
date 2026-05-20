@@ -1253,33 +1253,23 @@
   ],
   "campana": [
     {
+      "id": "5SeIvi5sb8A",
       "id_campana": "GR2025",
-      "nombre_campana": "Campaña Verano 2024",
+      "nombre_campana": "Campaña Verano 2025",
       "fecha_inicio": "2024-05-15",
-      "fecha_fin": "2024-08-20",
-      "estado": "Activa",
-      "id": "5SeIvi5sb8A"
+      "fecha_fin": "2024-08-29",
+      "estado": "Cancelada"
     },
     {
       "id_campana": "PRIM2025",
       "nombre_campana": "Campaña Primavera 2025",
       "fecha_inicio": "2022-02-15",
       "fecha_fin": "2025-04-06",
-      "estado": "Planificada",
+      "estado": "Activa",
       "id": "9g9lf4Q7RKU"
     }
   ],
   "campana_cadena": [
-    {
-      "id_campana": "PRIM2025",
-      "id_cadena": "ALCAMPO",
-      "id": "zVSboYmgtcQ"
-    },
-    {
-      "id_campana": "PRIM2025",
-      "id_cadena": "CARREFOUR",
-      "id": "zzRK3SE8iBg"
-    },
     {
       "id_campana": "PRIM2025",
       "id_cadena": "DIA",
@@ -1324,16 +1314,6 @@
       "id_campana": "PRIM2025",
       "id_cadena": "SUMA",
       "id": "4ZWBaVyhDmA"
-    },
-    {
-      "id_campana": "GR2025",
-      "id_cadena": "ALCAMPO",
-      "id": "9bNv29I"
-    },
-    {
-      "id_campana": "GR2025",
-      "id_cadena": "CARREFOUR",
-      "id": "i6NLzyr"
     }
   ],
   "direccion": [
@@ -4210,12 +4190,12 @@
       "id": "UlUEA2yXbvg"
     },
     {
+      "id": "2wbQ2eTKwUM",
       "id_direccion": 360,
       "tipo_via": "Calle",
       "nombre_via": "Jabalcuza,11  29130 - Alhaurín de la Torre ( Malaga)",
-      "numero": null,
-      "id_cp": 31,
-      "id": "2wbQ2eTKwUM"
+      "numero": "11  29130 - Alhaurín de la Torre ( Malaga), s/n",
+      "id_cp": 31
     },
     {
       "id_direccion": 361,
@@ -6681,7 +6661,33 @@
       "nombre_resena": "ECHEVERRIA",
       "lineales": 1,
       "id_direccion": 1,
-      "id": "AT1MTW4z38M"
+      "id": "AT1MTW4z38M",
+      "nombre_cadena": "CARREFOUR",
+      "localidad": "Málaga",
+      "nombre_zona": "Málaga",
+      "id_zona": 1,
+      "nombre_coordinador": "Arantxa",
+      "id_coordinador": 42,
+      "gran_recogida": true,
+      "primavera": true,
+      "campanasIds": [
+        "GR2025",
+        "PRIM2025"
+      ],
+      "obj_direccion": {
+        "id_direccion": 1,
+        "tipo_via": "Avenida",
+        "nombre_via": "Pio Baroja",
+        "numero": "6",
+        "id_cp": 1,
+        "id": "ZFtZbxouDlE"
+      },
+      "obj_cp": {
+        "id_cp": 1,
+        "codigo": "29017",
+        "id_division": 1,
+        "id": "-408N2__Y-o"
+      }
     },
     {
       "id_establecimiento": 2,
@@ -9549,11 +9555,11 @@
       "id": "39ymH8ryVlk"
     },
     {
+      "id": "jnkM9KcqLEw",
       "id_colaborador": "A0024",
       "nombre_colaborador": "ABC ASOCIACIÓN BENEFICA CRISTIANA DIOS ES FIEL",
       "observaciones": null,
-      "id_direccion": 360,
-      "id": "jnkM9KcqLEw"
+      "id_direccion": 360
     },
     {
       "id_colaborador": "A0482",
