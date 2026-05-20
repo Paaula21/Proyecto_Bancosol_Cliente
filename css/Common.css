@@ -34,42 +34,6 @@ body {
     overflow: hidden;
 }
 
-/* ─── Cabecera ─── */
-header.main-header {
-    background-color: #f8fafc;
-    padding: 16px 32px;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
-    flex-shrink: 0;
-}
-
-header.main-header nav {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-}
-
-.header-branding {
-    display: flex;
-    align-items: center;
-    gap: 15px;
-}
-
-.header-logo {
-    height: 50px;
-}
-
-.header-titles h1 {
-    margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
-}
-
-.header-titles p {
-    margin: 4px 0 0 0;
-    font-size: 0.875rem;
-    color: #6b7280;
-}
-
 /* ─── Botones ─── */
 .btn {
     padding: 10px 12px;

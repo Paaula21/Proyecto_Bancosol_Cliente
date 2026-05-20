@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="../css/Sidebar.css">
     <link rel="stylesheet" href="../css/Common.css">
     <link rel="stylesheet" href="../css/popUpRegistro.css">
+    <link rel="stylesheet" href="../css/Header.css">
     <link rel="stylesheet" href="../css/DetalleColaborador.css">
-    <link rel="stylesheet" href="../css/EditarColaborador.css">
+    <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/InformacionTienda.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/popUpRegistro.js"></script>
+    <script src="../javascript/Header.js"></script>
 </head>
 <body>
 <div class="app-container">
@@ -22,16 +24,7 @@
     </aside>
     <div class="right-content">
         <header class="main-header">
-            <nav>
-                <div class="header-branding">
-                    <img src="../images/icono.png" alt="Bancosol" class="header-logo">
-                    <div class="header-titles">
-                        <h1>Establecimientos</h1>
-                        <p>Gestión de establecimientos participantes en las campañas</p>
-                    </div>
-                </div>
-                <button class="btn btn--secondary" id="btn-notifications">Notificaciones</button>
-            </nav>
+            <include-html src="../html/header.html"></include-html>
         </header>
 
         <div class="main-layout">
