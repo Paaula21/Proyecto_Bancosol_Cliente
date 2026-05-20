@@ -35,6 +35,37 @@
 
             <div class="main-layout">
                 <main>
+                    <form>
+                        <section class="filters">
+                            <div class="filter-group">
+                                <label for="filter-turnos">Disponibilidad Horaria</label>
+                                <select id="filter-turnos">
+
+                                    <option value=""> Todos los turnos </option>
+
+                                    <option value="lunes-mañana">Lunes mañana</option>
+                                    <option value="martes-mañana">Martes mañana</option>
+                                    <option value="miercoles-mañana">Miercoles mañana</option>
+                                    <option value="jueves-mañana">Jueves mañana</option>
+                                    <option value="viernes-mañana">Viernes mañana</option>
+                                    <option value="sabado-mañana">Sabado mañana</option>
+                                    <option value="domingo-mañana">Domingo mañana</option>
+
+                                    <option value="lunes-tarde">Lunes tarde</option>
+                                    <option value="martes-tarde">Martes tarde</option>
+                                    <option value="miercoles-tarde">Miercoles tarde</option>
+                                    <option value="jueves-tarde">Jueves tarde</option>
+                                    <option value="viernes-tarde">Viernes tarde</option>
+                                    <option value="sabado-tarde">Sabado tarde</option>
+                                    <option value="domingo-tarde">Domingo tarde</option>
+                                </select>
+                            </div>
+                            <div class="filter-button">
+                                <button type="button" id="btn-filter" class="btn-filtro">Filtrar</button>
+                            </div>
+                        </section>
+                    </form>
+
                     <form id="form-voluntario">
                             <div class="list-container">
                                 <div class="list-header">
@@ -60,7 +91,7 @@
                                 </div>
                             </div>
 
-                        <div class="list-container">
+                        <!-- <div class="list-container">
                                 <div class="list-header">
                                     <h2>Selección de camapaña y fecha </h2> <br>
                                 </div>
@@ -85,7 +116,7 @@
                                         </div>
                                     </div>
                                 </div>
-                        </div>
+                        </div> -->
 
                         <div class="list-container">
                             <div class="list-header">

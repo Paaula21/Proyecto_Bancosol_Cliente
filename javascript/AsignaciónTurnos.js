@@ -12,130 +12,99 @@ document.addEventListener("DOMContentLoaded", () => {
     loadVolunteers();
 
     // Botón filtros
-    document.getElementById('btn-filter')
-        .addEventListener('click', applyFilters);
+    const btnFilter = document.getElementById('btn-filter');
+    if (btnFilter) {
+        btnFilter.addEventListener('click', applyFilters);
+    }
 
-    // Botón editar
-    document.getElementById('btn-editar-voluntario')
-        .addEventListener('click', (e) => {
-
+    // Botón editar global (Salvaguardado por si no existe en el HTML)
+    const btnEditarGlobal = document.getElementById('btn-editar-voluntario');
+    if (btnEditarGlobal) {
+        btnEditarGlobal.addEventListener('click', (e) => {
             e.stopPropagation();
-
             const vol = volunteersData.find(
                 v => v.id_voluntario === selectedVolunteerId
             );
-
             if (vol) {
-
-                sessionStorage.setItem(
-                    'voluntario_editar',
-                    JSON.stringify(vol)
-                );
-
+                sessionStorage.setItem('voluntario_editar', JSON.stringify(vol));
                 window.location.href = 'NuevoVoluntario.html';
             }
         });
+    }
 
-    // Botón eliminar
-    document.getElementById('btn-eliminar-voluntario')
-        .addEventListener('click', (e) => {
-
+    // Botón eliminar global (Salvaguardado por si no existe en el HTML)
+    const btnEliminarGlobal = document.getElementById('btn-eliminar-voluntario');
+    if (btnEliminarGlobal) {
+        btnEliminarGlobal.addEventListener('click', (e) => {
             e.stopPropagation();
-
             if (selectedVolunteerId) {
-
-                document.getElementById('overlay-eliminar')
-                    .classList.add('active');
-
-                document.getElementById('popup-eliminar')
-                    .classList.add('active');
+                const overlay = document.getElementById('overlay-eliminar');
+                const popup = document.getElementById('popup-eliminar');
+                if (overlay) overlay.classList.add('active');
+                if (popup) popup.classList.add('active');
+            } else {
+                alert("Por favor, selecciona un voluntario de la lista primero.");
             }
         });
+    }
 
-    // Cancelar eliminar
-    document.getElementById('btn-cancelar-eliminar')
-        .addEventListener('click', (e) => {
-
+    // Cancelar eliminar modal
+    const btnCancelarEliminar = document.getElementById('btn-cancelar-eliminar');
+    if (btnCancelarEliminar) {
+        btnCancelarEliminar.addEventListener('click', (e) => {
             e.preventDefault();
-
             hideDeletePopup();
         });
+    }
 
-    // Confirmar eliminar
-    document.getElementById('btn-confirmar-eliminar')
-        .addEventListener('click', async (e) => {
-
+    // Confirmar eliminar modal
+    const btnConfirmarEliminar = document.getElementById('btn-confirmar-eliminar');
+    if (btnConfirmarEliminar) {
+        btnConfirmarEliminar.addEventListener('click', async (e) => {
             e.preventDefault();
-
             await deleteVolunteer(e.target);
         });
+    }
 });
 
 
 // ----- UTILITIES -----
 
 async function fetchJson(url) {
-
     const res = await fetch(url);
-
     if (!res.ok) {
         throw new Error(`Error ${res.status} en ${url}`);
     }
-
     return res.json();
 }
 
 
 function clearSelection() {
-
     document.querySelectorAll('#tabla-voluntarios tr')
         .forEach(r => r.classList.remove('selected'));
 }
 
 
 function updateScrollable(list) {
-
     const wrapper = document.querySelector('.table-wrapper');
-
     if (wrapper) {
-
-        wrapper.classList.toggle(
-            'scrollable',
-            list.length > VISIBLE_ROWS
-        );
+        wrapper.classList.toggle('scrollable', list.length > VISIBLE_ROWS);
     }
 }
 
 
 function setTableState(state, message = '') {
-
     const tbody = document.getElementById('tabla-voluntarios');
-
     const counter = document.getElementById('contador-voluntarios');
 
     if (!tbody || !counter) return;
 
     if (state === 'loading') {
-
-        tbody.innerHTML =
-            `<tr>
-<td colspan="4" style="text-align:center;padding:20px;">
-    Cargando voluntarios...
-</td>
-</tr>`;
-
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:20px;">Cargando voluntarios...</td></tr>`;
         counter.textContent = 'Cargando...';
     }
-
     else if (state === 'error') {
-
-        tbody.innerHTML =
-            `<tr>
-<td colspan="4" style="text-align:center;padding:20px;color:#dc2626;">
-    ${message}
-</td>
-</tr>`;
-
+        tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;padding:20px;color:#dc2626;">${message}</td></tr>`;
         counter.textContent = 'Error de conexión';
     }
 }
@@ -144,110 +113,66 @@ function setTableState(state, message = '') {
 // ----- FETCH AND PROCESS DATA -----
 
 async function loadVolunteers() {
-
     setTableState('loading');
 
     try {
+        const voluntarios = await fetchJson(`${API_BASE}/voluntario`);
+        const personas = await fetchJson(`${API_BASE}/persona`);
 
-        const voluntarios =
-            await fetchJson(`${API_BASE}/voluntario`);
+        volunteersData = voluntarios.map(vol => {
+            const per = personas.find(p => p.id_persona === vol.id_persona);
 
-const personas =
-    await fetchJson(`${API_BASE}/persona`);
+            return {
+                id_voluntario: vol.id_voluntario,
+                vol_id_interno: vol.id,
+                persona_id_interno: per ? per.id : null,
 
-volunteersData = voluntarios.map(vol => {
+                nombre: per ? (per.nombre_completo || "Sin nombre") : "Persona no encontrada",
+                email: per ? (per.email || "No disponible") : "No disponible",
+                telefono: per ? (per.telefono || "No disponible") : "No disponible",
 
-    const per = personas.find(
-        p => p.id_persona === vol.id_persona
-    );
+                // CORREGIDO: Mapeamos 'preferencia_horario' que es el nombre real en tu JSON
+                disponibilidad: vol.preferencia_horario || ""
+            };
+        });
 
-    return {
+        displayVolunt(volunteersData);
+        updateCounter(volunteersData.length);
 
-        id_voluntario: vol.id_voluntario,
-
-        nombre: per
-            ? (per.nombre_completo || "Sin nombre")
-            : "Persona no encontrada",
-
-        email: per
-            ? (per.email || "No disponible")
-            : "No disponible",
-
-        telefono: per
-            ? (per.telefono || "No disponible")
-            : "No disponible"
-    };
-});
-
-displayVolunt(volunteersData);
-
-updateCounter(volunteersData.length);
-
-} catch (error) {
-
-    console.error('Error al cargar datos:', error);
-
-    setTableState(
-        'error',
-        `Error al conectar con la base de datos. 
-            Asegúrate de que json-server esté corriendo en ${API_BASE}`
-    );
-}
+    } catch (error) {
+        console.error('Error al cargar datos:', error);
+        setTableState(
+            'error',
+            `Error al conectar con la base de datos. Asegúrate de que json-server esté corriendo en ${API_BASE}`
+        );
+    }
 }
 
 
 // ----- FILTER LOGIC -----
 
 function applyFilters() {
+    const inputTurnos = document.getElementById('filter-turnos');
+    const selectedTurno = inputTurnos ? inputTurnos.value.trim().toLowerCase() : '';
 
-    const filters = {
-
-        nombre:
-            document.getElementById('filter-name')
-                .value
-                .toLowerCase()
-                .trim(),
-
-        email:
-            document.getElementById('filter-email')
-                .value
-                .toLowerCase()
-                .trim(),
-
-        telefono:
-            document.getElementById('filter-phone')
-                .value
-                .trim()
-    };
+    // Si seleccionas "Todos los turnos" (option con value=""), muestra todo el universo de datos
+    if (!selectedTurno) {
+        displayVolunt(volunteersData);
+        updateCounter(volunteersData.length);
+        return;
+    }
 
     const filtered = volunteersData.filter(vol => {
+        if (!vol.disponibilidad) return false;
 
-        if (
-            filters.nombre &&
-            !vol.nombre.toLowerCase().includes(filters.nombre)
-        ) {
-            return false;
-        }
+        // CORREGIDO: Convertimos el string "lunes-mañana, lunes-tarde" en un Array real: ["lunes-mañana", "lunes-tarde"]
+        const listaTurnos = vol.disponibilidad.split(',').map(turno => turno.trim().toLowerCase());
 
-        if (
-            filters.email &&
-            !vol.email.toLowerCase().includes(filters.email)
-        ) {
-            return false;
-        }
-
-        if (
-            filters.telefono &&
-            !vol.telefono.includes(filters.telefono)
-        ) {
-            return false;
-        }
-
-        return true;
+        // Verificamos si el turno seleccionado en el HTML existe dentro del array del voluntario
+        return listaTurnos.includes(selectedTurno);
     });
 
     displayVolunt(filtered);
-
     updateCounter(filtered.length);
 }
 
@@ -255,60 +180,47 @@ function applyFilters() {
 // ----- TABLE RENDERING -----
 
 function displayVolunt(voluntarios) {
-
     const tbody = document.querySelector("#tabla-voluntarios");
-
     if (!tbody) return;
 
     tbody.innerHTML = "";
 
     voluntarios.forEach(vol => {
-
         let tr = document.createElement('tr');
-
         tr.style.cursor = 'pointer';
 
         // ----- CLICK FILA -----
         tr.addEventListener('click', () => {
-
             clearSelection();
-
             tr.classList.add('selected');
-
             showDetail(vol);
         });
 
         // ----- NOMBRE -----
         let tdNombre = document.createElement('td');
-
         tdNombre.innerHTML = `<strong>${vol.nombre}</strong>`;
-
         tr.appendChild(tdNombre);
 
         // ----- EMAIL -----
         let tdEmail = document.createElement('td');
-
         tdEmail.textContent = vol.email;
-
         tr.appendChild(tdEmail);
 
         // ----- TELEFONO -----
         let tdTelefono = document.createElement('td');
-
         tdTelefono.textContent = vol.telefono;
-
         tr.appendChild(tdTelefono);
 
         // ----- ACCIONES -----
         let tdAcciones = document.createElement('td');
 
-// EDITAR
+        // EDITAR
+        let enlaceEditar = document.createElement('a');
         enlaceEditar.href = 'EditarVoluntario.html?id_voluntario=' + encodeURIComponent(vol.id_voluntario);
         enlaceEditar.className = 'btn btn-edit';
         enlaceEditar.textContent = 'Editar';
-        enlaceEditar.addEventListener('click', (e) => { e.stopPropagation();})
 
-// ESTILOS
+        // ESTILOS EDITAR
         enlaceEditar.style.display = 'inline-block';
         enlaceEditar.style.padding = '8px 16px';
         enlaceEditar.style.border = '1px solid #d1d5db';
@@ -321,32 +233,21 @@ function displayVolunt(voluntarios) {
         enlaceEditar.style.marginRight = '6px';
         enlaceEditar.style.cursor = 'pointer';
 
-        enlaceEditar.addEventListener('mouseenter', () => {
-            enlaceEditar.style.backgroundColor = '#f9fafb';
-        });
+        enlaceEditar.addEventListener('mouseenter', () => { enlaceEditar.style.backgroundColor = '#f9fafb'; });
+        enlaceEditar.addEventListener('mouseleave', () => { enlaceEditar.style.backgroundColor = '#ffffff'; });
 
-        enlaceEditar.addEventListener('mouseleave', () => {
-            enlaceEditar.style.backgroundColor = '#ffffff';
-        });
-
-// CLICK EDITAR
         enlaceEditar.addEventListener('click', (e) => {
-
             e.stopPropagation();
-
-            window.location.href =
-                'EditarVoluntario.html?id_voluntario=' +
-                encodeURIComponent(vol.id_voluntario);
+            window.location.href = 'EditarVoluntario.html?id_voluntario=' + encodeURIComponent(vol.id_voluntario);
         });
 
-// ELIMINAR
+        // ELIMINAR (Botón de la fila)
         let btnBorrar = document.createElement('button');
-
         btnBorrar.type = 'button';
-
         btnBorrar.textContent = 'Eliminar';
+        btnBorrar.id = 'btn-eliminar-voluntario';
 
-// ESTILOS
+        // ESTILOS BORRAR
         btnBorrar.style.padding = '8px 16px';
         btnBorrar.style.border = 'none';
         btnBorrar.style.borderRadius = '6px';
@@ -356,37 +257,24 @@ function displayVolunt(voluntarios) {
         btnBorrar.style.fontWeight = '600';
         btnBorrar.style.cursor = 'pointer';
 
-        btnBorrar.addEventListener('mouseenter', () => {
-            btnBorrar.style.backgroundColor = '#dc2626';
-        });
-
-        btnBorrar.addEventListener('mouseleave', () => {
-            btnBorrar.style.backgroundColor = '#ef4444';
-        });
+        btnBorrar.addEventListener('mouseenter', () => { btnBorrar.style.backgroundColor = '#dc2626'; });
+        btnBorrar.addEventListener('mouseleave', () => { btnBorrar.style.backgroundColor = '#ef4444'; });
 
         btnBorrar.addEventListener('click', function (e) {
-
             e.stopPropagation();
-
             selectedVolunteerId = vol.id_voluntario;
 
-            document.getElementById('overlay-eliminar')
-                .classList.add('active');
-
-            document.getElementById('popup-eliminar')
-                .classList.add('active');
+            const overlay = document.getElementById('overlay-eliminar');
+            const popup = document.getElementById('popup-eliminar');
+            if (overlay) overlay.classList.add('active');
+            if (popup) popup.classList.add('active');
         });
 
         tdAcciones.appendChild(enlaceEditar);
-
-        tdAcciones.appendChild(
-            document.createTextNode(' ')
-        );
-
+        tdAcciones.appendChild(document.createTextNode(' '));
         tdAcciones.appendChild(btnBorrar);
 
         tr.appendChild(tdAcciones);
-
         tbody.appendChild(tr);
     });
 
@@ -395,14 +283,9 @@ function displayVolunt(voluntarios) {
 
 
 function updateCounter(total) {
-
-    const counter =
-        document.getElementById('contador-voluntarios');
-
+    const counter = document.getElementById('contador-voluntarios');
     if (counter) {
-
-        counter.textContent =
-            `${total} voluntario${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}`;
+        counter.textContent = `${total} voluntario${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}`;
     }
 }
 
@@ -410,102 +293,93 @@ function updateCounter(total) {
 // ----- DETAIL PANEL -----
 
 function showDetail(vol) {
-
     selectedVolunteerId = vol.id_voluntario;
 
-    document.getElementById('estado-vacio-panel')
-        .style.display = 'none';
+    const emptyPanel = document.getElementById('estado-vacio-panel');
+    const dataPanel = document.getElementById('datos-voluntario');
 
-    document.getElementById('datos-voluntario')
-        .style.display = 'block';
+    if (emptyPanel) emptyPanel.style.display = 'none';
+    if (dataPanel) dataPanel.style.display = 'block';
 
-    document.getElementById('ficha-nombre')
-        .textContent = vol.nombre;
+    const fNombre = document.getElementById('ficha-nombre');
+    const fEmail = document.getElementById('ficha-email');
+    const fTelefono = document.getElementById('ficha-telefono');
 
-    document.getElementById('ficha-email')
-        .textContent = vol.email;
-
-    document.getElementById('ficha-telefono')
-        .textContent = vol.telefono;
+    if (fNombre) fNombre.textContent = vol.nombre;
+    if (fEmail) fEmail.textContent = vol.email;
+    if (fTelefono) fTelefono.textContent = vol.telefono;
 }
 
 
 // ----- DELETE POPUP -----
 
 function hideDeletePopup() {
-
-    document.getElementById('overlay-eliminar')
-        .classList.remove('active');
-
-    document.getElementById('popup-eliminar')
-        .classList.remove('active');
+    const overlay = document.getElementById('overlay-eliminar');
+    const popup = document.getElementById('popup-eliminar');
+    if (overlay) overlay.classList.remove('active');
+    if (popup) popup.classList.remove('active');
 }
 
 
 async function deleteVolunteer(btn) {
-
     if (!selectedVolunteerId) {
-
         alert("Error: No se ha seleccionado ningún voluntario.");
+        return;
+    }
 
+    const volToDelete = volunteersData.find(v => v.id_voluntario === selectedVolunteerId);
+    if (!volToDelete) {
+        alert("Voluntario no encontrado en memoria.");
         return;
     }
 
     const originalText = btn.textContent;
 
     try {
-
         btn.textContent = "Eliminando...";
-
         btn.disabled = true;
 
-        const response = await fetch(
-            `${API_BASE}/voluntario/${selectedVolunteerId}`,
-            {
+        // 1. ELIMINAR EL VOLUNTARIO (Endpoint /voluntario/:id)
+        const volId = volToDelete.vol_id_interno;
+        const responseVoluntario = await fetch(`${API_BASE}/voluntario/${volId}`, {
+            method: 'DELETE',
+            headers: { 'Content-Type': 'application/json' }
+        });
+
+        if (!responseVoluntario.ok) {
+            throw new Error(`Error al borrar voluntario: ${responseVoluntario.status}`);
+        }
+
+        // 2. ELIMINAR LA PERSONA RELACIONADA (Endpoint /persona/:id)
+        if (volToDelete.persona_id_interno) {
+            const responsePersona = await fetch(`${API_BASE}/persona/${volToDelete.persona_id_interno}`, {
                 method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
+                headers: { 'Content-Type': 'application/json' }
+            });
+            if (!responsePersona.ok) {
+                console.warn("La persona asociada no se pudo borrar o ya no existía.");
             }
-        );
-
-        if (!response.ok) {
-
-            throw new Error(
-                `Error en el servidor: ${response.status}`
-            );
         }
 
         hideDeletePopup();
 
         selectedVolunteerId = null;
 
-        document.getElementById('estado-vacio-panel')
-            .style.display = 'block';
+        const emptyPanel = document.getElementById('estado-vacio-panel');
+        const dataPanel = document.getElementById('datos-voluntario');
+        if (emptyPanel) emptyPanel.style.display = 'block';
+        if (dataPanel) dataPanel.style.display = 'none';
 
-        document.getElementById('datos-voluntario')
-            .style.display = 'none';
-
+        // Recargar la tabla actualizándola
         await loadVolunteers();
 
-        alert("Voluntario eliminado con éxito");
+        alert("Voluntario y persona eliminados con éxito.");
 
     } catch (error) {
-
-        console.error(
-            "Error al intentar eliminar el voluntario:",
-            error
-        );
-
-        alert(
-            "No se pudo eliminar el voluntario. " +
-            "Asegúrate de que json-server esté corriendo."
-        );
-
+        console.error("Error al intentar eliminar:", error);
+        alert("No se pudo eliminar el registro. Inténtalo de nuevo.");
     } finally {
-
         btn.textContent = originalText;
-
         btn.disabled = false;
     }
 }

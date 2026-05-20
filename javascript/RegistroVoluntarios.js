@@ -1,62 +1,86 @@
+function maxNumero(lista, campo) {
+    return Math.max(0, ...lista.map(item => Number(item?.[campo]) || 0));
+}
+
 document.getElementById('form-voluntario').addEventListener('submit', async function (e) {
 
-    // SIEMPRE evitamos el envío por defecto primero
     e.preventDefault();
 
-    // Capturamos los checkboxes marcados
+    // CHECKBOXES
     const asistencias = [];
 
-    document.querySelectorAll('input[name="asistencia"]:checked').forEach((checkbox) => {
-        asistencias.push(checkbox.value);
-    });
+    document.querySelectorAll('input[name="asistencia"]:checked')
+        .forEach((checkbox) => {
+            asistencias.push(checkbox.value);
+        });
 
-    // VALIDACIÓN CHECKBOXES
+    // VALIDACIÓN
     if (asistencias.length === 0) {
+
         alert("Debes seleccionar al menos una disponibilidad.");
         return;
     }
 
-    // Si llega aquí, TODO está correcto
     const formData = new FormData(e.target);
-    const datosVoluntario = Object.fromEntries(formData.entries());
 
-    // Añadimos horarios
-    datosVoluntario.horarios = asistencias;
-
-    // Eliminamos el campo duplicado
-    delete datosVoluntario.asistencia;
-
-    console.log("Enviando a json-server:", datosVoluntario);
+    const datos = Object.fromEntries(formData.entries());
 
     try {
+        // ====================================
+        // 1. OBTENER PERSONAS EXISTENTES
+        // ====================================
+        const responsePersonas = await fetch('http://localhost:3000/persona');
+        const personas = await responsePersonas.json();
 
-        const response = await fetch('http://localhost:3000/voluntario', {
+        // CORRECCIÓN: Quitamos el ".personas" extra
+        const nuevoIdPersona = maxNumero(personas, 'id_persona') + 1;
+
+        // ====================================
+        // 2. CREAR PERSONA
+        // ====================================
+        const nuevaPersona = {
+            id_persona: nuevoIdPersona,
+            nombre_completo: datos.volunt_name,
+            telefono: datos.volunt_tel || "",
+            email: datos.volunt_email || "",
+            observacion: datos.volunt_obs || null
+        };
+
+        console.log(nuevaPersona);
+
+        const responsePersona = await fetch('http://localhost:3000/persona', {
             method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(datosVoluntario)
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevaPersona)
         });
 
-        if (response.ok) {
-
-            // AQUÍ muestras el popup
-            document.getElementById("overlay").classList.add("active");
-            document.getElementById("popup").classList.add("active");
-
-            e.target.reset();
-
-        } else {
-
-            alert("Error: El servidor no pudo procesar el registro.");
-
+        if (!responsePersona.ok) {
+            throw new Error("Error al crear persona");
         }
+
+        // ====================================
+        // 3. OBTENER VOLUNTARIOS EXISTENTES
+        // ====================================
+        const responseVols = await fetch('http://localhost:3000/voluntario');
+        const voluntarios = await responseVols.json();
+
+        // CORRECCIÓN: Usamos la variable 'voluntarios' y el campo 'id_voluntario'
+        const nuevoIdVoluntario = maxNumero(voluntarios, 'id_voluntario') + 1;
+
+        // ====================================
+        // 4. CREAR VOLUNTARIO
+        // ====================================
+        const nuevoVoluntario = {
+            id_voluntario: nuevoIdVoluntario,
+            id_persona: nuevoIdPersona,
+            preferencia_horario: asistencias.join(', '),
+            id_colaborador: null
+        };
 
     } catch (error) {
 
-        console.error("Error de conexión:", error);
-        alert("No se pudo conectar con el servidor. Revisa la terminal.");
+        console.error(error);
 
+        alert("Error al registrar voluntario");
     }
-
 });
