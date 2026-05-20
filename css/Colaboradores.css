@@ -1,15 +1,3 @@
-* {
-    box-sizing: border-box;
-}
-
-body, html {
-    margin: 0; padding: 0;
-    height: 100vh;
-    background-color: #f5f7f9 !important;
-    font-family: Arial, sans-serif;
-    overflow: hidden; 
-}
-
 .main-layout {
     display: flex;
     flex: 1;
@@ -50,6 +38,7 @@ main {
     flex-direction: column;
     gap: 8px;
     flex: 1;
+    min-width: 200px;
 
 }
 
@@ -75,15 +64,23 @@ main {
 }
 
 .filter-button button {
-    width: 100%;
     padding: 10px 12px;
-    background-color: #f9fafb;
-    border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    color: #374151;
+    border: 1px solid #d1d5db;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, border-color 0.2s;
+    background-color: #420098;
+    color: white;
+    border-color: transparent;
+}
+
+.filter-button button:hover {
+    background-color: #310073;
 }
 
 hr {
