@@ -14,7 +14,7 @@
 }
 
 main {
-    padding: 24px 32px;
+    padding: 20px 32px;
     flex: 1;
     overflow: hidden; 
     display: flex;
@@ -30,7 +30,6 @@ main {
     display: flex;
     gap: 20px;
     align-items: flex-end;
-    margin-top: 15px;
 }
 
 .filter-group {
@@ -60,7 +59,7 @@ main {
 }
 
 .filter-button {
-    flex: 1;
+    flex: 0 0 auto;
 }
 
 .filter-button button {
