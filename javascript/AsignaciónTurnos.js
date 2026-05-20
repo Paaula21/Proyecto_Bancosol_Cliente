@@ -131,7 +131,6 @@ async function loadVolunteers() {
                 email: per ? (per.email || "No disponible") : "No disponible",
                 telefono: per ? (per.telefono || "No disponible") : "No disponible",
 
-                // CORREGIDO: Mapeamos 'preferencia_horario' que es el nombre real en tu JSON
                 disponibilidad: vol.preferencia_horario || ""
             };
         });
@@ -155,7 +154,6 @@ function applyFilters() {
     const inputTurnos = document.getElementById('filter-turnos');
     const selectedTurno = inputTurnos ? inputTurnos.value.trim().toLowerCase() : '';
 
-    // Si seleccionas "Todos los turnos" (option con value=""), muestra todo el universo de datos
     if (!selectedTurno) {
         displayVolunt(volunteersData);
         updateCounter(volunteersData.length);
@@ -165,10 +163,7 @@ function applyFilters() {
     const filtered = volunteersData.filter(vol => {
         if (!vol.disponibilidad) return false;
 
-        // CORREGIDO: Convertimos el string "lunes-mañana, lunes-tarde" en un Array real: ["lunes-mañana", "lunes-tarde"]
         const listaTurnos = vol.disponibilidad.split(',').map(turno => turno.trim().toLowerCase());
-
-        // Verificamos si el turno seleccionado en el HTML existe dentro del array del voluntario
         return listaTurnos.includes(selectedTurno);
     });
 
@@ -241,11 +236,11 @@ function displayVolunt(voluntarios) {
             window.location.href = 'EditarVoluntario.html?id_voluntario=' + encodeURIComponent(vol.id_voluntario);
         });
 
-        // ELIMINAR (Botón de la fila)
+        // ELIMINAR (Botón único de la fila)
         let btnBorrar = document.createElement('button');
         btnBorrar.type = 'button';
+        btnBorrar.className = 'btn-eliminar-fila'; // Cambiado a clase para no romper semántica de IDs
         btnBorrar.textContent = 'Eliminar';
-        btnBorrar.id = 'btn-eliminar-voluntario';
 
         // ESTILOS BORRAR
         btnBorrar.style.padding = '8px 16px';

@@ -12466,30 +12466,6 @@
       "email": "ainhoitagar05@gmail.com",
       "observacion": null,
       "id": "TNKOcE2"
-    },
-    {
-      "id_persona": 63,
-      "nombre_completo": "Ainhoa",
-      "telefono": "",
-      "email": "ainhoitagar05@gmail.com",
-      "observacion": null,
-      "id": "o1LfiCu"
-    },
-    {
-      "id_persona": 64,
-      "nombre_completo": "Javieh",
-      "telefono": "",
-      "email": "javi@email.com",
-      "observacion": null,
-      "id": "cvnXc97"
-    },
-    {
-      "id_persona": 65,
-      "nombre_completo": "Prueba",
-      "telefono": "",
-      "email": "prueba@email.com",
-      "observacion": null,
-      "id": "AsSyktx"
     }
   ],
   "usuario": [
@@ -12627,27 +12603,6 @@
       "preferencia_horario": "lunes-tarde",
       "id_colaborador": null,
       "id": "OmBf9VBxjV8"
-    },
-    {
-      "id_voluntario": 6,
-      "id_persona": 63,
-      "preferencia_horario": "lunes-mañana, lunes-tarde",
-      "id_colaborador": null,
-      "id": "IRdqYiQ"
-    },
-    {
-      "id_voluntario": 7,
-      "id_persona": 64,
-      "preferencia_horario": "martes-mañana",
-      "id_colaborador": null,
-      "id": "e1tjWJF"
-    },
-    {
-      "id_voluntario": 8,
-      "id_persona": 65,
-      "preferencia_horario": "martes-tarde",
-      "id_colaborador": null,
-      "id": "0wjYF55"
     }
   ],
   "tipo_notificacion": [
