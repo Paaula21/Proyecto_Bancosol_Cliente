@@ -1197,6 +1197,18 @@
       "id": "bdCCk2LK0R8",
       "id_cp": 86,
       "codigo": "prueba"
+    },
+    {
+      "id": "D6IRgSonJN4",
+      "id_cp": 87,
+      "codigo": "29181",
+      "id_division": 1
+    },
+    {
+      "id": "sAa5jza-3ho",
+      "id_cp": 88,
+      "codigo": "29000",
+      "id_division": 1
     }
   ],
   "cadena": [
@@ -6741,6 +6753,54 @@
       "nombre_via": "",
       "numero": null,
       "id_cp": null
+    },
+    {
+      "id": "W5kJ0csKk_8",
+      "id_direccion": 676,
+      "tipo_via": null,
+      "nombre_via": "prueba",
+      "numero": "s/n",
+      "id_cp": 87
+    },
+    {
+      "id": "NfLJSSiLliY",
+      "id_direccion": 677,
+      "tipo_via": null,
+      "nombre_via": "prueba",
+      "numero": "s/n",
+      "id_cp": 87
+    },
+    {
+      "id": "eR0pnEanKi0",
+      "id_direccion": 678,
+      "tipo_via": null,
+      "nombre_via": "prueba",
+      "numero": "s/n",
+      "id_cp": 87
+    },
+    {
+      "id": "jvEMnK0-GJ8",
+      "id_direccion": 679,
+      "tipo_via": null,
+      "nombre_via": "prueba",
+      "numero": "s/n",
+      "id_cp": 87
+    },
+    {
+      "id": "JwROV2XR85o",
+      "id_direccion": 680,
+      "tipo_via": null,
+      "nombre_via": "fsdf",
+      "numero": "s/n",
+      "id_cp": 88
+    },
+    {
+      "id": "VCDgfX3smYo",
+      "id_direccion": 681,
+      "tipo_via": null,
+      "nombre_via": "prueba",
+      "numero": "s/n",
+      "id_cp": 88
     }
   ],
   "establecimiento": [
@@ -11798,13 +11858,6 @@
       "observaciones": null,
       "id_direccion": 667,
       "id": "zArPRVKvV4M"
-    },
-    {
-      "id": "9Bhh8qWueiY",
-      "id_colaborador": "A0524",
-      "nombre_colaborador": "prueba",
-      "observaciones": null,
-      "id_direccion": 671
     }
   ],
   "contacto_colaborador": [

@@ -307,6 +307,4 @@ async function guardarColaborador() {
         await crearRecurso('persona', personaObj);
         await crearRecurso('contacto_colaborador', relacionObj);
     }
-
-    await Promise.all(guardados);
 }
