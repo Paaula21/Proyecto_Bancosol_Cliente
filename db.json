@@ -1314,6 +1314,31 @@
       "id_campana": "PRIM2025",
       "id_cadena": "SUMA",
       "id": "4ZWBaVyhDmA"
+    },
+    {
+      "id": "cacsunqo31",
+      "id_campana": "GR2025",
+      "id_cadena": "ALCAMPO"
+    },
+    {
+      "id": "ha360san39",
+      "id_campana": "GR2025",
+      "id_cadena": "CARREFOUR"
+    },
+    {
+      "id": "jstk9stp67",
+      "id_campana": "GR2025",
+      "id_cadena": "DIA"
+    },
+    {
+      "id": "qrson6grcw",
+      "id_campana": "GR2025",
+      "id_cadena": "ECI"
+    },
+    {
+      "id": "z19tdo93ri",
+      "id_campana": "GR2025",
+      "id_cadena": "EL_JAM"
     }
   ],
   "direccion": [
@@ -12578,7 +12603,7 @@
     {
       "id_voluntario": 1,
       "id_persona": 51,
-      "preferencia_horario": "",
+      "preferencia_horario": "Mañana",
       "id_colaborador": null,
       "id": "eikJJjBuqdw"
     },
