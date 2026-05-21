@@ -212,12 +212,18 @@ function hideDeletePopup() {
 }
 
 async function deleteChain(btn) {
-    if (!selectedChainInternalId) {
+    if (!selectedChainInternalId || !selectedChainId) {
         alert("Error: No se ha seleccionado ninguna cadena.");
         return;
     }
 
     try {
+        const campanaCadena = await fetchJson(`${API_BASE}/campana_cadena`);
+        const relaciones = campanaCadena.filter(cc => cc.id_cadena === selectedChainId);
+        for (const r of relaciones) {
+            await fetch(`${API_BASE}/campana_cadena/${r.id}`, { method: 'DELETE' });
+        }
+
         const response = await fetch(`${API_BASE}/cadena/${selectedChainInternalId}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }

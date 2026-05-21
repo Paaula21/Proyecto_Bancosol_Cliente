@@ -1336,21 +1336,6 @@
       "id_campana": "PRIM2025",
       "id_cadena": "SUMA",
       "id": "4ZWBaVyhDmA"
-    },
-    {
-      "id": "hg1hR7yDUbg",
-      "id_cadena": "PR",
-      "id_campana": "PRIM2025"
-    },
-    {
-      "id": "p2yQsCw5IVk",
-      "id_cadena": "SA",
-      "id_campana": "PRIM2025"
-    },
-    {
-      "id": "cC1EiGm7Djs",
-      "id_cadena": "PRUEBA",
-      "id_campana": "PRIM2025"
     }
   ],
   "direccion": [
@@ -6711,6 +6696,7 @@
       "id_direccion": 670,
       "tipo_via": "",
       "nombre_via": "prueba",
+      
       "numero": "prueba",
       "id_cp": 86
     },
