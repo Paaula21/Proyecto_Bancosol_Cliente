@@ -5,13 +5,6 @@
     width: 100%;
     overflow: hidden;
 }
-.right-column {
-    display: flex;
-    flex-direction: column;
-    flex: 1;
-    height: 100vh;
-    overflow: hidden;
-}
 
 main {
     padding: 20px 32px;
@@ -56,30 +49,6 @@ main {
     outline: none;
     background-color: #ffffff;
     color: #374151;
-}
-
-.filter-button {
-    flex: 0 0 auto;
-}
-
-.filter-button button {
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid #d1d5db;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s, border-color 0.2s;
-    background-color: #420098;
-    color: white;
-    border-color: transparent;
-}
-
-.filter-button button:hover {
-    background-color: #310073;
 }
 
 hr {
@@ -276,22 +245,4 @@ tbody tr.selected {
 
 .btn-rojo:hover {
     background-color: #ae3022 !important; 
-}
-
-#btn-abrir-registro{
-    flex: 1;
-    padding: 10px 15px;
-    border-radius: 6px;
-    font-size: 14px;
-    font-weight: bold;
-    cursor: pointer;
-    background-color: #420098;
-    border: none;
-    color: white;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-#btn-abrir-registro:hover {
-    background-color: #2d0068;
-    transition: background-color 0.3s, color 0.3s;
 }
