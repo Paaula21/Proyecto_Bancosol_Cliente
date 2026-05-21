@@ -13,6 +13,11 @@ document.addEventListener('DOMContentLoaded', () => {
             headerSubtitle.textContent = "Complete los siguientes campos";
         };
 
+        if(rutaActual.includes("EditarVoluntario.html")) {
+            headerTitle.textContent = "Editar Voluntario";
+            headerSubtitle.textContent = "Modifique los datos personales y la disponibilidad del voluntario";
+        }
+
         if (headerTitle && headerSubtitle && enlacesMenu.length > 0) {
             clearInterval(buscadorHeader); // Apagamos el buscador
 

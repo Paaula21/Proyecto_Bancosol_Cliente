@@ -12582,6 +12582,14 @@
       "telefono": null,
       "email": null,
       "observacion": null
+    },
+    {
+      "id_persona": 64,
+      "nombre_completo": "Dani",
+      "telefono": "",
+      "email": "dani@example.com",
+      "observacion": null,
+      "id": "1ICl-y4"
     }
   ],
   "usuario": [
@@ -12719,6 +12727,13 @@
       "preferencia_horario": "lunes-tarde",
       "id_colaborador": null,
       "id": "OmBf9VBxjV8"
+    },
+    {
+      "id_voluntario": 6,
+      "id_persona": 64,
+      "preferencia_horario": "lunes-mañana",
+      "id_colaborador": null,
+      "id": "cx4iuTg"
     }
   ],
   "tipo_notificacion": [
