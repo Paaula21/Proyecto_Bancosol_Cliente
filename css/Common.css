@@ -1,7 +1,3 @@
-/* ===================================================
-   Common.css — Estilos compartidos por todas las páginas
-   =================================================== */
-
 * {
     box-sizing: border-box;
 }
@@ -13,20 +9,12 @@ body {
     color: #111827;
 }
 
-/* ─── Estructura principal ─── */
 .app-container {
     display: flex;
     height: 100vh;
     width: 100%;
     overflow: hidden;
 }
-
-.sidebar {
-    width: 260px;
-    background-color: #420098;
-    color: white;
-}
-
 .right-content {
     flex: 1;
     display: flex;
@@ -34,7 +22,6 @@ body {
     overflow: hidden;
 }
 
-/* ─── Botones ─── */
 .btn {
     padding: 10px 12px;
     border-radius: 6px;
@@ -58,14 +45,212 @@ body {
     background-color: #310073;
 }
 
-.btn--secondary {
-    background-color: white;
-    color: #374151;
+.detail-actions-sticky .btn {
+    flex: 1;
 }
 
-.btn--secondary:hover {
+.btn--cancel {
     background-color: #f3f4f6;
-    border-color: #9ca3af;
+    color: #374151;
+    border-color: #d1d5db;
+}
+
+.btn--cancel:hover {
+    background-color: #e5e7eb;
+}
+
+.btn--delete {
+    background-color: #e74c3c;
+    color: #ffffff;
+    border-color: transparent;
+}
+
+.btn--delete:hover {
+    background-color: #ae3022;
+}
+
+.btn--delete:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.main-layout {
+    display: flex;
+    flex: 1;
+    overflow: hidden;
+}
+
+main {
+    padding: 24px 32px;
+    flex: 1;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+    background-color: #f5f7f9;
+}
+
+.filter-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+    outline: none;
+    border-color: #420098;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+thead {
+    position: sticky;
+    top: 0;
+    z-index: 1;
+    background-color: #f8fafc;
+}
+
+th {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+td {
+    padding: 16px;
+    font-size: 0.875rem;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+tbody tr.selected {
+    background-color: #f5f0ff;
+}
+
+tbody tr:hover {
+    background-color: inherit;
+    cursor: default;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    width: 100%;
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}
+
+.list-header {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    align-items: center;
+    margin-bottom: 24px;
+}
+
+.list-header h2 {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 600;
+}
+
+.detail-panel {
+    flex: 0 0 420px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    align-self: stretch;
+}
+
+.detail-content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 24px 24px 8px 24px;
+    min-height: 0;
+}
+
+.detail-actions-sticky {
+    flex-shrink: 0;
+    background-color: #ffffff;
+    border-top: 1px solid #e5e7eb;
+    padding: 12px 24px;
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.detail-panel .estado-vacio {
+    text-align: center;
+    color: #9ca3af;
+    padding: 40px 20px;
+}
+
+.detail-panel .estado-vacio h3 {
+    font-size: 1.125rem;
+    font-weight: 600;
+    color: #111827;
+    margin: 0 0 8px 0;
+}
+
+.detail-panel .estado-vacio p {
+    margin: 0;
+    font-size: 0.875rem;
+}
+
+tr.row-selectable {
+    cursor: pointer;
+}
+
+td.table-cell-loading,
+td.table-cell-error {
+    text-align: center;
+    padding: 20px;
+}
+
+td.table-cell-error {
+    color: #dc2626;
+}
+
+.form-hint {
+    color: #6b7280;
+    font-size: 0.75rem;
+    margin-top: 4px;
+}
+
+#form-campaigns {
+    min-height: 80px;
+}
+
+#form-campaigns option {
+    padding: 4px 6px;
+}
+
+#form-campaigns option:checked {
+    background-color: #420098;
+    color: white;
+}
+
+.ficha-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.ficha-grid .ficha-tarjeta-info {
+    margin-bottom: 0;
 }
 
 

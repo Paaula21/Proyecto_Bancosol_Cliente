@@ -1,38 +1,42 @@
 const API_BASE = 'http://localhost:3000';
-const VISIBLE_ROWS = 4;
 
 let chainsData = [];
 let selectedChainId = null;
+let selectedChainInternalId = null;
 let campaignsData = [];
 
 document.addEventListener("DOMContentLoaded", () => {
     loadChains();
     document.getElementById('btn-filter').addEventListener('click', applyFilters);
-    document.getElementById('btn-add-cadena').addEventListener('click', () => showForm(null));
-    document.getElementById('btn-editar-cadena').addEventListener('click', (e) => {
+    document.getElementById('btn-add').addEventListener('click', () => showForm(null));
+    document.getElementById('btn-edit').addEventListener('click', (e) => {
         e.stopPropagation();
         const cad = chainsData.find(c => c.id_cadena === selectedChainId);
         if (cad) showForm(cad);
     });
-    document.getElementById('btn-eliminar-cadena').addEventListener('click', (e) => {
+    document.getElementById('btn-delete').addEventListener('click', (e) => {
         e.stopPropagation();
         if (selectedChainId) {
-            document.getElementById('overlay-eliminar').classList.add('active');
-            document.getElementById('popup-eliminar').classList.add('active');
+            document.getElementById('delete-overlay').classList.add('active');
+            document.getElementById('delete-popup').classList.add('active');
         }
     });
-    document.getElementById('btn-cancelar-eliminar').addEventListener('click', (e) => {
+    document.getElementById('btn-cancel-delete').addEventListener('click', (e) => {
         e.preventDefault();
         hideDeletePopup();
     });
-    document.getElementById('btn-confirmar-eliminar').addEventListener('click', async (e) => {
+    document.getElementById('btn-confirm-delete').addEventListener('click', async (e) => {
         e.preventDefault();
         await deleteChain(e.target);
     });
-    document.getElementById('btn-cancelar-formulario').addEventListener('click', hideForm);
-    document.getElementById('form-cadena').addEventListener('submit', async (e) => {
+    document.getElementById('btn-cancel-form').addEventListener('click', hideForm);
+    document.getElementById('chain-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        await guardarCadena();
+        await saveChain();
+    });
+    document.getElementById('btn-accept-success').addEventListener('click', (e) => {
+        e.preventDefault();
+        hideSuccessPopup();
     });
 });
 
@@ -42,17 +46,8 @@ async function fetchJson(url) {
     return res.json();
 }
 
-function updateScrollable(list) {
-    const wrapper = document.querySelector('.table-wrapper');
-    wrapper.classList.toggle('scrollable', list.length > VISIBLE_ROWS);
-}
-
 function clearSelection() {
-    document.querySelectorAll('#tabla-cadenas tr').forEach(r => r.classList.remove('selected'));
-}
-
-function participatesInCampaign(cad, campanaCadena, idCampana) {
-    return campanaCadena.some(cc => cc.id_cadena === cad.id_cadena && cc.id_campana === idCampana);
+    document.querySelectorAll('#chains-table tr').forEach(r => r.classList.remove('selected'));
 }
 
 function populateChainSelect(chains) {
@@ -67,7 +62,7 @@ function populateChainSelect(chains) {
 }
 
 function populateCampaignSelect(campaigns) {
-    const filterSelect = document.getElementById('filter-campana');
+    const filterSelect = document.getElementById('filter-campaign');
     while (filterSelect.options.length > 1) filterSelect.remove(1);
     campaigns.forEach(c => {
         const opt = document.createElement('option');
@@ -75,7 +70,7 @@ function populateCampaignSelect(campaigns) {
         opt.textContent = c.nombre_campana || c.id_campana;
         filterSelect.appendChild(opt);
     });
-    const formSelect = document.getElementById('form-campanas');
+    const formSelect = document.getElementById('form-campaigns');
     formSelect.innerHTML = '';
     campaigns.forEach(c => {
         const opt = document.createElement('option');
@@ -90,7 +85,7 @@ function getColspan() {
 }
 
 function renderTableHeader() {
-    const theadTr = document.querySelector('#tabla-cadenas').closest('table').querySelector('thead tr');
+    const theadTr = document.querySelector('#chains-table').closest('table').querySelector('thead tr');
     theadTr.innerHTML = `
         <th>Nombre</th>
         <th>Nº Establecimientos</th>
@@ -99,15 +94,15 @@ function renderTableHeader() {
 }
 
 function setTableState(state, message = '') {
-    const tbody = document.getElementById('tabla-cadenas');
-    const counter = document.getElementById('contador-cadenas');
+    const tbody = document.getElementById('chains-table');
+    const counter = document.getElementById('chains-counter');
     const colspan = getColspan();
 
     if (state === 'loading') {
-        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center;padding:20px;">Cargando...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${colspan}" class="table-cell-loading">Cargando...</td></tr>`;
         counter.textContent = 'Cargando...';
     } else if (state === 'error') {
-        tbody.innerHTML = `<tr><td colspan="${colspan}" style="text-align:center;padding:20px;color:#dc2626;">${message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="${colspan}" class="table-cell-error">${message}</td></tr>`;
         counter.textContent = 'Error de conexión';
     }
 }
@@ -148,7 +143,7 @@ async function loadChains() {
 function applyFilters() {
     const filters = {
         cadena:  document.getElementById('filter-chain').value,
-        campana: document.getElementById('filter-campana').value
+        campana: document.getElementById('filter-campaign').value
     };
 
     const filtered = chainsData.filter(cad => {
@@ -163,7 +158,7 @@ function applyFilters() {
 
 function createChainRow(cad, onSelect) {
     const tr = document.createElement('tr');
-    tr.style.cursor = 'pointer';
+    tr.classList.add('row-selectable');
 
     let cells = `
         <td><strong>${cad.nombre_cadena}</strong></td>
@@ -184,7 +179,7 @@ function createChainRow(cad, onSelect) {
 }
 
 function displayChains(list) {
-    const tbody = document.getElementById('tabla-cadenas');
+    const tbody = document.getElementById('chains-table');
     tbody.innerHTML = '';
     list.forEach(cad => tbody.appendChild(
         createChainRow(cad, (c, tr) => {
@@ -193,30 +188,30 @@ function displayChains(list) {
             showDetail(c);
         })
     ));
-    updateScrollable(list);
 }
 
 function updateCounter(total) {
     const label = total === 1 ? 'cadena encontrada' : 'cadenas encontradas';
-    document.getElementById('contador-cadenas').textContent = `${total} ${label}`;
+    document.getElementById('chains-counter').textContent = `${total} ${label}`;
 }
 
 function showDetail(cad) {
     selectedChainId = cad.id_cadena;
+    selectedChainInternalId = cad.id;
 
-    document.getElementById('formulario-cadena').style.display = 'none';
-    document.getElementById('acciones-formulario').style.display = 'none';
-    document.getElementById('acciones-detalle').style.display = 'flex';
-    document.getElementById('estado-vacio-panel').style.display = 'none';
-    document.getElementById('datos-cadena').style.display = 'block';
+    document.getElementById('chain-form-panel').style.display = 'none';
+    document.getElementById('form-actions-bar').style.display = 'none';
+    document.getElementById('detail-actions').style.display = 'flex';
+    document.getElementById('empty-state-panel').style.display = 'none';
+    document.getElementById('chain-data').style.display = 'block';
 
-    document.getElementById('btn-editar-cadena').disabled = false;
-    document.getElementById('btn-eliminar-cadena').disabled = false;
+    document.getElementById('btn-edit').disabled = false;
+    document.getElementById('btn-delete').disabled = false;
 
-    document.getElementById('ficha-nombre').textContent = cad.nombre_cadena;
-    document.getElementById('ficha-establecimientos').textContent = cad.num_establecimientos;
+    document.getElementById('record-name').textContent = cad.nombre_cadena;
+    document.getElementById('record-establishments').textContent = cad.num_establecimientos;
 
-    const campanasContainer = document.getElementById('ficha-campanas-contenido');
+    const campanasContainer = document.getElementById('record-campaigns-content');
     campanasContainer.innerHTML = '';
     campaignsData.forEach(c => {
         const participa = cad.campanasIds && cad.campanasIds.includes(c.id_campana);
@@ -227,67 +222,61 @@ function showDetail(cad) {
 }
 
 function showForm(cad) {
-    document.getElementById('estado-vacio-panel').style.display = 'none';
-    document.getElementById('datos-cadena').style.display = 'none';
-    document.getElementById('formulario-cadena').style.display = 'block';
-    document.getElementById('acciones-detalle').style.display = 'none';
-    document.getElementById('acciones-formulario').style.display = 'flex';
+    document.getElementById('empty-state-panel').style.display = 'none';
+    document.getElementById('chain-data').style.display = 'none';
+    document.getElementById('chain-form-panel').style.display = 'block';
+    document.getElementById('detail-actions').style.display = 'none';
+    document.getElementById('form-actions-bar').style.display = 'flex';
 
     if (cad) {
-        document.getElementById('form-titulo').textContent = 'Editar Cadena';
-        document.getElementById('form-nombre').value = cad.nombre_cadena || '';
+        document.getElementById('form-title').textContent = 'Editar Cadena';
+        document.getElementById('form-name').value = cad.nombre_cadena || '';
 
         if (cad.campanasIds) {
-            const select = document.getElementById('form-campanas');
+            const select = document.getElementById('form-campaigns');
             Array.from(select.options).forEach(opt => {
                 opt.selected = cad.campanasIds.includes(opt.value);
             });
         }
     } else {
-        document.getElementById('form-titulo').textContent = 'Nueva Cadena';
-        document.getElementById('form-cadena').reset();
-        Array.from(document.getElementById('form-campanas').options).forEach(o => o.selected = false);
+        document.getElementById('form-title').textContent = 'Nueva Cadena';
+        document.getElementById('chain-form').reset();
+        Array.from(document.getElementById('form-campaigns').options).forEach(o => o.selected = false);
     }
 
     selectedChainId = cad ? cad.id_cadena : 'new';
 }
 
 function hideForm() {
-    document.getElementById('formulario-cadena').style.display = 'none';
-    document.getElementById('acciones-formulario').style.display = 'none';
+    document.getElementById('chain-form-panel').style.display = 'none';
+    document.getElementById('form-actions-bar').style.display = 'none';
 
     if (selectedChainId === 'new') {
-        document.getElementById('estado-vacio-panel').style.display = 'block';
-        document.getElementById('acciones-detalle').style.display = 'none';
+        document.getElementById('empty-state-panel').style.display = 'block';
+        document.getElementById('detail-actions').style.display = 'none';
     } else if (selectedChainId) {
-        document.getElementById('datos-cadena').style.display = 'block';
-        document.getElementById('acciones-detalle').style.display = 'flex';
-        document.getElementById('btn-editar-cadena').disabled = false;
-        document.getElementById('btn-eliminar-cadena').disabled = false;
+        document.getElementById('chain-data').style.display = 'block';
+        document.getElementById('detail-actions').style.display = 'flex';
+        document.getElementById('btn-edit').disabled = false;
+        document.getElementById('btn-delete').disabled = false;
     } else {
-        document.getElementById('estado-vacio-panel').style.display = 'block';
-        document.getElementById('acciones-detalle').style.display = 'none';
+        document.getElementById('empty-state-panel').style.display = 'block';
+        document.getElementById('detail-actions').style.display = 'none';
     }
 }
 
-async function guardarCadena() {
-    const btn = document.getElementById('btn-guardar-cadena');
-    const textoOriginal = btn.textContent;
-
+async function saveChain() {
     try {
-        btn.textContent = 'Guardando...';
-        btn.disabled = true;
-
-        const nombre = document.getElementById('form-nombre').value.trim();
+        const nombre = document.getElementById('form-name').value.trim();
         const campanasSeleccionadas = Array.from(
-            document.getElementById('form-campanas').selectedOptions
+            document.getElementById('form-campaigns').selectedOptions
         ).map(o => o.value);
 
         if (selectedChainId && selectedChainId !== 'new') {
             const cadOriginal = chainsData.find(c => c.id_cadena === selectedChainId);
             if (!cadOriginal) throw new Error('Cadena no encontrada');
 
-            await fetch(`${API_BASE}/cadena/${selectedChainId}`, {
+            await fetch(`${API_BASE}/cadena/${cadOriginal.id}`, {
                 method: 'PUT',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
@@ -339,37 +328,39 @@ async function guardarCadena() {
             }
         }
 
-        hideForm();
         selectedChainId = null;
-        await loadChains();
+        selectedChainInternalId = null;
+        hideForm();
+        document.getElementById('save-overlay').classList.add('active');
+        document.getElementById('save-popup').classList.add('active');
 
     } catch (error) {
         console.error('Error al guardar:', error);
         alert('Error al guardar la cadena. Revisa la consola.');
-    } finally {
-        btn.textContent = textoOriginal;
-        btn.disabled = false;
     }
 }
 
 function hideDeletePopup() {
-    document.getElementById('overlay-eliminar').classList.remove('active');
-    document.getElementById('popup-eliminar').classList.remove('active');
+    document.getElementById('delete-overlay').classList.remove('active');
+    document.getElementById('delete-popup').classList.remove('active');
+}
+
+function hideSuccessPopup() {
+    document.getElementById('save-overlay').classList.remove('active');
+    document.getElementById('save-popup').classList.remove('active');
+    selectedChainId = null;
+    selectedChainInternalId = null;
+    loadChains();
 }
 
 async function deleteChain(btn) {
-    if (!selectedChainId) {
+    if (!selectedChainInternalId) {
         alert("Error: No se ha seleccionado ninguna cadena.");
         return;
     }
 
-    const originalText = btn.textContent;
-
     try {
-        btn.textContent = "Eliminando...";
-        btn.disabled = true;
-
-        const response = await fetch(`${API_BASE}/cadena/${selectedChainId}`, {
+        const response = await fetch(`${API_BASE}/cadena/${selectedChainInternalId}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -380,23 +371,20 @@ async function deleteChain(btn) {
 
         hideDeletePopup();
         selectedChainId = null;
+        selectedChainInternalId = null;
 
-        document.getElementById('btn-editar-cadena').disabled = true;
-        document.getElementById('btn-eliminar-cadena').disabled = true;
-        document.getElementById('datos-cadena').style.display = 'none';
-        document.getElementById('formulario-cadena').style.display = 'none';
-        document.getElementById('acciones-formulario').style.display = 'none';
-        document.getElementById('acciones-detalle').style.display = 'none';
-        document.getElementById('estado-vacio-panel').style.display = 'block';
+        document.getElementById('btn-edit').disabled = true;
+        document.getElementById('btn-delete').disabled = true;
+        document.getElementById('chain-data').style.display = 'none';
+        document.getElementById('chain-form-panel').style.display = 'none';
+        document.getElementById('form-actions-bar').style.display = 'none';
+        document.getElementById('detail-actions').style.display = 'none';
+        document.getElementById('empty-state-panel').style.display = 'block';
 
         await loadChains();
-        alert("Cadena eliminada con éxito");
 
     } catch (error) {
         console.error("Error al intentar eliminar la cadena:", error);
         alert("No se pudo eliminar la cadena. Asegúrate de que json-server esté corriendo.");
-    } finally {
-        btn.textContent = originalText;
-        btn.disabled = false;
     }
 }

@@ -1,137 +1,3 @@
-
-    /* ===================================================
-       TablaEstilos.css — Iconos, popup borrado, tabla mejorada
-       Depende de: Common.css
-       =================================================== */
-
-    /* ── Botones icono ── */
-.btn-icon {
-    background: none;
-    border: none;
-    cursor: pointer;
-    padding: 6px;
-    border-radius: 6px;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    transition: background 0.2s, color 0.2s;
-    color: #6b7280;
-}
-
-.btn-icon:hover {
-    background: #f3f4f6;
-    color: #111827;
-}
-
-.btn-icon.btn-icon--danger:hover {
-    background: #fee2e2;
-    color: #dc2626;
-}
-
-/* ── Pop-up de confirmación de borrado ── */
-.delete-overlay {
-    position: fixed;
-    inset: 0;
-    background: rgba(0, 0, 0, 0.35);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    z-index: 1000;
-    opacity: 0;
-    visibility: hidden;
-    transition: opacity 0.2s, visibility 0.2s;
-}
-
-.delete-overlay.active {
-    opacity: 1;
-    visibility: visible;
-}
-
-.delete-popup {
-    background: #fff;
-    border-radius: 12px;
-    padding: 32px 28px 24px;
-    width: 380px;
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.18);
-    transform: scale(0.92);
-    transition: transform 0.2s;
-    text-align: center;
-}
-
-.delete-overlay.active .delete-popup {
-    transform: scale(1);
-}
-
-.delete-popup .delete-icon {
-    width: 52px;
-    height: 52px;
-    background: #fee2e2;
-    border-radius: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 auto 16px;
-    color: #dc2626;
-}
-
-.delete-popup h3 {
-    font-size: 1.1rem;
-    font-weight: 700;
-    color: #111827;
-    margin: 0 0 8px;
-}
-
-.delete-popup p {
-    font-size: 0.875rem;
-    color: #6b7280;
-    margin: 0 0 24px;
-}
-
-.delete-popup p strong {
-    color: #111827;
-}
-
-.delete-popup-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: center;
-}
-
-.delete-popup-actions .btn-cancel-del {
-    flex: 1;
-    padding: 10px;
-    border: 1px solid #d1d5db;
-    border-radius: 6px;
-    background: #fff;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #374151;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.delete-popup-actions .btn-cancel-del:hover {
-    background: #f3f4f6;
-}
-
-.delete-popup-actions .btn-confirm-del {
-    flex: 1;
-    padding: 10px;
-    border: none;
-    border-radius: 6px;
-    background: #dc2626;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #fff;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.delete-popup-actions .btn-confirm-del:hover {
-    background: #b91c1c;
-}
-
-/* ── Tabla mejorada ── */
 .data-table thead th {
     font-size: 0.875rem;
     font-weight: 600;
@@ -145,13 +11,11 @@
     transition: background 0.15s;
 }
 
-/* Fondo blanco en todas las filas (sin cebra) */
 .data-table tbody tr:nth-child(odd),
 .data-table tbody tr:nth-child(even) {
     background-color: #ffffff;
 }
 
-/* Sin efecto hover */
 .data-table tbody tr:hover {
     background-color: inherit !important;
     cursor: default;

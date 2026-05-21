@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <title>Establecimientos</title>
+
     <link rel="stylesheet" href="../css/InformacionTienda.css">
     <link rel="stylesheet" href="../css/TablaEstilos.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
@@ -11,6 +12,7 @@
     <link rel="stylesheet" href="../css/Header.css">
     <link rel="stylesheet" href="../css/DetalleColaborador.css">
     <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
+
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/InformacionTienda.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
@@ -54,8 +56,8 @@
                             </div>
 
                             <div class="filter-group">
-                                <label for="filter-campanas">Campañas</label>
-                                <select id="filter-campanas" name="campanas">
+                                <label for="filter-campaigns">Campañas</label>
+                                <select id="filter-campaigns" name="campaigns">
                                     <option value="">Todas las campañas</option>
                                 </select>
                             </div>
@@ -108,8 +110,8 @@
                     <div class="list-container">
                         <div class="list-header">
                             <h2>Listado de Establecimientos</h2>
-                            <button type="button" id="btn-add-establecimiento" class="btn btn--primary">+ Añadir</button>
-                            <p id="contador-establecimientos">Cargando...</p>
+                            <button type="button" id="btn-add" class="btn btn--primary">Añadir Tienda</button>
+                            <p id="establishments-counter">Cargando...</p>
                         </div>
                         <div class="table-wrapper">
                             <table class="data-table">
@@ -120,8 +122,8 @@
                                     <th>Coordinador</th>
                                 </tr>
                                 </thead>
-                                <tbody id="tabla-establecimientos">
-                                <tr><td colspan="3" style="text-align: center; padding: 20px;">Cargando...</td></tr>
+                                <tbody id="establishments-table">
+                                <tr><td colspan="3" class="table-cell-loading">Cargando...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -129,14 +131,14 @@
 
                     <aside class="detail-panel">
                         <div class="detail-content">
-                            <div id="estado-vacio-panel" class="estado-vacio">
+                            <div id="empty-state-panel" class="estado-vacio">
                                 <h3>Detalle de Establecimiento</h3>
                                 <p>Haga clic en un establecimiento de la lista para ver sus detalles.</p>
                             </div>
-                            <div id="datos-establecimiento" class="datos-colaborador" style="display: none;">
+                            <div id="establishment-data" style="display: none;">
                                 <h3 class="ficha-titulo-principal">Ficha del Establecimiento</h3>
                                 <div class="ficha-cabecera">
-                                    <div class="ficha-titulos">
+                                    <div>
                                         <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
                                         <span id="ficha-cadena" class="ficha-etiqueta-codigo">---</span>
                                     </div>
@@ -163,25 +165,25 @@
                                     </div>
                                 </div>
                             </div>
-                            <div id="formulario-establecimiento" class="datos-colaborador" style="display: none;">
-                                <h3 class="ficha-titulo-principal" id="form-titulo">Nuevo Establecimiento</h3>
-                                <form id="form-establecimiento">
+                            <div id="establishment-form-panel" style="display: none;">
+                                <h3 class="ficha-titulo-principal" id="form-title">Nuevo Establecimiento</h3>
+                                <form id="establishment-form">
                                     <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
                                         <h5>Nombre del Establecimiento</h5>
-                                        <input type="text" id="form-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour Hiper Centro">
+                                        <input type="text" id="form-name" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour Hiper Centro">
                                     </div>
                                     <div class="ficha-tarjeta-info">
                                         <h5>Cadena</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-cadena"><strong>Cadena comercial:</strong></label>
-                                            <input type="text" id="form-cadena" class="input-ficha-lateral" required placeholder="Ej. Carrefour, Aldi, ...">
+                                            <label for="form-chain"><strong>Cadena comercial:</strong></label>
+                                            <input type="text" id="form-chain" class="input-ficha-lateral" required placeholder="Ej. Carrefour, Aldi, ...">
                                         </div>
                                     </div>
                                     <div class="ficha-tarjeta-info">
                                         <h5>Dirección Postal</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-tipo-via"><strong>Tipo de Vía:</strong></label>
-                                            <select id="form-tipo-via" class="select-ficha-lateral">
+                                            <label for="form-street-type"><strong>Tipo de Vía:</strong></label>
+                                            <select id="form-street-type" class="select-ficha-lateral">
                                                 <option value="">Selecciona...</option>
                                                 <option value="Calle">Calle</option>
                                                 <option value="Avenida">Avenida</option>
@@ -189,27 +191,27 @@
                                             </select>
                                         </div>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-via"><strong>Nombre de la Vía:</strong></label>
-                                            <input type="text" id="form-via" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
+                                            <label for="form-street"><strong>Nombre de la Vía:</strong></label>
+                                            <input type="text" id="form-street" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
                                         </div>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-numero"><strong>Número:</strong></label>
-                                            <input type="text" id="form-numero" class="input-ficha-lateral" placeholder="Ej. 12">
+                                            <label for="form-number"><strong>Número:</strong></label>
+                                            <input type="text" id="form-number" class="input-ficha-lateral" placeholder="Ej. 12">
                                         </div>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-cp"><strong>Código Postal:</strong></label>
-                                            <input type="text" id="form-cp" class="input-ficha-lateral" placeholder="Ej. 29001">
+                                            <label for="form-zip"><strong>Código Postal:</strong></label>
+                                            <input type="text" id="form-zip" class="input-ficha-lateral" placeholder="Ej. 29001">
                                         </div>
                                     </div>
                                     <div class="ficha-tarjeta-info">
                                         <h5>Información General</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-lineales"><strong>Lineales:</strong></label>
-                                            <input type="number" id="form-lineales" class="input-ficha-lateral" placeholder="Número de lineales" min="0">
+                                            <label for="form-checkouts"><strong>Lineales:</strong></label>
+                                            <input type="number" id="form-checkouts" class="input-ficha-lateral" placeholder="Número de lineales" min="0">
                                         </div>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-coordinador"><strong>Coordinador:</strong></label>
-                                            <select id="form-coordinador" class="select-ficha-lateral">
+                                            <label for="form-coordinator"><strong>Coordinador:</strong></label>
+                                            <select id="form-coordinator" class="select-ficha-lateral">
                                                 <option value="">Sin asignar</option>
                                             </select>
                                         </div>
@@ -217,23 +219,23 @@
                                     <div class="ficha-tarjeta-info">
                                         <h5>Campañas</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-campanas"><strong>Participación en campañas:</strong></label>
-                                            <select id="form-campanas" class="select-ficha-lateral" multiple size="4">
+                                            <label for="form-campaigns"><strong>Participación en campañas:</strong></label>
+                                            <select id="form-campaigns" class="select-ficha-lateral" multiple size="4">
                                             </select>
-                                            <small style="color:#6b7280; font-size:0.75rem; margin-top:4px;">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
+                                            <small class="form-hint">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
 
-                        <div class="detail-actions-sticky" id="acciones-detalle" style="display: none;">
-                            <button type="button" id="btn-editar-establecimiento" class="btn-ficha btn-editar" disabled>Editar</button>
-                            <button type="button" id="btn-eliminar-establecimiento" class="btn-ficha btn-eliminar" disabled>Eliminar</button>
+                        <div class="detail-actions-sticky" id="detail-actions" style="display: none;">
+                            <button type="button" id="btn-edit" class="btn btn--primary" disabled>Editar</button>
+                            <button type="button" id="btn-delete" class="btn btn--delete" disabled>Eliminar</button>
                         </div>
-                        <div class="detail-actions-sticky" id="acciones-formulario" style="display: none;">
-                            <button type="submit" form="form-establecimiento" id="btn-guardar-establecimiento" class="btn-ficha btn-guardar">Guardar</button>
-                            <button type="button" id="btn-cancelar-formulario" class="btn-ficha btn-cancelar-edit">Cancelar</button>
+                        <div class="detail-actions-sticky" id="form-actions-bar" style="display: none;">
+                            <button type="submit" form="establishment-form" class="btn btn--primary">Guardar</button>
+                            <button type="button" id="btn-cancel-form" class="btn btn--cancel">Cancelar</button>
                         </div>
                     </aside>
                 </div>
@@ -241,14 +243,26 @@
         </div>
     </div>
 </div>
-<div class="overlay" id="overlay-eliminar">
-    <div class="popup" id="popup-eliminar">
+<div class="overlay" id="delete-overlay">
+    <div class="popup" id="delete-popup">
         <h3>¿Eliminar establecimiento?</h3>
         <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este establecimiento de la base de datos?</p>
-        <div class="popup-actions">
+        <div>
             <form action="">
-                <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
-                <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+                <button class="btn btn--delete" id="btn-confirm-delete">Eliminar</button>
+                <button class="btn btn--cancel" id="btn-cancel-delete">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="save-overlay">
+    <div class="popup" id="save-popup">
+        <h3>¡Guardado con éxito!</h3>
+        <p>El establecimiento ha sido guardado correctamente en la base de datos.</p>
+        <div>
+            <form action="">
+                <button class="btn btn--primary" id="btn-accept-success">Aceptar</button>
             </form>
         </div>
     </div>

@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/Header.css">
     <link rel="stylesheet" href="../css/DetalleColaborador.css">
     <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
+
     <script src="../javascript/InformacionCadena.js" defer></script>
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/popUpRegistro.js"></script>
@@ -24,17 +25,9 @@
     </aside>
     <div class="right-content">
         <header class="main-header">
-            <nav>
-                <div class="header-branding">
-                    <img src="../images/icono.png" alt="App Icon" class="header-logo">
-                    <div class="header-titles">
-                        <h1>Cadenas</h1>
-                        <p>Panel de administración para registrar y gestionar las marcas de los supermercados</p>
-                    </div>
-                </div>
-                <button class="btn btn--secondary" id="btn-notifications">Notificaciones</button>
-            </nav>
+            <include-html src="../html/header.html"></include-html>
         </header>
+
 
         <div class="main-layout">
             <main>
@@ -47,9 +40,9 @@
                                  <option value="">Todas las cadenas</option>
                             </select>
                         </div>
-                        <div class="filter-group filter-group--small">
-                            <label for="filter-campana">Campaña</label>
-                            <select id="filter-campana" name="campana">
+                        <div class="filter-group">
+                            <label for="filter-campaign">Campaña</label>
+                            <select id="filter-campaign" name="campaign">
                                 <option value="">Todas las campañas</option>
                             </select>
                         </div>
@@ -63,8 +56,8 @@
                     <div class="list-container">
                         <div class="list-header">
                             <h2>Listado de Cadenas</h2>
-                            <button type="button" id="btn-add-cadena" class="btn btn--primary">+ Añadir</button>
-                            <p id="contador-cadenas">Cargando...</p>
+                            <button type="button" id="btn-add" class="btn btn--primary">Añadir Cadena</button>
+                            <p id="chains-counter">Cargando...</p>
                         </div>
 
                         <div class="table-wrapper">
@@ -75,8 +68,8 @@
                                     <th>Nº Establecimientos</th>
                                 </tr>
                                 </thead>
-                                <tbody id="tabla-cadenas">
-                                <tr><td colspan="2" style="text-align:center;padding:20px;">Cargando...</td></tr>
+                                <tbody id="chains-table">
+                                <tr><td colspan="2" class="table-cell-loading">Cargando...</td></tr>
                                 </tbody>
                             </table>
                         </div>
@@ -84,55 +77,55 @@
 
                     <aside class="detail-panel">
                         <div class="detail-content">
-                            <div id="estado-vacio-panel" class="estado-vacio">
+                            <div id="empty-state-panel" class="estado-vacio">
                                 <h3>Detalle de Cadena</h3>
                                 <p>Haga clic en una cadena de la lista para ver sus detalles.</p>
                             </div>
-                            <div id="datos-cadena" class="datos-colaborador" style="display: none;">
+                            <div id="chain-data" style="display: none;">
                                 <h3 class="ficha-titulo-principal">Ficha de la Cadena</h3>
                                 <div class="ficha-cabecera">
-                                    <div class="ficha-titulos">
-                                        <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
+                                    <div>
+                                        <h4 id="record-name" class="ficha-nombre">---</h4>
                                     </div>
                                 </div>
                                 <div class="ficha-grid">
                                     <div class="ficha-tarjeta-info">
                                         <h5>INFORMACIÓN GENERAL</h5>
-                                        <p><strong>Nº Establecimientos:</strong> <span id="ficha-establecimientos">---</span></p>
+                                        <p><strong>Nº Establecimientos:</strong> <span id="record-establishments">---</span></p>
                                     </div>
                                     <div class="ficha-tarjeta-info">
                                         <h5>Campañas</h5>
-                                        <div id="ficha-campanas-contenido"></div>
+                                        <div id="record-campaigns-content"></div>
                                     </div>
                                 </div>
                             </div>
-                            <div id="formulario-cadena" class="datos-colaborador" style="display: none;">
-                                <h3 class="ficha-titulo-principal" id="form-titulo">Nueva Cadena</h3>
-                                <form id="form-cadena">
+                            <div id="chain-form-panel" style="display: none;">
+                                <h3 class="ficha-titulo-principal" id="form-title">Nueva Cadena</h3>
+                                <form id="chain-form">
                                     <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
                                         <h5>Nombre de la Cadena</h5>
-                                        <input type="text" id="form-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour">
+                                        <input type="text" id="form-name" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour">
                                     </div>
                                     <div class="ficha-tarjeta-info">
                                         <h5>Campañas</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="form-campanas"><strong>Participación en campañas:</strong></label>
-                                            <select id="form-campanas" class="select-ficha-lateral" multiple size="4">
+                                            <label for="form-campaigns"><strong>Participación en campañas:</strong></label>
+                                            <select id="form-campaigns" class="select-ficha-lateral" multiple size="4">
                                             </select>
-                                            <small style="color:#6b7280; font-size:0.75rem; margin-top:4px;">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
+                                            <small class="form-hint">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
                                         </div>
                                     </div>
                                 </form>
                             </div>
                         </div>
 
-                        <div class="detail-actions-sticky" id="acciones-detalle" style="display: none;">
-                            <button type="button" id="btn-editar-cadena" class="btn-ficha btn-editar" disabled>Editar</button>
-                            <button type="button" id="btn-eliminar-cadena" class="btn-ficha btn-eliminar" disabled>Eliminar</button>
+                        <div class="detail-actions-sticky" id="detail-actions" style="display: none;">
+                            <button type="button" id="btn-edit" class="btn btn--primary" disabled>Editar</button>
+                            <button type="button" id="btn-delete" class="btn btn--delete" disabled>Eliminar</button>
                         </div>
-                        <div class="detail-actions-sticky" id="acciones-formulario" style="display: none;">
-                            <button type="submit" form="form-cadena" id="btn-guardar-cadena" class="btn-ficha btn-guardar">Guardar</button>
-                            <button type="button" id="btn-cancelar-formulario" class="btn-ficha btn-cancelar-edit">Cancelar</button>
+                        <div class="detail-actions-sticky" id="form-actions-bar" style="display: none;">
+                            <button type="submit" form="chain-form" class="btn btn--primary">Guardar</button>
+                            <button type="button" id="btn-cancel-form" class="btn btn--cancel">Cancelar</button>
                         </div>
                     </aside>
                 </div>
@@ -141,14 +134,26 @@
     </div>
 </div>
 
-<div class="overlay" id="overlay-eliminar">
-    <div class="popup" id="popup-eliminar">
+<div class="overlay" id="delete-overlay">
+    <div class="popup" id="delete-popup">
         <h3>¿Eliminar cadena?</h3>
         <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta cadena de la base de datos?</p>
-        <div class="popup-actions">
+        <div>
             <form action="">
-                <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
-                <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+                <button class="btn btn--delete" id="btn-confirm-delete">Eliminar</button>
+                <button class="btn btn--cancel" id="btn-cancel-delete">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<div class="overlay" id="save-overlay">
+    <div class="popup" id="save-popup">
+        <h3>¡Guardado con éxito!</h3>
+        <p>La cadena ha sido guardada correctamente en la base de datos.</p>
+        <div>
+            <form action="">
+                <button class="btn btn--primary" id="btn-accept-success">Aceptar</button>
             </form>
         </div>
     </div>
