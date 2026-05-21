@@ -46,20 +46,3 @@
     border-color: #cbd5e0;
 }
 
-.btn-guardar {
-    background-color: #420098;
-    color: white;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.btn-guardar:hover {
-    background-color: #2d0068;
-    transition: background-color 0.3s, color 0.3s;
-}
-
-.btn-cancelar-edit {
-    background-color: #ffffff;
-    color: #000000;
-    border: 1px solid #000000;
-    transition: background-color 0.3s, color 0.3s;
-}

@@ -182,6 +182,7 @@ tbody tr:hover {
 }
 
 .detail-actions-sticky {
+    position: sticky;
     flex-shrink: 0;
     background-color: #ffffff;
     border-top: 1px solid #e5e7eb;
