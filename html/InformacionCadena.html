@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
 
     <script src="../javascript/InformacionCadena.js" defer></script>
+    <script src="../javascript/EditarCadena.js" defer></script>
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/popUpRegistro.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
@@ -77,46 +78,8 @@
 
                     <aside class="detail-panel">
                         <div class="detail-content">
-                            <div id="empty-state-panel" class="estado-vacio">
-                                <h3>Detalle de Cadena</h3>
-                                <p>Haga clic en una cadena de la lista para ver sus detalles.</p>
-                            </div>
-                            <div id="chain-data" style="display: none;">
-                                <h3 class="ficha-titulo-principal">Ficha de la Cadena</h3>
-                                <div class="ficha-cabecera">
-                                    <div>
-                                        <h4 id="record-name" class="ficha-nombre">---</h4>
-                                    </div>
-                                </div>
-                                <div class="ficha-grid">
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>INFORMACIÓN GENERAL</h5>
-                                        <p><strong>Nº Establecimientos:</strong> <span id="record-establishments">---</span></p>
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>Campañas</h5>
-                                        <div id="record-campaigns-content"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="chain-form-panel" style="display: none;">
-                                <h3 class="ficha-titulo-principal" id="form-title">Nueva Cadena</h3>
-                                <form id="chain-form">
-                                    <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
-                                        <h5>Nombre de la Cadena</h5>
-                                        <input type="text" id="form-name" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour">
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>Campañas</h5>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-campaigns"><strong>Participación en campañas:</strong></label>
-                                            <select id="form-campaigns" class="select-ficha-lateral" multiple size="4">
-                                            </select>
-                                            <small class="form-hint">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
+                            <include-html src="../html/DetalleCadena.html"></include-html>
+                            <include-html src="../html/EditarCadena.html"></include-html>
                         </div>
 
                         <div class="detail-actions-sticky" id="detail-actions" style="display: none;">
@@ -142,18 +105,6 @@
             <form action="">
                 <button class="btn btn--delete" id="btn-confirm-delete">Eliminar</button>
                 <button class="btn btn--cancel" id="btn-cancel-delete">Cancelar</button>
-            </form>
-        </div>
-    </div>
-</div>
-
-<div class="overlay" id="save-overlay">
-    <div class="popup" id="save-popup">
-        <h3>¡Guardado con éxito!</h3>
-        <p>La cadena ha sido guardada correctamente en la base de datos.</p>
-        <div>
-            <form action="">
-                <button class="btn btn--primary" id="btn-accept-success">Aceptar</button>
             </form>
         </div>
     </div>
