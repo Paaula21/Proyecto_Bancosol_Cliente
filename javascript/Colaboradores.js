@@ -51,7 +51,7 @@ document.addEventListener("DOMContentLoaded", () => {
             filaClicada.classList.add('selected');
         });
     }
-});
+}); 
 
 // ----- OBTENER Y PROCESAR DATOS DE LA DB -----
 async function cargarDatosColaboradores() {
@@ -222,31 +222,24 @@ async function mostrarDetalle(c) {
 
     document.addEventListener('click', async function (e) {
 
-        // 1. Mostrar el popup al hacer clic en eliminar
-        if (e.target && e.target.id === 'btn-eliminar-voluntario') {
+        if (e.target && e.target.id === 'btn-eliminar-colaborador') {
             e.preventDefault();
 
-            if (!selectedVolunteerId) {
-                alert("Error: No se ha seleccionado ningún voluntario.");
+            if (!colaboradorSeleccionadoId) {
+                alert("Error: No se ha seleccionado ningún colaborador.");
                 return;
             }
 
-            const overlay = document.getElementById('overlay-eliminar');
-            const popup = document.getElementById('popup-eliminar');
-            if (overlay) overlay.classList.add('active');
-            if (popup) popup.classList.add('active');
+            document.getElementById('overlay-eliminar').classList.add('active');
+            document.getElementById('popup-eliminar').classList.add('active');
         }
 
-        // 2. Cancelar y cerrar el popup
         if (e.target && e.target.id === 'btn-cancelar-eliminar') {
             e.preventDefault();
-            const overlay = document.getElementById('overlay-eliminar');
-            const popup = document.getElementById('popup-eliminar');
-            if (overlay) overlay.classList.remove('active');
-            if (popup) popup.classList.remove('active');
+            document.getElementById('overlay-eliminar').classList.remove('active');
+            document.getElementById('popup-eliminar').classList.remove('active');
         }
 
-        // 3. Confirmar eliminación
         if (e.target && e.target.id === 'btn-confirmar-eliminar') {
             e.preventDefault();
 
@@ -257,15 +250,7 @@ async function mostrarDetalle(c) {
                 btnConfirmar.textContent = "Eliminando...";
                 btnConfirmar.disabled = true;
 
-                // Buscar el voluntario en memoria para obtener su ID interno
-                const volToDelete = volunteersData.find(v => v.id_voluntario === selectedVolunteerId);
-                if (!volToDelete) {
-                    alert("Voluntario no encontrado en memoria.");
-                    return;
-                }
-
-                // Usamos el vol_id_interno para borrar en el endpoint correcto de json-server
-                const urlEliminar = `${API_BASE}/voluntario/${volToDelete.vol_id_interno}`;
+                const urlEliminar = `${API_BASE}/colaborador/${colaboradorSeleccionadoId}`;
 
                 const response = await fetch(urlEliminar, {
                     method: 'DELETE',
@@ -278,35 +263,19 @@ async function mostrarDetalle(c) {
                     throw new Error(`Error en el servidor: ${response.status}`);
                 }
 
-                // Opcional: Eliminar la persona relacionada (como lo tienes estructurado en el repomix)
-                if (volToDelete.persona_id_interno) {
-                    await fetch(`${API_BASE}/persona/${volToDelete.persona_id_interno}`, {
-                        method: 'DELETE',
-                        headers: { 'Content-Type': 'application/json' }
-                    });
-                }
+                document.getElementById('overlay-eliminar').classList.remove('active');
+                document.getElementById('popup-eliminar').classList.remove('active');
 
-                const overlay = document.getElementById('overlay-eliminar');
-                const popup = document.getElementById('popup-eliminar');
-                if (overlay) overlay.classList.remove('active');
-                if (popup) popup.classList.remove('active');
+                document.getElementById('estado-vacio').style.display = 'block';
+                document.getElementById('datos-colaborador').style.display = 'none';
 
-                // Ajuste de los paneles en AsignaciónTurnos
-                const estadoVacio = document.getElementById('estado-vacio-panel');
-                const datosVoluntario = document.getElementById('datos-voluntario');
-                if (estadoVacio) estadoVacio.style.display = 'block';
-                if (datosVoluntario) datosVoluntario.style.display = 'none';
+                colaboradorSeleccionadoId = null;
 
-                selectedVolunteerId = null;
-
-                // Recargar los datos de la tabla
-                await loadVolunteers();
-
-                alert("Voluntario eliminado con éxito");
+                await cargarDatosColaboradores();
 
             } catch (error) {
-                console.error("Error al intentar eliminar el voluntario:", error);
-                alert("No se pudo eliminar el voluntario. Asegúrate de que el cambio a 'id' se guardó correctamente en db.json.");
+                console.error("Error al intentar eliminar el colaborador:", error);
+                alert("No se pudo eliminar el colaborador. Asegúrate de que el cambio a 'id' se guardó correctamente en db.json.");
             } finally {
                 btnConfirmar.textContent = textoOriginal;
                 btnConfirmar.disabled = false;

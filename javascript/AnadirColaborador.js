@@ -120,10 +120,6 @@ async function obtenerOCrearDivisionTerritorial(divisiones, localidadTxt, zonaId
 async function obtenerOCrearCodigoPostal(cps, divisiones, cpTxt, localidadTxt, zonaId) {
     const cpNormalizado = normalizarCodigoPostal(cpTxt);
 
-    if (!/^\d{5}$/.test(cpNormalizado)) {
-        throw new Error("El codigo postal debe tener 5 digitos.");
-    }
-
     let cpObj = cps.find(c => normalizarCodigoPostal(c.codigo) === cpNormalizado);
     if (cpObj) {
         return cpObj;
@@ -288,10 +284,8 @@ async function guardarColaborador() {
         observaciones: getValNuevo('nuevo-observaciones') || null
     };
 
-    const guardados = [
-        crearRecurso('direccion', direccionObj),
-        crearRecurso('colaborador', colaboradorObj)
-    ];
+    await crearRecurso('direccion', direccionObj);
+    await crearRecurso('colaborador', colaboradorObj);
 
     if (hayDatosContacto(nombreContacto, emailContacto, telContacto)) {
         const personaObj = {
@@ -310,10 +304,8 @@ async function guardarColaborador() {
             es_principal: true
         };
 
-        guardados.push(
-            crearRecurso('persona', personaObj),
-            crearRecurso('contacto_colaborador', relacionObj)
-        );
+        await crearRecurso('persona', personaObj);
+        await crearRecurso('contacto_colaborador', relacionObj);
     }
 
     await Promise.all(guardados);

@@ -5,18 +5,18 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/Administrador.css">
-  <link rel="stylesheet" href="../css/EditarCampana.css">
+  <link rel="stylesheet" href="../css/EditarVoluntario.css">
   <link rel="stylesheet" href="../css/popUpRegistro.css">
 
   <script src="../javascript/IncludeHTML.js"></script>
   <script src="../javascript/Sidebar.js" defer></script>
-  <script src="../javascript/EditarCampana.js" defer></script>
-  <title>Editar Campaña</title>
+  <script src="../javascript/EditarVoluntario.js" defer></script>
+  <script src="../javascript/AsignaciónTurnos.js" defer></script>
+  <title>Editar Voluntario</title>
 </head>
 
 <body>
 <div class="main-container">
-  <!-- Barra lateral -->
   <aside class="sidebar">
     <include-html src="../html/Sidebar.html"></include-html>
   </aside>
@@ -25,8 +25,8 @@
     <header class="header-dashboard">
       <img src="../images/icono.png" alt="App Icon" class="header-logo">
       <div class="header-titles">
-        <h1>Edición de Campaña</h1>
-        <p>Modifique los detalles generales y las cadenas participantes</p>
+        <h1>Edición de Voluntario</h1>
+        <p>Modifique los datos personales y la disponibilidad del voluntario</p>
       </div>
       <div class="header-actions">
         <button class="notification-btn" title="Notificaciones">
@@ -36,56 +36,47 @@
     </header>
 
     <div class="form-container">
-      <form action="#" method="POST" class="form-edit" id="form-edit">
+      <form action="#" method="POST" class="form-edit" id="form-edit-voluntario">
 
         <div class="form-card">
           <fieldset>
-            <legend>Datos de la campaña</legend>
+            <legend>Datos Personales</legend>
 
             <div class="form-group">
-              <label for="name-campanya">Nombre de la campaña</label>
-              <input type="text" id="name-campanya" name="name-campanya" value="Campaña Verano 2024"
-                     required>
+              <label for="nombre">Nombre Completo</label>
+              <input type="text" id="nombre" name="nombre" required>
             </div>
 
             <div class="form-group">
-              <label for="initial-date">Fecha de Inicio</label>
-              <input type="date" id="initial-date" name="initial-date" value="2024-05-15" required>
+              <label for="email">Correo Electrónico</label>
+              <input type="email" id="email" name="email" required>
             </div>
 
             <div class="form-group">
-              <label for="final-date">Fecha de Finalización</label>
-              <input type="date" id="final-date" name="final-date" value="2024-08-20" required>
+              <label for="telefono">Teléfono</label>
+              <input type="tel" id="telefono" name="telefono" required>
             </div>
 
             <div class="form-group">
-              <label for="status">Estado actual</label>
-              <select id="status" name="status" required>
-                <option value="Planificada">Planificada</option>
-                <option value="Activa" selected>Activa</option>
-                <option value="Completada">Completada</option>
-                <option value="Finalizada">Finalizada</option>
-                <option value="Cancelada">Cancelada</option>
-              </select>
+              <label>Disponibilidad (Turnos)</label>
+              <div class="checkbox-list">
+                <label class="checkbox-group">
+                  <input type="checkbox" name="disponibilidad" value="Mañana"> Mañana
+                </label>
+                <label class="checkbox-group">
+                  <input type="checkbox" name="disponibilidad" value="Tarde"> Tarde
+                </label>
+                <label class="checkbox-group">
+                  <input type="checkbox" name="disponibilidad" value="Noche"> Noche
+                </label>
+              </div>
             </div>
           </fieldset>
 
           <div class="form-actions">
-            <button type="submit" class="btn-submit">Guardar Cambios</button>
-            <button type="reset" class="btn-cancel">Descartar</button>
+            <button type="submit" class="btn-submit" id="btn-guardar">Guardar Cambios</button>
+            <button type="button" class="btn-cancel" id="btn-descartar">Descartar</button>
           </div>
-        </div>
-
-        <div class="form-card">
-          <fieldset>
-            <legend>Cadenas Participantes</legend>
-            <p class="checkbox-section-title">Seleccione las cadenas que forman parte de esta campaña:
-            </p>
-
-            <div class="checkbox-list" id="checkbox-list">
-              <!-- Se rellena desde JS -->
-            </div>
-          </fieldset>
         </div>
 
       </form>
@@ -96,7 +87,7 @@
 <div class="overlay" id="overlay-confirmar">
   <div class="popup" id="popup-confirmar">
     <h3>¿Confirmar cambios?</h3>
-    <p>¿Estás seguro de que deseas guardar los cambios realizados en esta campaña?</p>
+    <p>¿Estás seguro de que deseas guardar los cambios realizados en este voluntario?</p>
     <div class="popup-actions">
       <button type="button" class="btn-add" id="btn-confirmar-edicion">Confirmar</button>
       <button type="button" class="btn-cerrar-popup" id="btn-cancelar-edicion">Cancelar</button>
