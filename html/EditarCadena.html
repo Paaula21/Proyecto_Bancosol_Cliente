@@ -1,0 +1,30 @@
+<div id="chain-form-panel" style="display: none;">
+    <h3 class="ficha-titulo-principal" id="form-title">Nueva Cadena</h3>
+    <form id="chain-form">
+        <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
+            <h5>Nombre de la Cadena</h5>
+            <input type="text" id="form-name" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour">
+        </div>
+        <div class="ficha-tarjeta-info">
+            <h5>Campañas</h5>
+            <div class="campo-formulario-ficha">
+                <label for="form-campaigns"><strong>Participación en campañas:</strong></label>
+                <select id="form-campaigns" class="select-ficha-lateral" multiple size="4">
+                </select>
+                <small class="form-hint">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="overlay" id="save-overlay">
+    <div class="popup" id="save-popup">
+        <h3>¡Guardado con éxito!</h3>
+        <p>La cadena ha sido guardada correctamente en la base de datos.</p>
+        <div>
+            <form action="">
+                <button class="btn btn--primary" id="btn-accept-success">Aceptar</button>
+            </form>
+        </div>
+    </div>
+</div>

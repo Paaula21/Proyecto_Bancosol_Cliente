@@ -1326,11 +1326,14 @@
       "id": "4ZWBaVyhDmA"
     },
     {
+<<<<<<< HEAD
       "id": "3DuF4GDI57M",
       "id_cadena": "PRUEBA",
       "id_campana": "PRIM2025"
     },
     {
+=======
+>>>>>>> 8e8aeeea49f1867bfd2501f5e4bc18a99bd0b4b7
       "id": "hg1hR7yDUbg",
       "id_cadena": "PR",
       "id_campana": "PRIM2025"
@@ -1338,6 +1341,11 @@
     {
       "id": "p2yQsCw5IVk",
       "id_cadena": "SA",
+      "id_campana": "PRIM2025"
+    },
+    {
+      "id": "cC1EiGm7Djs",
+      "id_cadena": "PRUEBA",
       "id_campana": "PRIM2025"
     }
   ],
@@ -6733,6 +6741,14 @@
       "nombre_via": "",
       "numero": null,
       "id_cp": null
+    },
+    {
+      "id": "R6695YnaIa0",
+      "id_direccion": 675,
+      "tipo_via": "",
+      "nombre_via": "",
+      "numero": null,
+      "id_cp": null
     }
   ],
   "establecimiento": [
@@ -9625,39 +9641,6 @@
       "lineales": 1,
       "id_direccion": 358,
       "id": "MK7ktDt5XB4"
-    },
-    {
-      "id": "q02rmeWfyGM",
-      "id_establecimiento": 359,
-      "nombre_resena": "editado para comprobar",
-      "id_cadena": "PRUEBA",
-      "lineales": 1,
-      "id_direccion": 670,
-      "nombre_cadena": "prueba",
-      "localidad": "Desconocida",
-      "nombre_zona": "Sin zona",
-      "id_zona": null,
-      "nombre_coordinador": "Vicente",
-      "id_coordinador": 48,
-      "gran_recogida": true,
-      "primavera": true,
-      "campanasIds": [
-        "GR2025",
-        "PRIM2025"
-      ],
-      "obj_direccion": {
-        "id": "0GBkbhPvJ3A",
-        "id_direccion": 670,
-        "tipo_via": "",
-        "nombre_via": "prueba",
-        "numero": "prueba",
-        "id_cp": 86
-      },
-      "obj_cp": {
-        "id": "bdCCk2LK0R8",
-        "id_cp": 86,
-        "codigo": "prueba"
-      }
     }
   ],
   "colaborador": [

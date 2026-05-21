@@ -1,0 +1,74 @@
+<div id="establishment-form-panel" style="display: none;">
+    <h3 class="ficha-titulo-principal" id="form-title">Nuevo Establecimiento</h3>
+    <form id="establishment-form">
+        <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
+            <h5>Nombre del Establecimiento</h5>
+            <input type="text" id="form-name" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour Hiper Centro">
+        </div>
+        <div class="ficha-tarjeta-info">
+            <h5>Cadena</h5>
+            <div class="campo-formulario-ficha">
+                <label for="form-chain"><strong>Cadena comercial:</strong></label>
+                <input type="text" id="form-chain" class="input-ficha-lateral" required placeholder="Ej. Carrefour, Aldi, ...">
+            </div>
+        </div>
+        <div class="ficha-tarjeta-info">
+            <h5>Dirección Postal</h5>
+            <div class="campo-formulario-ficha">
+                <label for="form-street-type"><strong>Tipo de Vía:</strong></label>
+                <select id="form-street-type" class="select-ficha-lateral">
+                    <option value="">Selecciona...</option>
+                    <option value="Calle">Calle</option>
+                    <option value="Avenida">Avenida</option>
+                    <option value="Plaza">Plaza</option>
+                </select>
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="form-street"><strong>Nombre de la Vía:</strong></label>
+                <input type="text" id="form-street" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="form-number"><strong>Número:</strong></label>
+                <input type="text" id="form-number" class="input-ficha-lateral" placeholder="Ej. 12">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="form-zip"><strong>Código Postal:</strong></label>
+                <input type="text" id="form-zip" class="input-ficha-lateral" placeholder="Ej. 29001">
+            </div>
+        </div>
+        <div class="ficha-tarjeta-info">
+            <h5>Información General</h5>
+            <div class="campo-formulario-ficha">
+                <label for="form-checkouts"><strong>Lineales:</strong></label>
+                <input type="number" id="form-checkouts" class="input-ficha-lateral" placeholder="Número de lineales" min="0">
+            </div>
+            <div class="campo-formulario-ficha">
+                <label for="form-coordinator"><strong>Coordinador:</strong></label>
+                <select id="form-coordinator" class="select-ficha-lateral">
+                    <option value="">Sin asignar</option>
+                </select>
+            </div>
+        </div>
+        <div class="ficha-tarjeta-info">
+            <h5>Campañas</h5>
+            <div class="campo-formulario-ficha">
+                <label for="form-campaigns"><strong>Participación en campañas:</strong></label>
+                <select id="form-campaigns" class="select-ficha-lateral" multiple size="4">
+                </select>
+                <small class="form-hint">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div class="overlay" id="save-overlay">
+    <div class="popup" id="save-popup">
+        <h3>¡Guardado con éxito!</h3>
+        <p>El establecimiento ha sido guardado correctamente en la base de datos.</p>
+        <div>
+            <form action="">
+                <button class="btn btn--primary" id="btn-accept-success">Aceptar</button>
+            </form>
+        </div>
+    </div>
+</div>
