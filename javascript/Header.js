@@ -1,12 +1,17 @@
 document.addEventListener('DOMContentLoaded', () => {
     
-    const rutaActual = window.location.pathname.split('/').pop() || "Administrador.html"; 
+    const rutaActual = window.location.pathname.split('/').pop() || "Administrador.html" || "AsignacionTurnos.html";
     
     // Obtener el header
     const buscadorHeader = setInterval(() => {
         const headerTitle = document.getElementById('dynamic-header-title');
         const headerSubtitle = document.getElementById('dynamic-header-subtitle');
         const enlacesMenu = document.querySelectorAll('.sidebar ul li a');
+
+        if(rutaActual.includes("RegistroVoluntarios.html")) {
+            headerTitle.textContent = "Registro de Voluntarios";
+            headerSubtitle.textContent = "Complete los siguientes campos";
+        };
 
         if (headerTitle && headerSubtitle && enlacesMenu.length > 0) {
             clearInterval(buscadorHeader); // Apagamos el buscador

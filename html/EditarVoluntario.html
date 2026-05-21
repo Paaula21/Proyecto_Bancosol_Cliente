@@ -7,11 +7,12 @@
   <link rel="stylesheet" href="../css/Administrador.css">
   <link rel="stylesheet" href="../css/EditarVoluntario.css">
   <link rel="stylesheet" href="../css/popUpRegistro.css">
+  <link rel="stylesheet" href="../css/RegistroVoluntarios.css">
 
   <script src="../javascript/IncludeHTML.js"></script>
   <script src="../javascript/Sidebar.js" defer></script>
   <script src="../javascript/EditarVoluntario.js" defer></script>
-  <script src="../javascript/AsignaciónTurnos.js" defer></script>
+  <script src="../javascript/AsignacionTurnos.js" defer></script>
   <title>Editar Voluntario</title>
 </head>
 
@@ -58,18 +59,45 @@
             </div>
 
             <div class="form-group">
-              <label>Disponibilidad (Turnos)</label>
-              <div class="checkbox-list">
-                <label class="checkbox-group">
-                  <input type="checkbox" name="disponibilidad" value="Mañana"> Mañana
-                </label>
-                <label class="checkbox-group">
-                  <input type="checkbox" name="disponibilidad" value="Tarde"> Tarde
-                </label>
-                <label class="checkbox-group">
-                  <input type="checkbox" name="disponibilidad" value="Noche"> Noche
-                </label>
-              </div>
+              <label>Disponibilidad en la campaña</label>
+              <p style="font-size: 0.9rem; color: #666; margin-bottom: 10px;">Especifique la disponibilidad del voluntario para la campaña</p>
+
+              <table class="tabla-registro" style="width: 100%; margin-top: 10px;">
+                <thead>
+                <tr>
+                  <th>Mañana/Tarde</th>
+                  <th>Lunes</th>
+                  <th>Martes</th>
+                  <th>Miércoles</th>
+                  <th>Jueves</th>
+                  <th>Viernes</th>
+                  <th>Sábado</th>
+                  <th>Domingo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                  <td>Mañana</td>
+                  <td><input type="checkbox" name="asistencia" value="lunes-mañana"></td>
+                  <td><input type="checkbox" name="asistencia" value="martes-mañana"></td>
+                  <td><input type="checkbox" name="asistencia" value="miercoles-mañana"></td>
+                  <td><input type="checkbox" name="asistencia" value="jueves-mañana"></td>
+                  <td><input type="checkbox" name="asistencia" value="viernes-mañana"></td>
+                  <td><input type="checkbox" name="asistencia" value="sabado-mañana"></td>
+                  <td><input type="checkbox" name="asistencia" value="domingo-mañana"></td>
+                </tr>
+                <tr>
+                  <td>Tarde</td>
+                  <td><input type="checkbox" name="asistencia" value="lunes-tarde"></td>
+                  <td><input type="checkbox" name="asistencia" value="martes-tarde"></td>
+                  <td><input type="checkbox" name="asistencia" value="miercoles-tarde"></td>
+                  <td><input type="checkbox" name="asistencia" value="jueves-tarde"></td>
+                  <td><input type="checkbox" name="asistencia" value="viernes-tarde"></td>
+                  <td><input type="checkbox" name="asistencia" value="sabado-tarde"></td>
+                  <td><input type="checkbox" name="asistencia" value="domingo-tarde"></td>
+                </tr>
+                </tbody>
+              </table>
             </div>
           </fieldset>
 
@@ -88,9 +116,9 @@
   <div class="popup" id="popup-confirmar">
     <h3>¿Confirmar cambios?</h3>
     <p>¿Estás seguro de que deseas guardar los cambios realizados en este voluntario?</p>
-    <div class="popup-actions">
+    <div class="popup-actions" style="display: flex; justify-content: center; gap: 15px; margin-top: 20px;">
       <button type="button" class="btn-add" id="btn-confirmar-edicion">Confirmar</button>
-      <button type="button" class="btn-cerrar-popup" id="btn-cancelar-edicion">Cancelar</button>
+      <button type="button" class="btn-close" id="btn-cancelar-edicion">Cancelar</button>
     </div>
   </div>
 </div>

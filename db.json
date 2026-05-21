@@ -1326,11 +1326,6 @@
       "id": "4ZWBaVyhDmA"
     },
     {
-      "id": "0sYgXXN6cUQ",
-      "id_cadena": "PRUEBA",
-      "id_campana": "GR2025"
-    },
-    {
       "id": "3DuF4GDI57M",
       "id_cadena": "PRUEBA",
       "id_campana": "PRIM2025"
@@ -12718,7 +12713,7 @@
     {
       "id_voluntario": 1,
       "id_persona": 51,
-      "preferencia_horario": "",
+      "preferencia_horario": "lunes-mañana",
       "id_colaborador": null,
       "id": "eikJJjBuqdw"
     },
@@ -12732,7 +12727,7 @@
     {
       "id_voluntario": 3,
       "id_persona": 53,
-      "preferencia_horario": "martes-mañana",
+      "preferencia_horario": "lunes-mañana, martes-mañana, lunes-tarde",
       "id_colaborador": null,
       "id": "mPDMI1Q6LYQ"
     },

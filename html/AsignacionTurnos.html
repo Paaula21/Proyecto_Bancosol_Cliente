@@ -2,13 +2,16 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Asignación de turnos</title>
-    <link rel="stylesheet" href="../css/AsignaciónTurnos.css">
+    <link rel="stylesheet" href="../css/AsignacionTurnos.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
+    <link rel="stylesheet" href="../css/Header.css">
 
+    <script src="../javascript/Header.js" defer></script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/IncludeHTML.js"></script>
-    <script src="../javascript/AsignaciónTurnos.js" defer></script>
+    <script src="../javascript/AsignacionTurnos.js" defer></script>
+
+    <title>Asignación de turnos</title>
 </head>
 <body>
 
@@ -21,16 +24,7 @@
     <div class="right-content">
 
         <header class="main-header">
-            <nav>
-                <div class="header-branding">
-                    <img src="/images/icono.png" alt="App Icon" class="header-logo">
-                    <div class="header-titles">
-                        <h1>Asignación de turnos</h1>
-                        <p>Gestión de horarios para voluntarios</p>
-                    </div>
-                </div>
-                <button class="btn btn--cancel" id="btn-notifications">Notificaciones</button>
-            </nav>
+            <include-html src="../html/header.html"></include-html>
         </header>
 
         <div class="main-layout">

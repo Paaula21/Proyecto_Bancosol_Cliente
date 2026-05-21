@@ -9,8 +9,7 @@ document.addEventListener("DOMContentLoaded", async () => {
 
     if (!idVoluntarioURL) {
         alert("Error: No se ha especificado ningún voluntario para editar.");
-        // CORRECCIÓN: Redirige a la página correcta (AsignaciónTurnos.html)
-        window.location.href = 'AsignaciónTurnos.html';
+        window.location.href = 'AsignacionTurnos.html';
         return;
     }
 
@@ -26,29 +25,29 @@ async function cargarDatosVoluntario(idVol) {
         const resPersonas = await fetch(`${API_BASE}/persona`);
         const personas = await resPersonas.json();
 
-        // 🛠️ CORRECCIÓN CRÍTICA: Convertimos ambos ID a String para que '1' sea igual a 1.
+        // Conversión segura de identificadores a String
         voluntarioActual = voluntarios.find(v => String(v.id_voluntario) === String(idVol));
 
         if (!voluntarioActual) {
             alert("No se encontró el voluntario en la base de datos.");
-            window.location.href = 'AsignaciónTurnos.html';
+            window.location.href = 'AsignacionTurnos.html';
             return;
         }
 
-        // CORRECCIÓN: También blindamos la comparación de la persona asociada por si acaso
         personaActual = personas.find(p => String(p.id_persona) === String(voluntarioActual.id_persona));
 
-        // Rellenar inputs de texto habituales
+        // Rellenar datos en los inputs del formulario
         document.getElementById('nombre').value = personaActual ? personaActual.nombre_completo : '';
         document.getElementById('email').value = personaActual ? personaActual.email : '';
         document.getElementById('telefono').value = personaActual ? personaActual.telefono : '';
 
-        // --- LÓGICA DE CHECKBOXES ---
+        // --- CARGAR CHECKBOXES DE ASISTENCIA SEMANAL ---
         const turnosGuardados = voluntarioActual.preferencia_horario
             ? voluntarioActual.preferencia_horario.split(',').map(t => t.trim().toLowerCase())
             : [];
 
-        const checkboxes = document.querySelectorAll('input[name="disponibilidad"]');
+        // Buscamos los inputs con name="asistencia" como en el registro
+        const checkboxes = document.querySelectorAll('input[name="asistencia"]');
 
         checkboxes.forEach(cb => {
             if (turnosGuardados.includes(cb.value.toLowerCase())) {
@@ -67,25 +66,39 @@ function configurarEventosBotones() {
     const overlay = document.getElementById('overlay-confirmar');
     const popup = document.getElementById('popup-confirmar');
 
-    form.addEventListener('submit', (e) => {
-        e.preventDefault();
-        overlay.classList.add('active');
-        popup.classList.add('active');
-    });
+    if (form) {
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            if (overlay && popup) {
+                overlay.classList.add('active');
+                popup.classList.add('active');
+            } else {
+                guardarCambiosVoluntario();
+            }
+        });
+    }
 
-    document.getElementById('btn-cancelar-edicion').addEventListener('click', () => {
-        overlay.classList.remove('active');
-        popup.classList.remove('active');
-    });
+    const btnCancelar = document.getElementById('btn-cancelar-edicion');
+    if (btnCancelar && overlay && popup) {
+        btnCancelar.addEventListener('click', () => {
+            overlay.classList.remove('active');
+            popup.classList.remove('active');
+        });
+    }
 
-    document.getElementById('btn-descartar').addEventListener('click', () => {
-        // CORRECCIÓN: Redirección al listado correcto
-        window.location.href = 'AsignaciónTurnos.html';
-    });
+    const btnDescartar = document.getElementById('btn-descartar');
+    if (btnDescartar) {
+        btnDescartar.addEventListener('click', () => {
+            window.location.href = 'AsignacionTurnos.html';
+        });
+    }
 
-    document.getElementById('btn-confirmar-edicion').addEventListener('click', async () => {
-        await guardarCambiosVoluntario();
-    });
+    const btnConfirmar = document.getElementById('btn-confirmar-edicion');
+    if (btnConfirmar) {
+        btnConfirmar.addEventListener('click', async () => {
+            await guardarCambiosVoluntario();
+        });
+    }
 }
 
 async function guardarCambiosVoluntario() {
@@ -95,12 +108,26 @@ async function guardarCambiosVoluntario() {
     const nuevoEmail = document.getElementById('email').value;
     const nuevoTelefono = document.getElementById('telefono').value;
 
-    const checkboxesActivos = document.querySelectorAll('input[name="disponibilidad"]:checked');
+    // --- RECOPILAR TURNOS SELECCIONADOS (name="asistencia") ---
+    const checkboxesActivos = document.querySelectorAll('input[name="asistencia"]:checked');
     const listaTurnos = Array.from(checkboxesActivos).map(cb => cb.value);
-    const nuevaDisponibilidadString = listaTurnos.join(', ');
+    const nuevaDisponibilidadString = listaTurnos.join(', '); // Formato: "lunes-mañana, martes-tarde"
+
+    // VALIDACIÓN: El voluntario debe tener al menos un turno marcado
+    if (listaTurnos.length === 0) {
+        alert("Debes seleccionar al menos una disponibilidad.");
+
+        const overlay = document.getElementById('overlay-confirmar');
+        const popup = document.getElementById('popup-confirmar');
+        if (overlay && popup) {
+            overlay.classList.remove('active');
+            popup.classList.remove('active');
+        }
+        return;
+    }
 
     try {
-        // 1. Actualizar datos en /persona
+        // 1. Actualizar datos en la entidad /persona
         await fetch(`${API_BASE}/persona/${personaActual.id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -111,7 +138,7 @@ async function guardarCambiosVoluntario() {
             })
         });
 
-        // 2. Actualizar disponibilidad en /voluntario
+        // 2. Actualizar datos de turnos en la entidad /voluntario
         await fetch(`${API_BASE}/voluntario/${voluntarioActual.id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -121,11 +148,10 @@ async function guardarCambiosVoluntario() {
         });
 
         alert("Voluntario actualizado correctamente.");
-        // CORRECCIÓN: Redirección final exitosa
-        window.location.href = 'AsignaciónTurnos.html';
+        window.location.href = 'AsignacionTurnos.html';
 
     } catch (error) {
-        console.error("Error al guardar:", error);
+        console.error("Error al guardar en el servidor:", error);
         alert("Hubo un error al guardar los cambios.");
     }
 }

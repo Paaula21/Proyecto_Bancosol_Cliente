@@ -1,5 +1,11 @@
+/* ==========================================================================
+   ESTILOS GENERALES Y BASE (Basados en Registro y Edición)
+   ========================================================================== */
 body {
     background-color: #f5f7f9 !important;
+    font-family: Arial, sans-serif;
+    color: #111827;
+    margin: 0;
 }
 
 .header-left-group {
@@ -12,11 +18,18 @@ body {
     height: 50px;
 }
 
-/* Formulario: Centrado y adaptado para una sola tarjeta */
+/* ==========================================================================
+   ESTRUCTURA DE PANTALLA COMPLETA
+   ========================================================================== */
+/* Asegura que el contenedor del formulario ocupe todo el espacio disponible */
+.form-container {
+    width: 100%;
+    padding: 32px;
+    box-sizing: border-box;
+}
+
 .form-edit {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
+    display: block; /* Permite que los elementos hijos se expandan al 100% de manera natural */
     width: 100%;
 }
 
@@ -26,8 +39,9 @@ body {
     border-radius: 8px;
     padding: 32px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    width: 100%;
-    max-width: 700px; /* Evita que el formulario sea demasiado ancho en pantallas grandes */
+    width: 100%; /* Ocupa el ancho completo asignado por el contenedor */
+    max-width: none; /* ELIMINADO el límite para que use toda la pantalla */
+    box-sizing: border-box;
 }
 
 fieldset {
@@ -36,6 +50,8 @@ fieldset {
     padding: 24px;
     margin-bottom: 24px;
     background-color: #fcfcfc;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 legend {
@@ -50,10 +66,11 @@ legend {
 }
 
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 24px;
     display: flex;
     flex-direction: column;
     gap: 8px;
+    width: 100%;
 }
 
 .form-group label {
@@ -62,7 +79,7 @@ legend {
     color: #374151;
 }
 
-/* Añadidos email y tel para que mantengan el mismo estilo */
+/* Inputs de texto habituales (Nombre, Email, Teléfono, etc.) */
 .form-group input[type="text"],
 .form-group input[type="email"],
 .form-group input[type="tel"],
@@ -75,6 +92,8 @@ legend {
     color: #111827;
     transition: border-color 0.2s, box-shadow 0.2s;
     outline: none;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .form-group input:focus,
@@ -83,13 +102,60 @@ legend {
     box-shadow: 0 0 0 3px rgba(66, 0, 152, 0.1);
 }
 
+/* ==========================================================================
+   TABLA DE DISPONIBILIDAD (Estilo fluido e idéntico al Registro)
+   ========================================================================== */
+.tabla-registro {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: center;
+    margin-top: 16px;
+    background-color: #ffffff;
+}
+
+.tabla-registro th {
+    padding: 12px 16px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #111827;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.tabla-registro td {
+    padding: 16px;
+    font-size: 0.875rem;
+    color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+    vertical-align: middle;
+}
+
+/* Alineación a la izquierda para la primera columna de turnos (Mañana/Tarde) */
+.tabla-registro td:first-child {
+    text-align: left;
+    font-weight: 600;
+    color: #111827;
+}
+
+/* Estilo unificado para las checkboxes de asistencia */
+.tabla-registro input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #420098;
+    cursor: pointer;
+    vertical-align: middle;
+}
+
+/* ==========================================================================
+   BOTONES DE ACCIÓN (Manteniendo la paleta corporativa #420098)
+   ========================================================================== */
 .form-actions {
     display: flex;
     gap: 16px;
     margin-top: 8px;
     padding-top: 16px;
     border-top: 1px solid #f3f4f6;
-    justify-content: flex-end; /* Coloca los botones a la derecha */
+    justify-content: flex-end; /* Alinea los botones a la derecha */
+    width: 100%;
 }
 
 .btn-submit {
@@ -121,28 +187,5 @@ legend {
 }
 
 .btn-cancel:hover {
-    background-color: #f3f4f6; /* Gris más sutil y moderno */
-}
-
-.checkbox-list {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    margin-top: 4px;
-}
-
-.checkbox-group {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    font-size: 0.9rem;
-    color: #374151;
-    cursor: pointer;
-}
-
-.checkbox-group input[type="checkbox"] {
-    width: 18px;
-    height: 18px;
-    accent-color: #420098;
-    cursor: pointer;
+    background-color: #f3f4f6;
 }
