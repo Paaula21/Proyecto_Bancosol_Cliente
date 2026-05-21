@@ -322,25 +322,6 @@ form {
     border-color: #420098;
 }
 
-.filter-button {
-    flex: 0 0 auto;
-    display: flex;
-    align-items: flex-end;
-}
-
-.btn-filtro {
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    border: 1px solid transparent;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #420098;
-    color: #ffffff;
-}
 
 /* ======================================================== */
 /* ESTILOS DEL POPUP / MODAL DE CONFIRMACIÓN DE ELIMINACIÓN  */
