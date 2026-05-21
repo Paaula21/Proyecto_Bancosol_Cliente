@@ -12373,7 +12373,7 @@
     },
     {
       "id_persona": 51,
-      "nombre_completo": "María González",
+      "nombre_completo": "María Garcia",
       "telefono": "600111222",
       "email": "maria.gonzalez@example.com",
       "observacion": null,
@@ -12572,7 +12572,7 @@
     {
       "id_voluntario": 1,
       "id_persona": 51,
-      "preferencia_horario": "lunes-mañana",
+      "preferencia_horario": "",
       "id_colaborador": null,
       "id": "eikJJjBuqdw"
     },

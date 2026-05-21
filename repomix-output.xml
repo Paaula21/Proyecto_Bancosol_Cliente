@@ -48,6 +48,7 @@ css/Common.css
 css/DetalleColaborador.css
 css/EditarAnadirColaborador.css
 css/EditarCampana.css
+css/EditarVoluntario.css
 css/Formularios.css
 css/Header.css
 css/InformacionCadena.css
@@ -85,6 +86,7 @@ javascript/Campana.js
 javascript/Colaboradores.js
 javascript/EditarCampana.js
 javascript/EditarColaborador.js
+javascript/EditarVoluntario.js
 javascript/Header.js
 javascript/IncludeHTML.js
 javascript/InformacionCadena.js
@@ -103,7 +105,7 @@ README.txt
 This section contains the contents of the repository's files.
 
 <file path="css/AsignaciónTurnos.css">
-*{
+* {
     box-sizing: border-box;
 }
 
@@ -138,7 +140,6 @@ header.main-header {
     padding: 16px 32px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
-
 
 header.main-header nav {
     display: flex;
@@ -220,11 +221,65 @@ main {
     color: #6b7280;
 }
 
+/* ======================================================== */
+/* MODIFICADO: CONTENEDOR Y SCROLL IDÉNTICO A LA FOTO      */
+/* ======================================================== */
+.table-wrapper {
+    max-height: 420px;
+    overflow-y: auto;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-top: 30px;
+}
+
+/* Ancho general de la barra de scroll */
+.table-wrapper::-webkit-scrollbar {
+    width: 14px; /* Un poco más ancha para que se noten las flechas como en la foto */
+}
+
+/* Fondo del carril del scroll (gris muy suave y limpio) */
+.table-wrapper::-webkit-scrollbar-track {
+    background: #fcfcfc;
+    border-left: 1px solid #f1f1f1;
+}
+
+/* La pastilla / indicador (Gris oscuro y redondeada) */
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #aaaaaa;
+    border-radius: 20px;
+    border: 3px solid #fcfcfc; /* Crea un margen interior simulado alrededor de la pastilla */
+}
+
+/* Cambio de color sutil al pasar el ratón */
+.table-wrapper::-webkit-scrollbar-thumb:hover {
+    background: #888888;
+}
+
+/* Botones de flecha (Arriba y Abajo) para que quede exactamente igual */
+.table-wrapper::-webkit-scrollbar-button:single-button {
+    background-color: #fcfcfc;
+    display: block;
+    background-size: 10px;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 14px;
+}
+
+/* Flecha hacia arriba */
+.table-wrapper::-webkit-scrollbar-button:single-button:vertical:decrement {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23555555'><polygon points='50,15 15,85 85,85'/></svg>");
+}
+
+/* Flecha hacia abajo */
+.table-wrapper::-webkit-scrollbar-button:single-button:vertical:increment {
+    background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='100' height='100' fill='%23555555'><polygon points='15,15 85,15 50,85'/></svg>");
+}
+
 table {
     width: 100%;
     border-collapse: collapse;
     text-align: center;
-    margin-top: 30px;
+    margin-top: 0;
 }
 
 th {
@@ -233,6 +288,12 @@ th {
     font-weight: 600;
     color: #111827;
     border-bottom: 1px solid #e5e7eb;
+
+    position: sticky;
+    top: 0;
+    background-color: #ffffff;
+    z-index: 1;
+    box-shadow: inset 0 -1px 0 #e5e7eb;
 }
 
 td {
@@ -324,18 +385,14 @@ form {
 .btn--secondary {
     background-color: white;
     color: #374151;
-
     padding: 10px 12px;
     border-radius: 6px;
-    font-size: 13px;
     font-size: 0.875rem;
     cursor: pointer;
     border: 1px solid #d1d5db;
     background: transparent;
-    width: 150px;
     display: block;
     font-weight: 600;
-
     width: auto;
     min-width: 120px;
 }
@@ -404,6 +461,252 @@ form {
     background-color: #420098;
     color: #ffffff;
 }
+
+/* ======================================================== */
+/* ESTILOS DEL POPUP / MODAL DE CONFIRMACIÓN DE ELIMINACIÓN  */
+/* ======================================================== */
+
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.55);
+    display: none;
+    z-index: 9998;
+}
+
+.popup-confirmacion {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 28px;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    display: none;
+    z-index: 9999;
+    width: 90%;
+    max-width: 460px;
+    text-align: center;
+}
+
+.overlay.active,
+.popup-confirmacion.active {
+    display: block;
+}
+
+.popup-confirmacion h3 {
+    margin: 0 0 12px 0;
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: #111827;
+}
+
+.popup-confirmacion p {
+    margin: 0 0 24px 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: #6b7280;
+}
+
+.popup-actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+}
+
+.btn-cancelar {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    color: #374151;
+    transition: background-color 0.2s ease;
+}
+
+.btn-cancelar:hover {
+    background-color: #f9fafb;
+}
+
+.btn-confirmar {
+    padding: 10px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background-color: #ef4444;
+    color: #ffffff;
+    transition: background-color 0.2s ease;
+}
+
+.btn-confirmar:hover {
+    background-color: #dc2626;
+}
+
+.btn-confirmar:disabled {
+    background-color: #f3f4f6;
+    color: #9ca3af;
+    cursor: not-allowed;
+}
+</file>
+
+<file path="css/EditarVoluntario.css">
+body {
+    background-color: #f5f7f9 !important;
+}
+
+.header-left-group {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.header-logo {
+    height: 50px;
+}
+
+/* Formulario: Centrado y adaptado para una sola tarjeta */
+.form-edit {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 100%;
+}
+
+.form-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 32px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    width: 100%;
+    max-width: 700px; /* Evita que el formulario sea demasiado ancho en pantallas grandes */
+}
+
+fieldset {
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 24px;
+    margin-bottom: 24px;
+    background-color: #fcfcfc;
+}
+
+legend {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #111827;
+    padding: 4px 12px;
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+    margin-bottom: 10px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.form-group label {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* Añadidos email y tel para que mantengan el mismo estilo */
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"],
+.form-group input[type="date"],
+.form-group select {
+    padding: 10px 14px;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    color: #111827;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+    border-color: #420098;
+    box-shadow: 0 0 0 3px rgba(66, 0, 152, 0.1);
+}
+
+.form-actions {
+    display: flex;
+    gap: 16px;
+    margin-top: 8px;
+    padding-top: 16px;
+    border-top: 1px solid #f3f4f6;
+    justify-content: flex-end; /* Coloca los botones a la derecha */
+}
+
+.btn-submit {
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid transparent;
+    background-color: #420098;
+    color: #ffffff;
+    transition: background-color 0.2s;
+}
+
+.btn-submit:hover {
+    background-color: #310073;
+}
+
+.btn-cancel {
+    padding: 12px 20px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: 1px solid #d1d5db;
+    background-color: #ffffff;
+    color: #374151;
+    transition: all 0.2s;
+}
+
+.btn-cancel:hover {
+    background-color: #f3f4f6; /* Gris más sutil y moderno */
+}
+
+.checkbox-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 4px;
+}
+
+.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.9rem;
+    color: #374151;
+    cursor: pointer;
+}
+
+.checkbox-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #420098;
+    cursor: pointer;
+}
 </file>
 
 <file path="html/AsignaciónTurnos.html">
@@ -429,123 +732,108 @@ form {
 
     <div class="right-content">
 
-            <header class="main-header">
-                <nav>
-                    <div class="header-branding">
-                        <img src="/images/icono.png" alt="App Icon" class="header-logo">
-                        <div class="header-titles">
-                            <h1>Asignación de turnos</h1>
-                            <p>Gestión de horarios para voluntarios</p>
-                        </div>
+        <header class="main-header">
+            <nav>
+                <div class="header-branding">
+                    <img src="/images/icono.png" alt="App Icon" class="header-logo">
+                    <div class="header-titles">
+                        <h1>Asignación de turnos</h1>
+                        <p>Gestión de horarios para voluntarios</p>
                     </div>
-                    <button class="btn--secondary" id="btn-notifications">Notificaciones</button>
-                </nav>
-            </header>
+                </div>
+                <button class="btn--secondary" id="btn-notifications">Notificaciones</button>
+            </nav>
+        </header>
 
-            <div class="main-layout">
-                <main>
-                    <form>
-                        <section class="filters">
-                            <div class="filter-group">
-                                <label for="filter-turnos">Disponibilidad Horaria</label>
-                                <select id="filter-turnos">
+        <div class="main-layout">
+            <main>
+                <form>
+                    <section class="filters">
+                        <div class="filter-group">
+                            <label for="filter-turnos">Disponibilidad Horaria</label>
+                            <select id="filter-turnos">
 
-                                    <option value="lunes-mañana">Lunes mañana</option>
-                                    <option value="martes-mañana">Martes mañana</option>
-                                    <option value="miercoles-mañana">Miercoles mañana</option>
-                                    <option value="jueves-mañana">Jueves mañana</option>
-                                    <option value="viernes-mañana">Viernes mañana</option>
-                                    <option value="sabado-mañana">Sabado mañana</option>
-                                    <option value="domingo-mañana">Domingo mañana</option>
+                                <option value=""> Todos los turnos </option>
 
-                                    <option value="lunes-tarde">Lunes tarde</option>
-                                    <option value="martes-tarde">Martes tarde</option>
-                                    <option value="miercoles-tarde">Miercoles tarde</option>
-                                    <option value="jueves-tarde">Jueves tarde</option>
-                                    <option value="viernes-tarde">Viernes tarde</option>
-                                    <option value="sabado-tarde">Sabado tarde</option>
-                                    <option value="domingo-tarde">Domingo tarde</option>
-                                </select>
-                            </div>
-                            <div class="filter-button">
-                                <button type="button" id="btn-filter" class="btn-filtro">Filtrar</button>
-                            </div>
-                        </section>
-                    </form>
+                                <option value="lunes-mañana">Lunes mañana</option>
+                                <option value="martes-mañana">Martes mañana</option>
+                                <option value="miercoles-mañana">Miercoles mañana</option>
+                                <option value="jueves-mañana">Jueves mañana</option>
+                                <option value="viernes-mañana">Viernes mañana</option>
+                                <option value="sabado-mañana">Sabado mañana</option>
+                                <option value="domingo-mañana">Domingo mañana</option>
 
-                    <form id="form-voluntario">
-                            <div class="list-container">
-                                <div class="list-header">
-                                    <h2>Listado de Voluntarios</h2>
-                                    <button type="button" class="btn-add"
-                                            onclick="window.location.href='RegistroVoluntarios.html'">Añadir</button>
-                                    <p id="contador-voluntarios">Cargando...</p>
-                                </div>
-                                <div class="table-wrapper">
-                                    <table class="data-table">
-                                        <thead>
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Email</th>
-                                            <th>Teléfono</th>
-                                            <th>Acciones</th>
-                                        </tr>
-                                        </thead>
-                                        <tbody id="tabla-voluntarios">
-                                        <tr><td colspan="4" style="text-align: center; padding: 20px;">Cargando...</td></tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-                            </div>
+                                <option value="lunes-tarde">Lunes tarde</option>
+                                <option value="martes-tarde">Martes tarde</option>
+                                <option value="miercoles-tarde">Miercoles tarde</option>
+                                <option value="jueves-tarde">Jueves tarde</option>
+                                <option value="viernes-tarde">Viernes tarde</option>
+                                <option value="sabado-tarde">Sabado tarde</option>
+                                <option value="domingo-tarde">Domingo tarde</option>
+                            </select>
+                        </div>
+                        <div class="filter-button">
+                            <button type="button" id="btn-filter" class="btn-filtro">Filtrar</button>
+                        </div>
+                    </section>
+                </form>
 
-                        <!-- <div class="list-container">
-                                <div class="list-header">
-                                    <h2>Selección de camapaña y fecha </h2> <br>
-                                </div>
-
-                                <div class="field-group">
-                                        <input type="checkbox" name="campanya" value="GR"> GR
-                                        <input type="checkbox" name="campanya" value="Primavera"> Primavera
-                                </div>
-
-                                <br>
-
-                                <div class="field-group">
-                                    Selección de fechas <br> <br>
-                                    <div class="field-group">
-                                        <div class="date-group">
-                                            <label for="desde">Desde:</label>
-                                            <input type="date" id="desde" name="fecha_desde">
-                                        </div>
-                                        <div class="date-group">
-                                            <label for="hasta">Hasta:</label>
-                                            <input type="date" id="hasta" name="fecha_hasta">
-                                        </div>
-                                    </div>
-                                </div>
-                        </div> -->
-
-                        <div class="list-container">
-                            <div class="list-header">
-                                <h2>Asignación de fechas</h2>
-                            </div>
-                            <table>
+                <form id="form-voluntario">
+                    <div class="list-container">
+                        <div class="list-header">
+                            <h2>Listado de Voluntarios</h2>
+                            <button type="button" class="btn-add"
+                                    onclick="window.location.href='RegistroVoluntarios.html'">Añadir</button>
+                            <p id="contador-voluntarios">Cargando...</p>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
                                 <thead>
-                                    <tr>
-                                        <th>Tienda</th>
-                                        <th>Domicilio</th>
-                                        <th>Localidad</th>
-                                        <th>Capitán</th>
-                                        <th>Turnos</th>
-                                        <th>Observaciones</th>
-
-                                    </tr>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Email</th>
+                                    <th>Teléfono</th>
+                                    <th>Acciones</th>
+                                </tr>
                                 </thead>
+                                <tbody id="tabla-voluntarios">
+                                <tr><td colspan="4" style="text-align: center; padding: 20px;">Cargando...</td></tr>
+                                </tbody>
                             </table>
                         </div>
-                    </form>
-                </main>
-            </div>
+                    </div>
+
+                    <div class="list-container">
+                        <div class="list-header">
+                            <h2>Asignación de fechas</h2>
+                        </div>
+                        <table>
+                            <thead>
+                            <tr>
+                                <th>Tienda</th>
+                                <th>Domicilio</th>
+                                <th>Localidad</th>
+                                <th>Capitán</th>
+                                <th>Turnos</th>
+                                <th>Observaciones</th>
+
+                            </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </form>
+            </main>
+        </div>
+    </div>
+</div>
+
+<div id="overlay-eliminar" class="overlay"></div>
+<div id="popup-eliminar" class="popup-confirmacion">
+    <h3>¿Estás seguro de que deseas eliminar este voluntario?</h3>
+    <p>Esta acción eliminará de forma permanente al voluntario y a la persona vinculada en la base de datos.</p>
+    <div class="popup-actions">
+        <button type="button" id="btn-cancelar-eliminar" class="btn-cancelar">Cancelar</button>
+        <button type="button" id="btn-confirmar-eliminar" class="btn-confirmar">Eliminar definitivamente</button>
     </div>
 </div>
 
@@ -558,7 +846,18 @@ form {
 const API_BASE = 'http://localhost:3000';
 const VISIBLE_ROWS = 6;
 
-let volunteersData = [];
+async function fetchDatos(recurso) {
+    let response = await fetch(`${API_BASE}/${recurso}`);
+    if (!response.ok) {
+        throw new Error('Error al obtener "' + recurso + '": ' + response.status);
+    }
+    return response.json();
+}
+
+let parametrosURL = new URLSearchParams(window.location.search);
+let idVoluntario = parametrosURL.get('id_voluntario');
+
+let volunteersData = fetchDatos('?id_voluntario='+encodeURIComponent(idVoluntario));
 let selectedVolunteerId = null;
 
 
@@ -582,8 +881,11 @@ document.addEventListener("DOMContentLoaded", () => {
                 v => v.id_voluntario === selectedVolunteerId
             );
             if (vol) {
+                // Guarda los datos en sessionStorage (por si los necesitas en la otra página)
                 sessionStorage.setItem('voluntario_editar', JSON.stringify(vol));
-                window.location.href = 'NuevoVoluntario.html';
+
+                // Redirige a EditarVoluntario.html pasando el ID por la URL (consistente con el botón de la fila)
+                window.location.href = 'EditarVoluntario.html?id_voluntario=' + encodeURIComponent(vol.id_voluntario);
             }
         });
     }
@@ -685,7 +987,9 @@ async function loadVolunteers() {
 
                 nombre: per ? (per.nombre_completo || "Sin nombre") : "Persona no encontrada",
                 email: per ? (per.email || "No disponible") : "No disponible",
-                telefono: per ? (per.telefono || "No disponible") : "No disponible"
+                telefono: per ? (per.telefono || "No disponible") : "No disponible",
+
+                disponibilidad: vol.preferencia_horario || ""
             };
         });
 
@@ -705,22 +1009,20 @@ async function loadVolunteers() {
 // ----- FILTER LOGIC -----
 
 function applyFilters() {
-    // Salvaguardamos los elementos para evitar errores si no existen en este HTML específico
-    const inputName = document.getElementById('filter-name');
-    const inputEmail = document.getElementById('filter-email');
-    const inputPhone = document.getElementById('filter-phone');
+    const inputTurnos = document.getElementById('filter-turnos');
+    const selectedTurno = inputTurnos ? inputTurnos.value.trim().toLowerCase() : '';
 
-    const filters = {
-        nombre: inputName ? inputName.value.toLowerCase().trim() : '',
-        email: inputEmail ? inputEmail.value.toLowerCase().trim() : '',
-        telefono: inputPhone ? inputPhone.value.trim() : ''
-    };
+    if (!selectedTurno) {
+        displayVolunt(volunteersData);
+        updateCounter(volunteersData.length);
+        return;
+    }
 
     const filtered = volunteersData.filter(vol => {
-        if (filters.nombre && !vol.nombre.toLowerCase().includes(filters.nombre)) return false;
-        if (filters.email && !vol.email.toLowerCase().includes(filters.email)) return false;
-        if (filters.telefono && !vol.telefono.includes(filters.telefono)) return false;
-        return true;
+        if (!vol.disponibilidad) return false;
+
+        const listaTurnos = vol.disponibilidad.split(',').map(turno => turno.trim().toLowerCase());
+        return listaTurnos.includes(selectedTurno);
     });
 
     displayVolunt(filtered);
@@ -792,11 +1094,11 @@ function displayVolunt(voluntarios) {
             window.location.href = 'EditarVoluntario.html?id_voluntario=' + encodeURIComponent(vol.id_voluntario);
         });
 
-        // ELIMINAR (Botón de la fila)
+        // ELIMINAR (Botón único de la fila)
         let btnBorrar = document.createElement('button');
         btnBorrar.type = 'button';
+        btnBorrar.className = 'btn-eliminar-fila'; // Cambiado a clase para no romper semántica de IDs
         btnBorrar.textContent = 'Eliminar';
-        btnBorrar.id = 'btn-eliminar-voluntario';
 
         // ESTILOS BORRAR
         btnBorrar.style.padding = '8px 16px';
@@ -932,6 +1234,141 @@ async function deleteVolunteer(btn) {
     } finally {
         btn.textContent = originalText;
         btn.disabled = false;
+    }
+}
+</file>
+
+<file path="javascript/EditarVoluntario.js">
+const API_BASE = 'http://localhost:3000';
+
+let voluntarioActual = null;
+let personaActual = null;
+
+document.addEventListener("DOMContentLoaded", async () => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const idVoluntarioURL = urlParams.get('id_voluntario');
+
+    if (!idVoluntarioURL) {
+        alert("Error: No se ha especificado ningún voluntario para editar.");
+        window.location.href = 'ListaVoluntarios.html';
+        return;
+    }
+
+    await cargarDatosVoluntario(idVoluntarioURL);
+    configurarEventosBotones();
+});
+
+async function cargarDatosVoluntario(idVol) {
+    try {
+        const resVoluntarios = await fetch(`${API_BASE}/voluntario`);
+        const voluntarios = await resVoluntarios.json();
+
+        const resPersonas = await fetch(`${API_BASE}/persona`);
+        const personas = await resPersonas.json();
+
+        voluntarioActual = voluntarios.find(v => v.id_voluntario === idVol);
+
+        if (!voluntarioActual) {
+            alert("No se encontró el voluntario en la base de datos.");
+            return;
+        }
+
+        personaActual = personas.find(p => p.id_persona === voluntarioActual.id_persona);
+
+        // Rellenar inputs de texto habituales
+        document.getElementById('nombre').value = personaActual ? personaActual.nombre_completo : '';
+        document.getElementById('email').value = personaActual ? personaActual.email : '';
+        document.getElementById('telefono').value = personaActual ? personaActual.telefono : '';
+
+        // --- LÓGICA DE CHECKBOXES ---
+        // Convertimos "Mañana, Tarde" en un array listo para comparar: ['mañana', 'tarde']
+        const turnosGuardados = voluntarioActual.preferencia_horario
+            ? voluntarioActual.preferencia_horario.split(',').map(t => t.trim().toLowerCase())
+            : [];
+
+        // Buscamos todos los checkboxes del formulario
+        const checkboxes = document.querySelectorAll('input[name="disponibilidad"]');
+
+        checkboxes.forEach(cb => {
+            // Si el valor del checkbox está en el array del voluntario, lo marcamos
+            if (turnosGuardados.includes(cb.value.toLowerCase())) {
+                cb.checked = true;
+            }
+        });
+
+    } catch (error) {
+        console.error("Error cargando los datos:", error);
+        alert("Hubo un problema al conectar con la base de datos.");
+    }
+}
+
+function configurarEventosBotones() {
+    const form = document.getElementById('form-edit-voluntario');
+    const overlay = document.getElementById('overlay-confirmar');
+    const popup = document.getElementById('popup-confirmar');
+
+    form.addEventListener('submit', (e) => {
+        e.preventDefault();
+        overlay.classList.add('active');
+        popup.classList.add('active');
+    });
+
+    document.getElementById('btn-cancelar-edicion').addEventListener('click', () => {
+        overlay.classList.remove('active');
+        popup.classList.remove('active');
+    });
+
+    document.getElementById('btn-descartar').addEventListener('click', () => {
+        window.location.href = 'ListaVoluntarios.html';
+    });
+
+    document.getElementById('btn-confirmar-edicion').addEventListener('click', async () => {
+        await guardarCambiosVoluntario();
+    });
+}
+
+async function guardarCambiosVoluntario() {
+    if (!voluntarioActual || !personaActual) return;
+
+    const nuevoNombre = document.getElementById('nombre').value;
+    const nuevoEmail = document.getElementById('email').value;
+    const nuevoTelefono = document.getElementById('telefono').value;
+
+    // --- PROCESAR CHECKBOXES PARA GUARDAR ---
+    // Filtramos sólo los checkboxes que el usuario ha dejado marcados
+    const checkboxesActivos = document.querySelectorAll('input[name="disponibilidad"]:checked');
+
+    // Extraemos sus valores ("Mañana", "Tarde", etc.) y los unimos con comas
+    const listaTurnos = Array.from(checkboxesActivos).map(cb => cb.value);
+    const nuevaDisponibilidadString = listaTurnos.join(', ');
+
+    try {
+        // 1. Actualizar datos en /persona
+        await fetch(`${API_BASE}/persona/${personaActual.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                nombre_completo: nuevoNombre,
+                email: nuevoEmail,
+                telefono: nuevoTelefono
+            })
+        });
+
+        // 2. Actualizar disponibilidad en /voluntario
+        await fetch(`${API_BASE}/voluntario/${voluntarioActual.id}`, {
+            method: 'PATCH',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+                preferencia_horario: nuevaDisponibilidadString
+            })
+        });
+
+        alert("Voluntario actualizado correctamente.");
+        window.location.href = 'ListaVoluntarios.html';
+
+    } catch (error) {
+        console.error("Error al guardar:", error);
+        alert("Hubo un error al guardar los cambios.");
     }
 }
 </file>
@@ -1160,18 +1597,17 @@ h1 {
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="stylesheet" href="../css/Administrador.css">
-  <link rel="stylesheet" href="../css/EditarCampana.css">
+  <link rel="stylesheet" href="../css/EditarVoluntario.css">
   <link rel="stylesheet" href="../css/popUpRegistro.css">
 
   <script src="../javascript/IncludeHTML.js"></script>
   <script src="../javascript/Sidebar.js" defer></script>
-  <script src="../javascript/EditarCampana.js" defer></script>
-  <title>Editar Campaña</title>
+  <script src="../javascript/EditarVoluntario.js" defer></script>
+  <title>Editar Voluntario</title>
 </head>
 
 <body>
 <div class="main-container">
-  <!-- Barra lateral -->
   <aside class="sidebar">
     <include-html src="../html/Sidebar.html"></include-html>
   </aside>
@@ -1180,8 +1616,8 @@ h1 {
     <header class="header-dashboard">
       <img src="../images/icono.png" alt="App Icon" class="header-logo">
       <div class="header-titles">
-        <h1>Edición de Campaña</h1>
-        <p>Modifique los detalles generales y las cadenas participantes</p>
+        <h1>Edición de Voluntario</h1>
+        <p>Modifique los datos personales y la disponibilidad del voluntario</p>
       </div>
       <div class="header-actions">
         <button class="notification-btn" title="Notificaciones">
@@ -1191,56 +1627,47 @@ h1 {
     </header>
 
     <div class="form-container">
-      <form action="#" method="POST" class="form-edit" id="form-edit">
+      <form action="#" method="POST" class="form-edit" id="form-edit-voluntario">
 
         <div class="form-card">
           <fieldset>
-            <legend>Datos de la campaña</legend>
+            <legend>Datos Personales</legend>
 
             <div class="form-group">
-              <label for="name-campanya">Nombre de la campaña</label>
-              <input type="text" id="name-campanya" name="name-campanya" value="Campaña Verano 2024"
-                     required>
+              <label for="nombre">Nombre Completo</label>
+              <input type="text" id="nombre" name="nombre" required>
             </div>
 
             <div class="form-group">
-              <label for="initial-date">Fecha de Inicio</label>
-              <input type="date" id="initial-date" name="initial-date" value="2024-05-15" required>
+              <label for="email">Correo Electrónico</label>
+              <input type="email" id="email" name="email" required>
             </div>
 
             <div class="form-group">
-              <label for="final-date">Fecha de Finalización</label>
-              <input type="date" id="final-date" name="final-date" value="2024-08-20" required>
+              <label for="telefono">Teléfono</label>
+              <input type="tel" id="telefono" name="telefono" required>
             </div>
 
             <div class="form-group">
-              <label for="status">Estado actual</label>
-              <select id="status" name="status" required>
-                <option value="Planificada">Planificada</option>
-                <option value="Activa" selected>Activa</option>
-                <option value="Completada">Completada</option>
-                <option value="Finalizada">Finalizada</option>
-                <option value="Cancelada">Cancelada</option>
-              </select>
+              <label>Disponibilidad (Turnos)</label>
+              <div class="checkbox-list">
+                <label class="checkbox-group">
+                  <input type="checkbox" name="disponibilidad" value="Mañana"> Mañana
+                </label>
+                <label class="checkbox-group">
+                  <input type="checkbox" name="disponibilidad" value="Tarde"> Tarde
+                </label>
+                <label class="checkbox-group">
+                  <input type="checkbox" name="disponibilidad" value="Noche"> Noche
+                </label>
+              </div>
             </div>
           </fieldset>
 
           <div class="form-actions">
-            <button type="submit" class="btn-submit">Guardar Cambios</button>
-            <button type="reset" class="btn-cancel">Descartar</button>
+            <button type="submit" class="btn-submit" id="btn-guardar">Guardar Cambios</button>
+            <button type="button" class="btn-cancel" id="btn-descartar">Descartar</button>
           </div>
-        </div>
-
-        <div class="form-card">
-          <fieldset>
-            <legend>Cadenas Participantes</legend>
-            <p class="checkbox-section-title">Seleccione las cadenas que forman parte de esta campaña:
-            </p>
-
-            <div class="checkbox-list" id="checkbox-list">
-              <!-- Se rellena desde JS -->
-            </div>
-          </fieldset>
         </div>
 
       </form>
@@ -1251,7 +1678,7 @@ h1 {
 <div class="overlay" id="overlay-confirmar">
   <div class="popup" id="popup-confirmar">
     <h3>¿Confirmar cambios?</h3>
-    <p>¿Estás seguro de que deseas guardar los cambios realizados en esta campaña?</p>
+    <p>¿Estás seguro de que deseas guardar los cambios realizados en este voluntario?</p>
     <div class="popup-actions">
       <button type="button" class="btn-add" id="btn-confirmar-edicion">Confirmar</button>
       <button type="button" class="btn-cerrar-popup" id="btn-cancelar-edicion">Cancelar</button>
@@ -5700,284 +6127,6 @@ function formatearFecha(fechaString) {
 }
 </file>
 
-<file path="javascript/Colaboradores.js">
-// ----- CONFIGURACIÓN INICIAL -----
-const API_BASE = 'http://localhost:3000';
-
-let colaboradoresGlobal = [];
-let colaboradorSeleccionadoId = null;
-
-document.addEventListener("DOMContentLoaded", () => {
-    cargarDatosColaboradores();
-
-    document.getElementById('btn-filter').addEventListener('click', aplicarFiltros);
-    document.getElementById('input-search').addEventListener('input', aplicarFiltros);
-
-    const btnAnadir = document.getElementById('btn-abrir-registro');
-    if (btnAnadir) {
-        btnAnadir.addEventListener('click', () => {
-
-            document.getElementById('estado-vacio').style.display = 'none';
-            document.getElementById('datos-colaborador').style.display = 'none';
-            document.getElementById('formulario-editar-colaborador').style.display = 'none';
-            
-            const panelAnadir = document.getElementById('formulario-anadir-colaborador');
-            if(panelAnadir) panelAnadir.style.display = 'block';
-
-            const todasLasFilas = tbodyColaboradores.querySelectorAll('tr');
-            todasLasFilas.forEach(fila => fila.classList.remove('selected'));
-        });
-    }
-
-    const tbodyColaboradores = document.getElementById('tabla-colaboradores');
-
-    if (tbodyColaboradores) {
-
-        tbodyColaboradores.addEventListener('click', (e) => {
-            
-            const filaClicada = e.target.closest('tr');
-            
-            if (!filaClicada) return;
-
-            const todasLasFilas = tbodyColaboradores.querySelectorAll('tr');
-            todasLasFilas.forEach(fila => fila.classList.remove('selected'));
-
-            filaClicada.classList.add('selected');
-        });
-    }
-});
-
-// ----- OBTENER Y PROCESAR DATOS DE LA DB -----
-async function cargarDatosColaboradores() {
-    try {
-        const [resColab, resZonas, resDirs, resCP, resDivs, resRelContacto, resPersonas] = await Promise.all([
-            fetch(`${API_BASE}/colaborador`),
-            fetch(`${API_BASE}/zona_geografica`),
-            fetch(`${API_BASE}/direccion`),
-            fetch(`${API_BASE}/codigo_postal`),
-            fetch(`${API_BASE}/division_territorial`),
-            fetch(`${API_BASE}/contacto_colaborador`),
-            fetch(`${API_BASE}/persona`)
-        ]);
-
-        const colaboradores = await resColab.json();
-        const zonas = await resZonas.json();
-        const direcciones = await resDirs.json();
-        const cps = await resCP.json();
-        const divisiones = await resDivs.json();
-        const relaciones = await resRelContacto.json();
-        const personas = await resPersonas.json();
-
-        // Rellenar selector de zonas en el filtro
-        const selectZona = document.getElementById('filter-zona');
-        if (selectZona) {
-            selectZona.innerHTML = '<option value="Todas">Todas</option>';
-            zonas.forEach(z => {
-                const opt = document.createElement('option');
-                opt.value = z.id_zona;
-                opt.textContent = z.nombre_zona;
-                selectZona.appendChild(opt);
-            });
-        }
-
-        // Mapear colaboradores con sus relaciones de dirección y contacto
-        colaboradoresGlobal = colaboradores.map(colab => {
-            // Ubicación
-            const dir = direcciones.find(d => d.id_direccion === colab.id_direccion);
-            const cp = dir ? cps.find(c => c.id_cp === dir.id_cp) : null;
-            const div = cp ? divisiones.find(d => d.id_division === cp.id_division) : null;
-            const zona = div ? zonas.find(z => z.id_zona === div.id_zona) : null;
-
-            // Persona de Contacto
-            const relacion = relaciones.find(r =>
-                r.id_colaborador === colab.id_colaborador &&
-                (r.es_principal === true || r.es_principal === "true")
-            );
-            const persona = relacion ? personas.find(p => p.id_persona === relacion.id_contacto) : null;
-
-            return {
-                ...colab,
-                id_zona: zona ? zona.id_zona : null,
-                nombre_zona: zona ? zona.nombre_zona : "Sin Zona",
-                localidad: div ? div.nombre_division : "Desconocida",
-                contacto_principal: persona ? persona.nombre_completo : "Sin asignar",
-                contacto_correo: persona ? (persona.email || "No disponible") : "No disponible",
-                contacto_telefono: persona ? persona.telefono : null,
-                contacto_cargo: persona ? (persona.observacion || "Representante") : "Representante",
-                obj_direccion: dir,
-                obj_cp: cp,
-                obj_division: div
-            };
-        });
-
-        mostrarColaboradores(colaboradoresGlobal);
-        actualizarContador(colaboradoresGlobal.length);
-
-    } catch (error) {
-        console.error('Error al cargar datos:', error);
-    }
-}
-
-// ----- LÓGICA DE FILTRADO -----
-function aplicarFiltros() {
-    const valZona = document.getElementById('filter-zona').value;
-    const valSearch = document.getElementById('input-search').value.toLowerCase().trim();
-
-    const filtrados = colaboradoresGlobal.filter(c => {
-        const cumpleZona = (valZona === 'Todas' || c.id_zona == valZona);
-
-        const cumpleTexto = c.nombre_colaborador.toLowerCase().includes(valSearch) ||
-            c.id_colaborador.toLowerCase().includes(valSearch);
-
-        return cumpleZona && cumpleTexto;
-    });
-
-    mostrarColaboradores(filtrados);
-    actualizarContador(filtrados.length);
-}
-
-// ----- RENDERIZADO DE TABLA -----
-function mostrarColaboradores(lista) {
-    const tbody = document.getElementById('tabla-colaboradores');
-    tbody.innerHTML = '';
-
-    lista.forEach(colaborador => {
-        const tr = document.createElement('tr');
-        tr.style.cursor = 'pointer';
-        tr.onclick = () => mostrarDetalle(colaborador);
-
-        tr.innerHTML = `
-            <td><strong>${colaborador.nombre_colaborador}</strong><br><small>${colaborador.id_colaborador}</small></td>
-            <td>${colaborador.localidad}</td>
-            <td>${colaborador.nombre_zona}</td> 
-            <td>${colaborador.contacto_principal}</td>
-        `;
-        tbody.appendChild(tr);
-    });
-}
-
-function actualizarContador(total) {
-    document.getElementById('contador-colaboradores').textContent = `${total} colaboradores encontrados`;
-}
-
-// ----- PANEL DE DETALLES (Derecha) -----
-async function mostrarDetalle(c) {
-
-    colaboradorSeleccionadoId = c.id;
-
-    document.getElementById('estado-vacio').style.display = 'none';
-    document.getElementById('datos-colaborador').style.display = 'block';
-
-    document.getElementById('ficha-nombre').textContent = c.nombre_colaborador;
-    document.getElementById('ficha-codigo').textContent = `Código: ${c.id_colaborador}`;
-    document.getElementById('ficha-zona').textContent = c.nombre_zona;
-
-    document.getElementById('ficha-contacto-nombre').textContent = c.contacto_principal;
-
-    // --- LÓGICA EMAIL ---
-    const linkEmail = document.getElementById('ficha-contacto-email');
-    linkEmail.textContent = c.contacto_correo;
-    linkEmail.href = c.contacto_correo !== "No disponible" ? `mailto:${c.contacto_correo}` : "#";
-
-    // --- LÓGICA TELÉFONO ---
-    const contenedorTel = document.getElementById('contenedor-tel');
-    const linkTel = document.getElementById('ficha-contacto-tel');
-
-    if (c.contacto_telefono && c.contacto_telefono.trim() !== "") {
-        contenedorTel.style.display = "block";
-        linkTel.textContent = c.contacto_telefono;
-        linkTel.href = `tel:${c.contacto_telefono}`;
-    } else {
-        contenedorTel.style.display = "none";
-    }
-
-    // --- LÓGICA DIRECCIÓN ---
-    if (c.obj_direccion) {
-        const d = c.obj_direccion;
-        let via = d.nombre_via || "";
-        let numeroStr = "";
-
-        if (d.numero) {
-            numeroStr = `, ${d.numero}`;
-        } else {
-            // Solo añadir s/n si el nombre de la vía no lo contiene ya
-            if (!via.toLowerCase().includes("s/n")) {
-                numeroStr = ", s/n";
-            }
-        }
-
-        document.getElementById('ficha-direccion').textContent = `${d.tipo_via || ''} ${via}${numeroStr}`;
-        document.getElementById('ficha-localidad').textContent = `${c.localidad} (${c.obj_cp ? c.obj_cp.codigo : ''})`;
-    }
-    // --- LÓGICA BOTON ELIMINAR ---
-
-    document.addEventListener('click', async function (e) {
-
-        if (e.target && e.target.id === 'btn-eliminar-colaborador') {
-            e.preventDefault();
-
-            if (!colaboradorSeleccionadoId) {
-                alert("Error: No se ha seleccionado ningún colaborador.");
-                return;
-            }
-
-            document.getElementById('overlay-eliminar').classList.add('active');
-            document.getElementById('popup-eliminar').classList.add('active');
-        }
-
-        if (e.target && e.target.id === 'btn-cancelar-eliminar') {
-            e.preventDefault();
-            document.getElementById('overlay-eliminar').classList.remove('active');
-            document.getElementById('popup-eliminar').classList.remove('active');
-        }
-
-        if (e.target && e.target.id === 'btn-confirmar-eliminar') {
-            e.preventDefault();
-
-            const btnConfirmar = e.target;
-            const textoOriginal = btnConfirmar.textContent;
-
-            try {
-                btnConfirmar.textContent = "Eliminando...";
-                btnConfirmar.disabled = true;
-
-                const urlEliminar = `${API_BASE}/colaborador/${colaboradorSeleccionadoId}`;
-
-                const response = await fetch(urlEliminar, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json'
-                    }
-                });
-
-                if (!response.ok) {
-                    throw new Error(`Error en el servidor: ${response.status}`);
-                }
-
-                document.getElementById('overlay-eliminar').classList.remove('active');
-                document.getElementById('popup-eliminar').classList.remove('active');
-
-                document.getElementById('estado-vacio').style.display = 'block';
-                document.getElementById('datos-colaborador').style.display = 'none';
-
-                colaboradorSeleccionadoId = null;
-
-                await cargarDatosColaboradores();
-
-                alert("Colaborador eliminado con éxito");
-
-            } catch (error) {
-                console.error("Error al intentar eliminar el colaborador:", error);
-                alert("No se pudo eliminar el colaborador. Asegúrate de que el cambio a 'id' se guardó correctamente en db.json.");
-            } finally {
-                btnConfirmar.textContent = textoOriginal;
-                btnConfirmar.disabled = false;
-            }
-        }
-    });
-}
-</file>
-
 <file path="javascript/EditarCampana.js">
 // ----- CONFIGURACIÓN INICIAL -----
 const API_ENDPOINT = 'http://localhost:3000';
@@ -6936,95 +7085,6 @@ async function deleteEstablishment(btn) {
 }
 </file>
 
-<file path="javascript/RegistroVoluntarios.js">
-function maxNumero(lista, campo) {
-    return Math.max(0, ...lista.map(item => Number(item?.[campo]) || 0));
-}
-
-document.getElementById('form-voluntario').addEventListener('submit', async function (e) {
-
-    e.preventDefault();
-
-    // CHECKBOXES
-    const asistencias = [];
-
-    document.querySelectorAll('input[name="asistencia"]:checked')
-        .forEach((checkbox) => {
-            asistencias.push(checkbox.value);
-        });
-
-    // VALIDACIÓN
-    if (asistencias.length === 0) {
-
-        alert("Debes seleccionar al menos una disponibilidad.");
-        return;
-    }
-
-    const formData = new FormData(e.target);
-
-    const datos = Object.fromEntries(formData.entries());
-
-    try {
-        // ====================================
-        // 1. OBTENER PERSONAS EXISTENTES
-        // ====================================
-        const responsePersonas = await fetch('http://localhost:3000/persona');
-        const personas = await responsePersonas.json();
-
-        // CORRECCIÓN: Quitamos el ".personas" extra
-        const nuevoIdPersona = maxNumero(personas, 'id_persona') + 1;
-
-        // ====================================
-        // 2. CREAR PERSONA
-        // ====================================
-        const nuevaPersona = {
-            id_persona: nuevoIdPersona,
-            nombre_completo: datos.volunt_name,
-            telefono: datos.volunt_tel || "",
-            email: datos.volunt_email || "",
-            observacion: datos.volunt_obs || null
-        };
-
-        console.log(nuevaPersona);
-
-        const responsePersona = await fetch('http://localhost:3000/persona', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(nuevaPersona)
-        });
-
-        if (!responsePersona.ok) {
-            throw new Error("Error al crear persona");
-        }
-
-        // ====================================
-        // 3. OBTENER VOLUNTARIOS EXISTENTES
-        // ====================================
-        const responseVols = await fetch('http://localhost:3000/voluntario');
-        const voluntarios = await responseVols.json();
-
-        // CORRECCIÓN: Usamos la variable 'voluntarios' y el campo 'id_voluntario'
-        const nuevoIdVoluntario = maxNumero(voluntarios, 'id_voluntario') + 1;
-
-        // ====================================
-        // 4. CREAR VOLUNTARIO
-        // ====================================
-        const nuevoVoluntario = {
-            id_voluntario: nuevoIdVoluntario,
-            id_persona: nuevoIdPersona,
-            preferencia_horario: asistencias.join(', '),
-            id_colaborador: null
-        };
-
-    } catch (error) {
-
-        console.error(error);
-
-        alert("Error al registrar voluntario");
-    }
-});
-</file>
-
 <file path="css/Administrador.css">
 * {
     box-sizing: border-box;
@@ -7303,6 +7363,313 @@ body {
     color: #374151;
     border-bottom: 1px solid #f3f4f6;
     vertical-align: middle;
+}
+</file>
+
+<file path="javascript/Colaboradores.js">
+// ----- CONFIGURACIÓN INICIAL -----
+const API_BASE = 'http://localhost:3000';
+
+let colaboradoresGlobal = [];
+let colaboradorSeleccionadoId = null;
+
+document.addEventListener("DOMContentLoaded", () => {
+    cargarDatosColaboradores();
+
+    document.getElementById('btn-filter').addEventListener('click', aplicarFiltros);
+    document.getElementById('input-search').addEventListener('input', aplicarFiltros);
+
+    const btnAnadir = document.getElementById('btn-abrir-registro');
+    if (btnAnadir) {
+        btnAnadir.addEventListener('click', () => {
+
+            document.getElementById('estado-vacio').style.display = 'none';
+            document.getElementById('datos-colaborador').style.display = 'none';
+            document.getElementById('formulario-editar-colaborador').style.display = 'none';
+            
+            const panelAnadir = document.getElementById('formulario-anadir-colaborador');
+            if(panelAnadir) panelAnadir.style.display = 'block';
+
+            const todasLasFilas = tbodyColaboradores.querySelectorAll('tr');
+            todasLasFilas.forEach(fila => fila.classList.remove('selected'));
+        });
+    }
+
+    const tbodyColaboradores = document.getElementById('tabla-colaboradores');
+
+    if (tbodyColaboradores) {
+
+        tbodyColaboradores.addEventListener('click', (e) => {
+            
+            const filaClicada = e.target.closest('tr');
+            
+            if (!filaClicada) return;
+
+            const todasLasFilas = tbodyColaboradores.querySelectorAll('tr');
+            todasLasFilas.forEach(fila => fila.classList.remove('selected'));
+
+            filaClicada.classList.add('selected');
+        });
+    }
+});
+
+// ----- OBTENER Y PROCESAR DATOS DE LA DB -----
+async function cargarDatosColaboradores() {
+    try {
+        const [resColab, resZonas, resDirs, resCP, resDivs, resRelContacto, resPersonas] = await Promise.all([
+            fetch(`${API_BASE}/colaborador`),
+            fetch(`${API_BASE}/zona_geografica`),
+            fetch(`${API_BASE}/direccion`),
+            fetch(`${API_BASE}/codigo_postal`),
+            fetch(`${API_BASE}/division_territorial`),
+            fetch(`${API_BASE}/contacto_colaborador`),
+            fetch(`${API_BASE}/persona`)
+        ]);
+
+        const colaboradores = await resColab.json();
+        const zonas = await resZonas.json();
+        const direcciones = await resDirs.json();
+        const cps = await resCP.json();
+        const divisiones = await resDivs.json();
+        const relaciones = await resRelContacto.json();
+        const personas = await resPersonas.json();
+
+        // Rellenar selector de zonas en el filtro
+        const selectZona = document.getElementById('filter-zona');
+        if (selectZona) {
+            selectZona.innerHTML = '<option value="Todas">Todas</option>';
+            zonas.forEach(z => {
+                const opt = document.createElement('option');
+                opt.value = z.id_zona;
+                opt.textContent = z.nombre_zona;
+                selectZona.appendChild(opt);
+            });
+        }
+
+        // Mapear colaboradores con sus relaciones de dirección y contacto
+        colaboradoresGlobal = colaboradores.map(colab => {
+            // Ubicación
+            const dir = direcciones.find(d => d.id_direccion === colab.id_direccion);
+            const cp = dir ? cps.find(c => c.id_cp === dir.id_cp) : null;
+            const div = cp ? divisiones.find(d => d.id_division === cp.id_division) : null;
+            const zona = div ? zonas.find(z => z.id_zona === div.id_zona) : null;
+
+            // Persona de Contacto
+            const relacion = relaciones.find(r =>
+                r.id_colaborador === colab.id_colaborador &&
+                (r.es_principal === true || r.es_principal === "true")
+            );
+            const persona = relacion ? personas.find(p => p.id_persona === relacion.id_contacto) : null;
+
+            return {
+                ...colab,
+                id_zona: zona ? zona.id_zona : null,
+                nombre_zona: zona ? zona.nombre_zona : "Sin Zona",
+                localidad: div ? div.nombre_division : "Desconocida",
+                contacto_principal: persona ? persona.nombre_completo : "Sin asignar",
+                contacto_correo: persona ? (persona.email || "No disponible") : "No disponible",
+                contacto_telefono: persona ? persona.telefono : null,
+                contacto_cargo: persona ? (persona.observacion || "Representante") : "Representante",
+                obj_direccion: dir,
+                obj_cp: cp,
+                obj_division: div
+            };
+        });
+
+        mostrarColaboradores(colaboradoresGlobal);
+        actualizarContador(colaboradoresGlobal.length);
+
+    } catch (error) {
+        console.error('Error al cargar datos:', error);
+    }
+}
+
+// ----- LÓGICA DE FILTRADO -----
+function aplicarFiltros() {
+    const valZona = document.getElementById('filter-zona').value;
+    const valSearch = document.getElementById('input-search').value.toLowerCase().trim();
+
+    const filtrados = colaboradoresGlobal.filter(c => {
+        const cumpleZona = (valZona === 'Todas' || c.id_zona == valZona);
+
+        const cumpleTexto = c.nombre_colaborador.toLowerCase().includes(valSearch) ||
+            c.id_colaborador.toLowerCase().includes(valSearch);
+
+        return cumpleZona && cumpleTexto;
+    });
+
+    mostrarColaboradores(filtrados);
+    actualizarContador(filtrados.length);
+}
+
+// ----- RENDERIZADO DE TABLA -----
+function mostrarColaboradores(lista) {
+    const tbody = document.getElementById('tabla-colaboradores');
+    tbody.innerHTML = '';
+
+    lista.forEach(colaborador => {
+        const tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        tr.onclick = () => mostrarDetalle(colaborador);
+
+        tr.innerHTML = `
+            <td><strong>${colaborador.nombre_colaborador}</strong><br><small>${colaborador.id_colaborador}</small></td>
+            <td>${colaborador.localidad}</td>
+            <td>${colaborador.nombre_zona}</td> 
+            <td>${colaborador.contacto_principal}</td>
+        `;
+        tbody.appendChild(tr);
+    });
+}
+
+function actualizarContador(total) {
+    document.getElementById('contador-colaboradores').textContent = `${total} colaboradores encontrados`;
+}
+
+// ----- PANEL DE DETALLES (Derecha) -----
+async function mostrarDetalle(c) {
+
+    colaboradorSeleccionadoId = c.id;
+
+    document.getElementById('estado-vacio').style.display = 'none';
+    document.getElementById('datos-colaborador').style.display = 'block';
+
+    document.getElementById('ficha-nombre').textContent = c.nombre_colaborador;
+    document.getElementById('ficha-codigo').textContent = `Código: ${c.id_colaborador}`;
+    document.getElementById('ficha-zona').textContent = c.nombre_zona;
+
+    document.getElementById('ficha-contacto-nombre').textContent = c.contacto_principal;
+
+    // --- LÓGICA EMAIL ---
+    const linkEmail = document.getElementById('ficha-contacto-email');
+    linkEmail.textContent = c.contacto_correo;
+    linkEmail.href = c.contacto_correo !== "No disponible" ? `mailto:${c.contacto_correo}` : "#";
+
+    // --- LÓGICA TELÉFONO ---
+    const contenedorTel = document.getElementById('contenedor-tel');
+    const linkTel = document.getElementById('ficha-contacto-tel');
+
+    if (c.contacto_telefono && c.contacto_telefono.trim() !== "") {
+        contenedorTel.style.display = "block";
+        linkTel.textContent = c.contacto_telefono;
+        linkTel.href = `tel:${c.contacto_telefono}`;
+    } else {
+        contenedorTel.style.display = "none";
+    }
+
+    // --- LÓGICA DIRECCIÓN ---
+    if (c.obj_direccion) {
+        const d = c.obj_direccion;
+        let via = d.nombre_via || "";
+        let numeroStr = "";
+
+        if (d.numero) {
+            numeroStr = `, ${d.numero}`;
+        } else {
+            // Solo añadir s/n si el nombre de la vía no lo contiene ya
+            if (!via.toLowerCase().includes("s/n")) {
+                numeroStr = ", s/n";
+            }
+        }
+
+        document.getElementById('ficha-direccion').textContent = `${d.tipo_via || ''} ${via}${numeroStr}`;
+        document.getElementById('ficha-localidad').textContent = `${c.localidad} (${c.obj_cp ? c.obj_cp.codigo : ''})`;
+    }
+    // --- LÓGICA BOTON ELIMINAR ---
+
+    document.addEventListener('click', async function (e) {
+
+        // 1. Mostrar el popup al hacer clic en eliminar
+        if (e.target && e.target.id === 'btn-eliminar-voluntario') {
+            e.preventDefault();
+
+            if (!selectedVolunteerId) {
+                alert("Error: No se ha seleccionado ningún voluntario.");
+                return;
+            }
+
+            const overlay = document.getElementById('overlay-eliminar');
+            const popup = document.getElementById('popup-eliminar');
+            if (overlay) overlay.classList.add('active');
+            if (popup) popup.classList.add('active');
+        }
+
+        // 2. Cancelar y cerrar el popup
+        if (e.target && e.target.id === 'btn-cancelar-eliminar') {
+            e.preventDefault();
+            const overlay = document.getElementById('overlay-eliminar');
+            const popup = document.getElementById('popup-eliminar');
+            if (overlay) overlay.classList.remove('active');
+            if (popup) popup.classList.remove('active');
+        }
+
+        // 3. Confirmar eliminación
+        if (e.target && e.target.id === 'btn-confirmar-eliminar') {
+            e.preventDefault();
+
+            const btnConfirmar = e.target;
+            const textoOriginal = btnConfirmar.textContent;
+
+            try {
+                btnConfirmar.textContent = "Eliminando...";
+                btnConfirmar.disabled = true;
+
+                // Buscar el voluntario en memoria para obtener su ID interno
+                const volToDelete = volunteersData.find(v => v.id_voluntario === selectedVolunteerId);
+                if (!volToDelete) {
+                    alert("Voluntario no encontrado en memoria.");
+                    return;
+                }
+
+                // Usamos el vol_id_interno para borrar en el endpoint correcto de json-server
+                const urlEliminar = `${API_BASE}/voluntario/${volToDelete.vol_id_interno}`;
+
+                const response = await fetch(urlEliminar, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`Error en el servidor: ${response.status}`);
+                }
+
+                // Opcional: Eliminar la persona relacionada (como lo tienes estructurado en el repomix)
+                if (volToDelete.persona_id_interno) {
+                    await fetch(`${API_BASE}/persona/${volToDelete.persona_id_interno}`, {
+                        method: 'DELETE',
+                        headers: { 'Content-Type': 'application/json' }
+                    });
+                }
+
+                const overlay = document.getElementById('overlay-eliminar');
+                const popup = document.getElementById('popup-eliminar');
+                if (overlay) overlay.classList.remove('active');
+                if (popup) popup.classList.remove('active');
+
+                // Ajuste de los paneles en AsignaciónTurnos
+                const estadoVacio = document.getElementById('estado-vacio-panel');
+                const datosVoluntario = document.getElementById('datos-voluntario');
+                if (estadoVacio) estadoVacio.style.display = 'block';
+                if (datosVoluntario) datosVoluntario.style.display = 'none';
+
+                selectedVolunteerId = null;
+
+                // Recargar los datos de la tabla
+                await loadVolunteers();
+
+                alert("Voluntario eliminado con éxito");
+
+            } catch (error) {
+                console.error("Error al intentar eliminar el voluntario:", error);
+                alert("No se pudo eliminar el voluntario. Asegúrate de que el cambio a 'id' se guardó correctamente en db.json.");
+            } finally {
+                btnConfirmar.textContent = textoOriginal;
+                btnConfirmar.disabled = false;
+            }
+        }
+    });
 }
 </file>
 
@@ -8068,6 +8435,114 @@ td.col-actions .btn:first-child {
 </html>
 </file>
 
+<file path="javascript/RegistroVoluntarios.js">
+function maxNumero(lista, campo) {
+    return Math.max(0, ...lista.map(item => Number(item?.[campo]) || 0));
+}
+
+document.getElementById('form-voluntario').addEventListener('submit', async function (e) {
+
+    e.preventDefault();
+
+    // CHECKBOXES
+    const asistencias = [];
+
+    document.querySelectorAll('input[name="asistencia"]:checked')
+        .forEach((checkbox) => {
+            asistencias.push(checkbox.value);
+        });
+
+    // VALIDACIÓN
+    if (asistencias.length === 0) {
+        alert("Debes seleccionar al menos una disponibilidad.");
+        return;
+    }
+
+    const formData = new FormData(e.target);
+    const datos = Object.fromEntries(formData.entries());
+
+    try {
+        // ====================================
+        // 1. OBTENER PERSONAS EXISTENTES
+        // ====================================
+        const responsePersonas = await fetch('http://localhost:3000/persona');
+        const personas = await responsePersonas.json();
+
+        const nuevoIdPersona = maxNumero(personas, 'id_persona') + 1;
+
+        // ====================================
+        // 2. CREAR PERSONA
+        // ====================================
+        const nuevaPersona = {
+            id_persona: nuevoIdPersona,
+            nombre_completo: datos.volunt_name,
+            telefono: datos.volunt_tel || "",
+            email: datos.volunt_email || "",
+            observacion: datos.volunt_obs || null
+        };
+
+        const responsePersona = await fetch('http://localhost:3000/persona', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevaPersona)
+        });
+
+        if (!responsePersona.ok) {
+            throw new Error("Error al crear persona");
+        }
+
+        // ====================================
+        // 3. OBTENER VOLUNTARIOS EXISTENTES
+        // ====================================
+        const responseVols = await fetch('http://localhost:3000/voluntario');
+        const voluntarios = await responseVols.json();
+
+        const nuevoIdVoluntario = maxNumero(voluntarios, 'id_voluntario') + 1;
+
+        // ====================================
+        // 4. CREAR OBJETO VOLUNTARIO
+        // ====================================
+        const nuevoVoluntario = {
+            id_voluntario: nuevoIdVoluntario,
+            id_persona: nuevoIdPersona,
+            preferencia_horario: asistencias.join(', '),
+            id_colaborador: null
+        };
+
+        // ====================================
+        // 5. GUARDAR VOLUNTARIO EN LA DB
+        // ====================================
+        const responseVoluntario = await fetch('http://localhost:3000/voluntario', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(nuevoVoluntario)
+        });
+
+        if (!responseVoluntario.ok) {
+            throw new Error("Error al crear voluntario");
+        }
+
+        // ====================================
+        // 6. MOSTRAR POPUP Y LIMPIAR FORMULARIO
+        // ====================================
+        // Seleccionamos tus elementos del HTML
+        const overlay = document.getElementById('overlay');
+        const popup = document.getElementById('popup');
+
+        // Activamos el CSS del popup añadiendo la clase 'active'
+        overlay.classList.add('active');
+        popup.classList.add('active');
+
+        // Limpiamos los campos por si acaso
+        e.target.reset();
+
+    } catch (error) {
+        console.error(error);
+        alert("Hubo un problema al registrar el voluntario");
+    }
+});
+</file>
+
 <file path="css/InformacionTienda.css">
 /* ===================================================
    InformacionTienda.css
@@ -8715,6 +9190,554 @@ tbody tr:hover {
                 <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
                 <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
             </form>
+        </div>
+    </div>
+</div>
+
+</body>
+</html>
+</file>
+
+<file path="html/Administrador.html">
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../css/Administrador.css">
+    <link rel="stylesheet" href="../css/Sidebar.css">
+    <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/Sidebar.js" defer></script>
+    <script src="../javascript/Administrador.js" defer></script>
+    <title>Dashboard - Vista de administrador</title>
+</head>
+
+<body>
+    <div class="main-container">
+
+        <aside class="sidebar">
+            <include-html src="../html/Sidebar.html"></include-html>
+        </aside>
+
+        <div class="right-container">
+            <header class="header-dashboard">
+                <img src="../images/icono.png" alt="App Icon" class="header-logo">
+                <div class="header-titles">
+                    <h1>Dashboard</h1>
+                    <p>Datos del sistema de gestión de campañas</p>
+                </div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <p>N</p>
+                    </button>
+                </div>
+            </header>
+
+            <main class="dashboard-container">
+                <!-- TARJETAS DE RESUMEN -->
+                <section class="grid">
+                    <div class="card">
+                        <h3>Campañas Activas</h3>
+                        <div class="card" id="stat-campaigns-value"></div>
+                        <p class="card" id="stat-campaigns-subtitle">Cargando...</p>
+                    </div>
+                    <div class="card">
+                        <h3>Tiendas Totales</h3>
+                        <div class="card" id="stat-stores-value"></div>
+                        <p class="card" id="stat-stores-subtitle">Cargando...</p>
+                    </div>
+                    <div class="card">
+                        <h3>Colaboradores</h3>
+                        <div class="card" id="stat-collaborators-value"></div>
+                        <p class="card" id="stat-collaborators-subtitle">Cargando...</p>
+                    </div>
+                    <div class="card">
+                        <h3>Coordinadores</h3>
+                        <div class="card" id="stat-coordinators-value"></div>
+                        <p class="card" id="stat-coordinators-subtitle">Cargando...</p>
+                    </div>
+                </section>
+
+                <section class="dashboard-middle">
+                    <!-- PRÓXIMAS CAMPAÑAS -->
+                    <div class="upcoming-campaigns">
+                        <div class="header-upcoming-campaigns">
+                            <div>
+                                <h2>Próximas Campañas</h2>
+                                <p>Campañas programadas</p>
+                            </div>
+                            <button class="btn-view-all" onclick="window.location.href='Campana.html'">Ver
+                                todas</button>
+                        </div>
+                        <div class="campaign-container" id="campaign-container">
+                            <!-- Se rellena desde JS -->
+                        </div>
+                    </div>
+
+                    <!-- COBERTURA POR ZONA -->
+                    <div class="zone-coverage panel">
+                        <div class="panel-header">
+                            <h2>Cobertura por Zona</h2>
+                            <p>Número de tiendas por zona</p>
+                        </div>
+                        <div class="shops-list" id="shops-list">
+                            <!-- Se rellena desde JS -->
+                        </div>
+                    </div>
+                </section>
+
+            </main>
+        </div>
+    </div>
+</body>
+
+</html>
+</file>
+
+<file path="html/InformacionTienda.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Establecimientos</title>
+    <link rel="stylesheet" href="../css/InformacionTienda.css">
+    <link rel="stylesheet" href="../css/TablaEstilos.css">
+    <link rel="stylesheet" href="../css/Sidebar.css">
+    <link rel="stylesheet" href="../css/Common.css">
+    <link rel="stylesheet" href="../css/popUpRegistro.css">
+    <link rel="stylesheet" href="../css/Header.css">
+    <link rel="stylesheet" href="../css/DetalleColaborador.css">
+    <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
+    <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/InformacionTienda.js"></script>
+    <script src="../javascript/Sidebar.js" defer></script>
+    <script src="../javascript/popUpRegistro.js"></script>
+    <script src="../javascript/Header.js"></script>
+</head>
+<body>
+<div class="app-container">
+    <aside class="sidebar">
+        <include-html src="../html/Sidebar.html"></include-html>
+    </aside>
+    <div class="right-content">
+        <header class="main-header">
+            <include-html src="../html/header.html"></include-html>
+        </header>
+
+        <div class="main-layout">
+            <main>
+                <!--FILTROS-->
+                <form>
+                    <section class="filters">
+                        <!-- Fila 1: Identidad y Gestión -->
+                        <div class="filter-row">
+                            <div class="filter-group">
+                                <label for="filter-chain">Cadena</label>
+                                <select id="filter-chain" name="chain">
+                                    <option value="">Todas las cadenas</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-name">Nombre</label>
+                                <input type="text" id="filter-name" name="name" placeholder="Ej: Carrefour Hiper">
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-coordinator">Coordinador</label>
+                                <select id="filter-coordinator" name="coordinator">
+                                    <option value="">Todos</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-campanas">Campañas</label>
+                                <select id="filter-campanas" name="campanas">
+                                    <option value="">Todas las campañas</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <!-- Fila 2: Ubicación Geográfica + Botón -->
+                        <div class="filter-row">
+                            <div class="filter-group filter-group--small">
+                                <label for="filter-type">Tipo de Vía</label>
+                                <select id="filter-type" name="type">
+                                    <option value="">Todas</option>
+                                    <option value="Calle">Calle</option>
+                                    <option value="Avenida">Avenida</option>
+                                    <option value="Plaza">Plaza</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-street">Calle</label>
+                                <input type="text" id="filter-street" name="street" placeholder="Nombre">
+                            </div>
+
+                            <div class="filter-group filter-group--small">
+                                <label for="filter-code">Cód. Postal</label>
+                                <input type="text" id="filter-code" name="code" minlength="5" maxlength="5" pattern="[0-9]{5}"
+                                       title="Introduce exactamente 5 números" placeholder="29XXX">
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-city">Localidad</label>
+                                <input type="text" id="filter-city" name="city" placeholder="Ej: Málaga">
+                            </div>
+
+                            <div class="filter-group">
+                                <label for="filter-zone">Zona Geográfica</label>
+                                <select id="filter-zone" name="zone">
+                                    <option value="">Todas las zonas</option>
+                                </select>
+                            </div>
+
+                            <div class="filter-group filter-group--btn">
+                                <label>&nbsp;</label>
+                                <button type="button" id="btn-filter" class="btn btn--primary">Filtrar</button>
+                            </div>
+                        </div>
+                    </section>
+                </form>
+
+                <div class="content-wrapper">
+                    <div class="list-container">
+                        <div class="list-header">
+                            <h2>Listado de Establecimientos</h2>
+                            <button type="button" id="btn-add-establecimiento" class="btn btn--primary">+ Añadir</button>
+                            <p id="contador-establecimientos">Cargando...</p>
+                        </div>
+                        <div class="table-wrapper">
+                            <table class="data-table">
+                                <thead>
+                                <tr>
+                                    <th>Nombre</th>
+                                    <th>Localidad</th>
+                                    <th>Coordinador</th>
+                                </tr>
+                                </thead>
+                                <tbody id="tabla-establecimientos">
+                                <tr><td colspan="3" style="text-align: center; padding: 20px;">Cargando...</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <aside class="detail-panel">
+                        <div class="detail-content">
+                            <div id="estado-vacio-panel" class="estado-vacio">
+                                <h3>Detalle de Establecimiento</h3>
+                                <p>Haga clic en un establecimiento de la lista para ver sus detalles.</p>
+                            </div>
+                            <div id="datos-establecimiento" class="datos-colaborador" style="display: none;">
+                                <h3 class="ficha-titulo-principal">Ficha del Establecimiento</h3>
+                                <div class="ficha-cabecera">
+                                    <div class="ficha-titulos">
+                                        <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
+                                        <span id="ficha-cadena" class="ficha-etiqueta-codigo">---</span>
+                                    </div>
+                                </div>
+                                <div class="ficha-grid">
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>UBICACIÓN</h5>
+                                        <p><strong>Localidad:</strong> <span id="ficha-localidad">---</span></p>
+                                        <p><strong>Zona Geográfica:</strong> <span id="ficha-zona">---</span></p>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>DIRECCIÓN POSTAL</h5>
+                                        <p id="ficha-direccion">---</p>
+                                        <p><strong>Código Postal:</strong> <span id="ficha-cp">---</span></p>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>INFORMACIÓN GENERAL</h5>
+                                        <p><strong>Número de cajas:</strong> <span id="ficha-lineales">---</span></p>
+                                        <p><strong>Coordinador:</strong> <span id="ficha-coordinador">---</span></p>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Campañas</h5>
+                                        <div id="ficha-campanas-contenido"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="formulario-establecimiento" class="datos-colaborador" style="display: none;">
+                                <h3 class="ficha-titulo-principal" id="form-titulo">Nuevo Establecimiento</h3>
+                                <form id="form-establecimiento">
+                                    <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
+                                        <h5>Nombre del Establecimiento</h5>
+                                        <input type="text" id="form-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour Hiper Centro">
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Cadena</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-cadena"><strong>Cadena comercial:</strong></label>
+                                            <input type="text" id="form-cadena" class="input-ficha-lateral" required placeholder="Ej. Carrefour, Aldi, ...">
+                                        </div>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Dirección Postal</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-tipo-via"><strong>Tipo de Vía:</strong></label>
+                                            <select id="form-tipo-via" class="select-ficha-lateral">
+                                                <option value="">Selecciona...</option>
+                                                <option value="Calle">Calle</option>
+                                                <option value="Avenida">Avenida</option>
+                                                <option value="Plaza">Plaza</option>
+                                            </select>
+                                        </div>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-via"><strong>Nombre de la Vía:</strong></label>
+                                            <input type="text" id="form-via" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
+                                        </div>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-numero"><strong>Número:</strong></label>
+                                            <input type="text" id="form-numero" class="input-ficha-lateral" placeholder="Ej. 12">
+                                        </div>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-cp"><strong>Código Postal:</strong></label>
+                                            <input type="text" id="form-cp" class="input-ficha-lateral" placeholder="Ej. 29001">
+                                        </div>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Información General</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-lineales"><strong>Lineales:</strong></label>
+                                            <input type="number" id="form-lineales" class="input-ficha-lateral" placeholder="Número de lineales" min="0">
+                                        </div>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-coordinador"><strong>Coordinador:</strong></label>
+                                            <select id="form-coordinador" class="select-ficha-lateral">
+                                                <option value="">Sin asignar</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="ficha-tarjeta-info">
+                                        <h5>Campañas</h5>
+                                        <div class="campo-formulario-ficha">
+                                            <label for="form-campanas"><strong>Participación en campañas:</strong></label>
+                                            <select id="form-campanas" class="select-ficha-lateral" multiple size="4">
+                                            </select>
+                                            <small style="color:#6b7280; font-size:0.75rem; margin-top:4px;">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="detail-actions-sticky" id="acciones-detalle" style="display: none;">
+                            <button type="button" id="btn-editar-establecimiento" class="btn-ficha btn-editar" disabled>Editar</button>
+                            <button type="button" id="btn-eliminar-establecimiento" class="btn-ficha btn-eliminar" disabled>Eliminar</button>
+                        </div>
+                        <div class="detail-actions-sticky" id="acciones-formulario" style="display: none;">
+                            <button type="submit" form="form-establecimiento" id="btn-guardar-establecimiento" class="btn-ficha btn-guardar">Guardar</button>
+                            <button type="button" id="btn-cancelar-formulario" class="btn-ficha btn-cancelar-edit">Cancelar</button>
+                        </div>
+                    </aside>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+<div class="overlay" id="overlay-eliminar">
+    <div class="popup" id="popup-eliminar">
+        <h3>¿Eliminar establecimiento?</h3>
+        <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este establecimiento de la base de datos?</p>
+        <div class="popup-actions">
+            <form action="">
+                <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
+                <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+            </form>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+</file>
+
+<file path="html/RegistroVoluntarios.html">
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de voluntarios</title>
+
+    <link rel="stylesheet" href="../css/RegistroVoluntarios.css">
+    <link rel="stylesheet" href="../css/popUpRegistro.css">
+    <link rel="stylesheet" href="../css/Sidebar.css">
+    <script src="../javascript/RegistroVoluntarios.js" defer></script>
+    <script src="../javascript/Sidebar.js" defer></script>
+    <script src="../javascript/IncludeHTML.js" defer></script>
+
+</head>
+
+<body>
+
+<div class="app-container">
+
+    <aside class="sidebar">
+        <include-html src="../html/Sidebar.html"></include-html>
+    </aside>
+
+    <div class="right-content">
+
+        <header class="main-header">
+            <nav>
+                <div class="header-branding">
+                    <img src="/images/icono.png" alt="App Icon" class="header-logo">
+
+                    <div class="header-titles">
+                        <h1>Registro de Voluntarios</h1>
+                        <p>Gestión de voluntarios participantes en las campañas</p>
+                    </div>
+                </div>
+
+                <button class="btn--secondary" id="btn-notifications">
+                    Notificaciones
+                </button>
+            </nav>
+        </header>
+
+        <div class="main-layout">
+
+            <main>
+
+                <form id="form-voluntario">
+
+                    <!-- INFORMACIÓN -->
+                    <div class="list-container">
+
+                        <div class="list-header">
+                            <h2>Información del Voluntario</h2>
+                            <br>
+                            <p>Añadir un nuevo voluntario a la base de datos</p>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="volunt-name">Nombre</label>
+                            <input type="text" id="volunt-name" name="volunt_name" required>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="volunt-email">Email</label>
+                            <input type="email" id="volunt-email" name="volunt_email" required>
+                        </div>
+
+                        <div class="field-group">
+                            <label for="volunt-tel">Teléfono (opcional)</label>
+                            <input type="number" id="volunt-tel" name="volunt_tel">
+                        </div>
+
+                    </div>
+
+                    <!-- DISPONIBILIDAD -->
+                    <div class="list-container">
+
+                        <div class="list-header">
+                            <h2>Disponibilidad en la campaña</h2>
+                            <br>
+                            <p>Especifique la disponibilidad del voluntario para la campaña</p>
+                        </div>
+
+                        <table class="tabla-registro">
+
+                            <thead>
+                            <tr>
+                                <th>Mañana/Tarde</th>
+                                <th>Lunes</th>
+                                <th>Martes</th>
+                                <th>Miércoles</th>
+                                <th>Jueves</th>
+                                <th>Viernes</th>
+                                <th>Sábado</th>
+                                <th>Domingo</th>
+                            </tr>
+                            </thead>
+
+                            <tbody>
+
+                            <tr>
+                                <td>Mañana</td>
+
+                                <td><input type="checkbox" name="asistencia" value="lunes-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="martes-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="miercoles-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="jueves-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="viernes-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="sabado-mañana"></td>
+                                <td><input type="checkbox" name="asistencia" value="domingo-mañana"></td>
+                            </tr>
+
+                            <tr>
+                                <td>Tarde</td>
+
+                                <td><input type="checkbox" name="asistencia" value="lunes-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="martes-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="miercoles-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="jueves-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="viernes-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="sabado-tarde"></td>
+                                <td><input type="checkbox" name="asistencia" value="domingo-tarde"></td>
+                            </tr>
+
+                            </tbody>
+
+                        </table>
+
+                    </div>
+
+                    <!-- OBSERVACIONES -->
+                    <div class="list-container">
+
+                        <div class="list-header">
+                            <h2>Observaciones del voluntario</h2>
+                            <br>
+                            <p>
+                                Documente las observaciones del voluntario si es necesario
+                            </p>
+                        </div>
+
+                        <div class="field-group">
+                            <input type="text" id="volunt-obs" name="volunt_obs">
+                        </div>
+
+                    </div>
+
+                    <!-- BOTÓN -->
+                    <div class="contenedor">
+
+                        <article>
+                            <button type="submit" class="btn-abrir-popup">
+                                Guardar
+                            </button>
+                        </article>
+
+                        <!-- POPUP -->
+                        <div class="overlay" id="overlay">
+
+                            <div class="popup" id="popup">
+
+                                <h3>Inscripción completada</h3>
+
+                                <p>
+                                    Elija si desea añadir otro voluntario o finalizar la operación
+                                </p>
+
+                                <div class="botones">
+
+                                    <button type="button" class="btn-add" onclick="window.location.href='RegistroVoluntarios.html'">
+                                        Añadir
+                                    </button>
+
+                                    <button type="button" class="btn-close" onclick="window.location.href='Campana.html'">
+                                        Cerrar
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </main>
         </div>
     </div>
 </div>
@@ -21136,6 +22159,62 @@ tbody tr:hover {
       "email": "laura.sanchez@example.com",
       "observacion": null,
       "id": "iQg1_lXin9s"
+    },
+    {
+      "id_persona": 56,
+      "nombre_completo": "Ainhoa",
+      "telefono": "",
+      "email": "ainhoitagar05@gmail.com",
+      "observacion": null,
+      "id": "DNEX4zj"
+    },
+    {
+      "id_persona": 57,
+      "nombre_completo": "Ainhoa",
+      "telefono": "",
+      "email": "ainhoitagar05@gmail.com",
+      "observacion": null,
+      "id": "gjS060R"
+    },
+    {
+      "id_persona": 58,
+      "nombre_completo": "Ainhoa",
+      "telefono": "",
+      "email": "ainhoitagar05@gmail.com",
+      "observacion": null,
+      "id": "22UJDbw"
+    },
+    {
+      "id_persona": 59,
+      "nombre_completo": "Ainhoa",
+      "telefono": "",
+      "email": "ainhoitagar05@gmail.com",
+      "observacion": null,
+      "id": "PGKoIjQ"
+    },
+    {
+      "id_persona": 60,
+      "nombre_completo": "Ainhoa",
+      "telefono": "",
+      "email": "ainhoitagar05@gmail.com",
+      "observacion": null,
+      "id": "WSadYFa"
+    },
+    {
+      "id_persona": 61,
+      "nombre_completo": "Ainhoa",
+      "telefono": "",
+      "email": "ainhoitagar05@gmail.com",
+      "observacion": null,
+      "id": "eM26c6p"
+    },
+    {
+      "id_persona": 62,
+      "nombre_completo": "Ainhoa",
+      "telefono": "",
+      "email": "ainhoitagar05@gmail.com",
+      "observacion": null,
+      "id": "TNKOcE2"
     }
   ],
   "usuario": [
@@ -21242,75 +22321,37 @@ tbody tr:hover {
     {
       "id_voluntario": 1,
       "id_persona": 51,
-      "preferencia_horario": "mañana",
+      "preferencia_horario": "lunes-mañana",
       "id_colaborador": null,
       "id": "eikJJjBuqdw"
     },
     {
       "id_voluntario": 2,
       "id_persona": 52,
-      "preferencia_horario": "tarde",
+      "preferencia_horario": "lunes-tarde",
       "id_colaborador": null,
       "id": "CKHWY9Wzvsg"
     },
     {
       "id_voluntario": 3,
       "id_persona": 53,
-      "preferencia_horario": "mañana",
+      "preferencia_horario": "martes-mañana",
       "id_colaborador": null,
       "id": "mPDMI1Q6LYQ"
     },
     {
       "id_voluntario": 4,
       "id_persona": 54,
-      "preferencia_horario": "tarde",
+      "preferencia_horario": "lunes-mañana, lunes-tarde, martes-mañana",
       "id_colaborador": null,
       "id": "8Mb1yGHE-CU"
     },
     {
       "id_voluntario": 5,
       "id_persona": 55,
-      "preferencia_horario": "mañana",
+      "preferencia_horario": "lunes-tarde",
       "id_colaborador": null,
       "id": "OmBf9VBxjV8"
-    },
-    {
-      "volunt_name": "Ainhoa",
-      "volunt_email": "ainhoitagar05@gmail.com",
-      "volunt_tel": "",
-      "volunt_obs": "",
-      "horarios": [
-        "lunes-mañana"
-      ],
-      "id": "wbIgDlF0mhw"
-    },
-    {
-      "horarios": [
-        "lunes-mañana"
-      ],
-      "idPersona": "XNCGNyrq5C8",
-      "id": "SvobuRkkssc"
-    },
-    {
-      "id_voluntario": 6,
-      "id_persona": null,
-      "preferencia_horario": "lunes-mañana",
-      "id_colaborador": null,
-      "id": "YLEBa1l"
-    },
-    {
-      "id_voluntario": 7,
-      "id_persona": null,
-      "preferencia_horario": "lunes-mañana",
-      "id_colaborador": null,
-      "id": "q099nDC"
-    },
-    {
-      "id_voluntario": 8,
-      "id_persona": null,
-      "preferencia_horario": "lunes-mañana",
-      "id_colaborador": null,
-      "id": "d0-jmCL"
     }
   ],
   "tipo_notificacion": [
@@ -26563,554 +27604,6 @@ tbody tr:hover {
   ],
   "$schema": "./node_modules/json-server/schema.json"
 }
-</file>
-
-<file path="html/Administrador.html">
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../css/Administrador.css">
-    <link rel="stylesheet" href="../css/Sidebar.css">
-    <script src="../javascript/IncludeHTML.js"></script>
-    <script src="../javascript/Sidebar.js" defer></script>
-    <script src="../javascript/Administrador.js" defer></script>
-    <title>Dashboard - Vista de administrador</title>
-</head>
-
-<body>
-    <div class="main-container">
-
-        <aside class="sidebar">
-            <include-html src="../html/Sidebar.html"></include-html>
-        </aside>
-
-        <div class="right-container">
-            <header class="header-dashboard">
-                <img src="../images/icono.png" alt="App Icon" class="header-logo">
-                <div class="header-titles">
-                    <h1>Dashboard</h1>
-                    <p>Datos del sistema de gestión de campañas</p>
-                </div>
-                <div class="header-actions">
-                    <button class="notification-btn">
-                        <p>N</p>
-                    </button>
-                </div>
-            </header>
-
-            <main class="dashboard-container">
-                <!-- TARJETAS DE RESUMEN -->
-                <section class="grid">
-                    <div class="card">
-                        <h3>Campañas Activas</h3>
-                        <div class="card" id="stat-campaigns-value"></div>
-                        <p class="card" id="stat-campaigns-subtitle">Cargando...</p>
-                    </div>
-                    <div class="card">
-                        <h3>Tiendas Totales</h3>
-                        <div class="card" id="stat-stores-value"></div>
-                        <p class="card" id="stat-stores-subtitle">Cargando...</p>
-                    </div>
-                    <div class="card">
-                        <h3>Colaboradores</h3>
-                        <div class="card" id="stat-collaborators-value"></div>
-                        <p class="card" id="stat-collaborators-subtitle">Cargando...</p>
-                    </div>
-                    <div class="card">
-                        <h3>Coordinadores</h3>
-                        <div class="card" id="stat-coordinators-value"></div>
-                        <p class="card" id="stat-coordinators-subtitle">Cargando...</p>
-                    </div>
-                </section>
-
-                <section class="dashboard-middle">
-                    <!-- PRÓXIMAS CAMPAÑAS -->
-                    <div class="upcoming-campaigns">
-                        <div class="header-upcoming-campaigns">
-                            <div>
-                                <h2>Próximas Campañas</h2>
-                                <p>Campañas programadas</p>
-                            </div>
-                            <button class="btn-view-all" onclick="window.location.href='Campana.html'">Ver
-                                todas</button>
-                        </div>
-                        <div class="campaign-container" id="campaign-container">
-                            <!-- Se rellena desde JS -->
-                        </div>
-                    </div>
-
-                    <!-- COBERTURA POR ZONA -->
-                    <div class="zone-coverage panel">
-                        <div class="panel-header">
-                            <h2>Cobertura por Zona</h2>
-                            <p>Número de tiendas por zona</p>
-                        </div>
-                        <div class="shops-list" id="shops-list">
-                            <!-- Se rellena desde JS -->
-                        </div>
-                    </div>
-                </section>
-
-            </main>
-        </div>
-    </div>
-</body>
-
-</html>
-</file>
-
-<file path="html/InformacionTienda.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Establecimientos</title>
-    <link rel="stylesheet" href="../css/InformacionTienda.css">
-    <link rel="stylesheet" href="../css/TablaEstilos.css">
-    <link rel="stylesheet" href="../css/Sidebar.css">
-    <link rel="stylesheet" href="../css/Common.css">
-    <link rel="stylesheet" href="../css/popUpRegistro.css">
-    <link rel="stylesheet" href="../css/Header.css">
-    <link rel="stylesheet" href="../css/DetalleColaborador.css">
-    <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
-    <script src="../javascript/IncludeHTML.js"></script>
-    <script src="../javascript/InformacionTienda.js"></script>
-    <script src="../javascript/Sidebar.js" defer></script>
-    <script src="../javascript/popUpRegistro.js"></script>
-    <script src="../javascript/Header.js"></script>
-</head>
-<body>
-<div class="app-container">
-    <aside class="sidebar">
-        <include-html src="../html/Sidebar.html"></include-html>
-    </aside>
-    <div class="right-content">
-        <header class="main-header">
-            <include-html src="../html/header.html"></include-html>
-        </header>
-
-        <div class="main-layout">
-            <main>
-                <!--FILTROS-->
-                <form>
-                    <section class="filters">
-                        <!-- Fila 1: Identidad y Gestión -->
-                        <div class="filter-row">
-                            <div class="filter-group">
-                                <label for="filter-chain">Cadena</label>
-                                <select id="filter-chain" name="chain">
-                                    <option value="">Todas las cadenas</option>
-                                </select>
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="filter-name">Nombre</label>
-                                <input type="text" id="filter-name" name="name" placeholder="Ej: Carrefour Hiper">
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="filter-coordinator">Coordinador</label>
-                                <select id="filter-coordinator" name="coordinator">
-                                    <option value="">Todos</option>
-                                </select>
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="filter-campanas">Campañas</label>
-                                <select id="filter-campanas" name="campanas">
-                                    <option value="">Todas las campañas</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <!-- Fila 2: Ubicación Geográfica + Botón -->
-                        <div class="filter-row">
-                            <div class="filter-group filter-group--small">
-                                <label for="filter-type">Tipo de Vía</label>
-                                <select id="filter-type" name="type">
-                                    <option value="">Todas</option>
-                                    <option value="Calle">Calle</option>
-                                    <option value="Avenida">Avenida</option>
-                                    <option value="Plaza">Plaza</option>
-                                </select>
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="filter-street">Calle</label>
-                                <input type="text" id="filter-street" name="street" placeholder="Nombre">
-                            </div>
-
-                            <div class="filter-group filter-group--small">
-                                <label for="filter-code">Cód. Postal</label>
-                                <input type="text" id="filter-code" name="code" minlength="5" maxlength="5" pattern="[0-9]{5}"
-                                       title="Introduce exactamente 5 números" placeholder="29XXX">
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="filter-city">Localidad</label>
-                                <input type="text" id="filter-city" name="city" placeholder="Ej: Málaga">
-                            </div>
-
-                            <div class="filter-group">
-                                <label for="filter-zone">Zona Geográfica</label>
-                                <select id="filter-zone" name="zone">
-                                    <option value="">Todas las zonas</option>
-                                </select>
-                            </div>
-
-                            <div class="filter-group filter-group--btn">
-                                <label>&nbsp;</label>
-                                <button type="button" id="btn-filter" class="btn btn--primary">Filtrar</button>
-                            </div>
-                        </div>
-                    </section>
-                </form>
-
-                <div class="content-wrapper">
-                    <div class="list-container">
-                        <div class="list-header">
-                            <h2>Listado de Establecimientos</h2>
-                            <button type="button" id="btn-add-establecimiento" class="btn btn--primary">+ Añadir</button>
-                            <p id="contador-establecimientos">Cargando...</p>
-                        </div>
-                        <div class="table-wrapper">
-                            <table class="data-table">
-                                <thead>
-                                <tr>
-                                    <th>Nombre</th>
-                                    <th>Localidad</th>
-                                    <th>Coordinador</th>
-                                </tr>
-                                </thead>
-                                <tbody id="tabla-establecimientos">
-                                <tr><td colspan="3" style="text-align: center; padding: 20px;">Cargando...</td></tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-
-                    <aside class="detail-panel">
-                        <div class="detail-content">
-                            <div id="estado-vacio-panel" class="estado-vacio">
-                                <h3>Detalle de Establecimiento</h3>
-                                <p>Haga clic en un establecimiento de la lista para ver sus detalles.</p>
-                            </div>
-                            <div id="datos-establecimiento" class="datos-colaborador" style="display: none;">
-                                <h3 class="ficha-titulo-principal">Ficha del Establecimiento</h3>
-                                <div class="ficha-cabecera">
-                                    <div class="ficha-titulos">
-                                        <h4 id="ficha-nombre" class="ficha-nombre">---</h4>
-                                        <span id="ficha-cadena" class="ficha-etiqueta-codigo">---</span>
-                                    </div>
-                                </div>
-                                <div class="ficha-grid">
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>UBICACIÓN</h5>
-                                        <p><strong>Localidad:</strong> <span id="ficha-localidad">---</span></p>
-                                        <p><strong>Zona Geográfica:</strong> <span id="ficha-zona">---</span></p>
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>DIRECCIÓN POSTAL</h5>
-                                        <p id="ficha-direccion">---</p>
-                                        <p><strong>Código Postal:</strong> <span id="ficha-cp">---</span></p>
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>INFORMACIÓN GENERAL</h5>
-                                        <p><strong>Número de cajas:</strong> <span id="ficha-lineales">---</span></p>
-                                        <p><strong>Coordinador:</strong> <span id="ficha-coordinador">---</span></p>
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>Campañas</h5>
-                                        <div id="ficha-campanas-contenido"></div>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="formulario-establecimiento" class="datos-colaborador" style="display: none;">
-                                <h3 class="ficha-titulo-principal" id="form-titulo">Nuevo Establecimiento</h3>
-                                <form id="form-establecimiento">
-                                    <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
-                                        <h5>Nombre del Establecimiento</h5>
-                                        <input type="text" id="form-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour Hiper Centro">
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>Cadena</h5>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-cadena"><strong>Cadena comercial:</strong></label>
-                                            <input type="text" id="form-cadena" class="input-ficha-lateral" required placeholder="Ej. Carrefour, Aldi, ...">
-                                        </div>
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>Dirección Postal</h5>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-tipo-via"><strong>Tipo de Vía:</strong></label>
-                                            <select id="form-tipo-via" class="select-ficha-lateral">
-                                                <option value="">Selecciona...</option>
-                                                <option value="Calle">Calle</option>
-                                                <option value="Avenida">Avenida</option>
-                                                <option value="Plaza">Plaza</option>
-                                            </select>
-                                        </div>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-via"><strong>Nombre de la Vía:</strong></label>
-                                            <input type="text" id="form-via" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
-                                        </div>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-numero"><strong>Número:</strong></label>
-                                            <input type="text" id="form-numero" class="input-ficha-lateral" placeholder="Ej. 12">
-                                        </div>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-cp"><strong>Código Postal:</strong></label>
-                                            <input type="text" id="form-cp" class="input-ficha-lateral" placeholder="Ej. 29001">
-                                        </div>
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>Información General</h5>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-lineales"><strong>Lineales:</strong></label>
-                                            <input type="number" id="form-lineales" class="input-ficha-lateral" placeholder="Número de lineales" min="0">
-                                        </div>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-coordinador"><strong>Coordinador:</strong></label>
-                                            <select id="form-coordinador" class="select-ficha-lateral">
-                                                <option value="">Sin asignar</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="ficha-tarjeta-info">
-                                        <h5>Campañas</h5>
-                                        <div class="campo-formulario-ficha">
-                                            <label for="form-campanas"><strong>Participación en campañas:</strong></label>
-                                            <select id="form-campanas" class="select-ficha-lateral" multiple size="4">
-                                            </select>
-                                            <small style="color:#6b7280; font-size:0.75rem; margin-top:4px;">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
-                                        </div>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                        <div class="detail-actions-sticky" id="acciones-detalle" style="display: none;">
-                            <button type="button" id="btn-editar-establecimiento" class="btn-ficha btn-editar" disabled>Editar</button>
-                            <button type="button" id="btn-eliminar-establecimiento" class="btn-ficha btn-eliminar" disabled>Eliminar</button>
-                        </div>
-                        <div class="detail-actions-sticky" id="acciones-formulario" style="display: none;">
-                            <button type="submit" form="form-establecimiento" id="btn-guardar-establecimiento" class="btn-ficha btn-guardar">Guardar</button>
-                            <button type="button" id="btn-cancelar-formulario" class="btn-ficha btn-cancelar-edit">Cancelar</button>
-                        </div>
-                    </aside>
-                </div>
-            </main>
-        </div>
-    </div>
-</div>
-<div class="overlay" id="overlay-eliminar">
-    <div class="popup" id="popup-eliminar">
-        <h3>¿Eliminar establecimiento?</h3>
-        <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este establecimiento de la base de datos?</p>
-        <div class="popup-actions">
-            <form action="">
-                <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
-                <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
-            </form>
-        </div>
-    </div>
-</div>
-</body>
-</html>
-</file>
-
-<file path="html/RegistroVoluntarios.html">
-<!DOCTYPE html>
-<html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title>Registro de voluntarios</title>
-
-    <link rel="stylesheet" href="../css/RegistroVoluntarios.css">
-    <link rel="stylesheet" href="../css/popUpRegistro.css">
-    <link rel="stylesheet" href="../css/Sidebar.css">
-    <script src="../javascript/RegistroVoluntarios.js" defer></script>
-    <script src="../javascript/Sidebar.js" defer></script>
-    <script src="../javascript/IncludeHTML.js" defer></script>
-
-</head>
-
-<body>
-
-<div class="app-container">
-
-    <aside class="sidebar">
-        <include-html src="../html/Sidebar.html"></include-html>
-    </aside>
-
-    <div class="right-content">
-
-        <header class="main-header">
-            <nav>
-                <div class="header-branding">
-                    <img src="/images/icono.png" alt="App Icon" class="header-logo">
-
-                    <div class="header-titles">
-                        <h1>Registro de Voluntarios</h1>
-                        <p>Gestión de voluntarios participantes en las campañas</p>
-                    </div>
-                </div>
-
-                <button class="btn--secondary" id="btn-notifications">
-                    Notificaciones
-                </button>
-            </nav>
-        </header>
-
-        <div class="main-layout">
-
-            <main>
-
-                <form id="form-voluntario">
-
-                    <!-- INFORMACIÓN -->
-                    <div class="list-container">
-
-                        <div class="list-header">
-                            <h2>Información del Voluntario</h2>
-                            <br>
-                            <p>Añadir un nuevo voluntario a la base de datos</p>
-                        </div>
-
-                        <div class="field-group">
-                            <label for="volunt-name">Nombre</label>
-                            <input type="text" id="volunt-name" name="volunt_name" required>
-                        </div>
-
-                        <div class="field-group">
-                            <label for="volunt-email">Email</label>
-                            <input type="email" id="volunt-email" name="volunt_email" required>
-                        </div>
-
-                        <div class="field-group">
-                            <label for="volunt-tel">Teléfono (opcional)</label>
-                            <input type="number" id="volunt-tel" name="volunt_tel">
-                        </div>
-
-                    </div>
-
-                    <!-- DISPONIBILIDAD -->
-                    <div class="list-container">
-
-                        <div class="list-header">
-                            <h2>Disponibilidad en la campaña</h2>
-                            <br>
-                            <p>Especifique la disponibilidad del voluntario para la campaña</p>
-                        </div>
-
-                        <table class="tabla-registro">
-
-                            <thead>
-                            <tr>
-                                <th>Mañana/Tarde</th>
-                                <th>Lunes</th>
-                                <th>Martes</th>
-                                <th>Miércoles</th>
-                                <th>Jueves</th>
-                                <th>Viernes</th>
-                                <th>Sábado</th>
-                                <th>Domingo</th>
-                            </tr>
-                            </thead>
-
-                            <tbody>
-
-                            <tr>
-                                <td>Mañana</td>
-
-                                <td><input type="checkbox" name="asistencia" value="lunes-mañana"></td>
-                                <td><input type="checkbox" name="asistencia" value="martes-mañana"></td>
-                                <td><input type="checkbox" name="asistencia" value="miercoles-mañana"></td>
-                                <td><input type="checkbox" name="asistencia" value="jueves-mañana"></td>
-                                <td><input type="checkbox" name="asistencia" value="viernes-mañana"></td>
-                                <td><input type="checkbox" name="asistencia" value="sabado-mañana"></td>
-                                <td><input type="checkbox" name="asistencia" value="domingo-mañana"></td>
-                            </tr>
-
-                            <tr>
-                                <td>Tarde</td>
-
-                                <td><input type="checkbox" name="asistencia" value="lunes-tarde"></td>
-                                <td><input type="checkbox" name="asistencia" value="martes-tarde"></td>
-                                <td><input type="checkbox" name="asistencia" value="miercoles-tarde"></td>
-                                <td><input type="checkbox" name="asistencia" value="jueves-tarde"></td>
-                                <td><input type="checkbox" name="asistencia" value="viernes-tarde"></td>
-                                <td><input type="checkbox" name="asistencia" value="sabado-tarde"></td>
-                                <td><input type="checkbox" name="asistencia" value="domingo-tarde"></td>
-                            </tr>
-
-                            </tbody>
-
-                        </table>
-
-                    </div>
-
-                    <!-- OBSERVACIONES -->
-                    <div class="list-container">
-
-                        <div class="list-header">
-                            <h2>Observaciones del voluntario</h2>
-                            <br>
-                            <p>
-                                Documente las observaciones del voluntario si es necesario
-                            </p>
-                        </div>
-
-                        <div class="field-group">
-                            <input type="text" id="volunt-obs" name="volunt_obs">
-                        </div>
-
-                    </div>
-
-                    <!-- BOTÓN -->
-                    <div class="contenedor">
-
-                        <article>
-                            <button type="submit" class="btn-abrir-popup">
-                                Guardar
-                            </button>
-                        </article>
-
-                        <!-- POPUP -->
-                        <div class="overlay" id="overlay">
-
-                            <div class="popup" id="popup">
-
-                                <h3>Inscripción completada</h3>
-
-                                <p>
-                                    Elija si desea añadir otro voluntario o finalizar la operación
-                                </p>
-
-                                <div class="botones">
-
-                                    <button type="button" class="btn-add" onclick="window.location.href='RegistroVoluntarios.html'">
-                                        Añadir
-                                    </button>
-
-                                    <button type="button" class="btn-close" onclick="window.location.href='Campana.html'">
-                                        Cerrar
-                                    </button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </form>
-            </main>
-        </div>
-    </div>
-</div>
-
-</body>
-</html>
 </file>
 
 <file path="html/Colaboradores.html">

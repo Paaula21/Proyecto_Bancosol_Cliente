@@ -2,6 +2,18 @@
 const API_BASE = 'http://localhost:3000';
 const VISIBLE_ROWS = 6;
 
+async function fetchDatos(recurso) {
+    let response = await fetch(`${API_BASE}/${recurso}`);
+    if (!response.ok) {
+        throw new Error('Error al obtener "' + recurso + '": ' + response.status);
+    }
+    return response.json();
+}
+
+let parametrosURL = new URLSearchParams(window.location.search);
+let idVoluntario = parametrosURL.get('id_voluntario');
+
+// CORRECCIÓN: Inicializamos como array vacío, ya que loadVolunteers() se encargará de llenarlo correctamente
 let volunteersData = [];
 let selectedVolunteerId = null;
 
@@ -22,12 +34,18 @@ document.addEventListener("DOMContentLoaded", () => {
     if (btnEditarGlobal) {
         btnEditarGlobal.addEventListener('click', (e) => {
             e.stopPropagation();
+            // CORRECCIÓN: Comparamos convirtiendo ambos a String para evitar conflictos de Tipo (String vs Number)
             const vol = volunteersData.find(
-                v => v.id_voluntario === selectedVolunteerId
+                v => String(v.id_voluntario) === String(selectedVolunteerId)
             );
             if (vol) {
+                // Guarda los datos en sessionStorage (por si los necesitas en la otra página)
                 sessionStorage.setItem('voluntario_editar', JSON.stringify(vol));
-                window.location.href = 'NuevoVoluntario.html';
+
+                // Redirige a EditarVoluntario.html pasando el ID por la URL
+                window.location.href = 'EditarVoluntario.html?id_voluntario=' + encodeURIComponent(vol.id_voluntario);
+            } else {
+                alert("Por favor, selecciona un voluntario de la lista primero.");
             }
         });
     }
@@ -120,7 +138,8 @@ async function loadVolunteers() {
         const personas = await fetchJson(`${API_BASE}/persona`);
 
         volunteersData = voluntarios.map(vol => {
-            const per = personas.find(p => p.id_persona === vol.id_persona);
+            // CORRECCIÓN: Comparación segura de IDs convirtiéndolos a String
+            const per = personas.find(p => String(p.id_persona) === String(vol.id_persona));
 
             return {
                 id_voluntario: vol.id_voluntario,
@@ -239,7 +258,7 @@ function displayVolunt(voluntarios) {
         // ELIMINAR (Botón único de la fila)
         let btnBorrar = document.createElement('button');
         btnBorrar.type = 'button';
-        btnBorrar.className = 'btn-eliminar-fila'; // Cambiado a clase para no romper semántica de IDs
+        btnBorrar.className = 'btn-eliminar-fila';
         btnBorrar.textContent = 'Eliminar';
 
         // ESTILOS BORRAR
@@ -322,7 +341,8 @@ async function deleteVolunteer(btn) {
         return;
     }
 
-    const volToDelete = volunteersData.find(v => v.id_voluntario === selectedVolunteerId);
+    // CORRECCIÓN: Comparación segura de IDs convirtiéndolos a String
+    const volToDelete = volunteersData.find(v => String(v.id_voluntario) === String(selectedVolunteerId));
     if (!volToDelete) {
         alert("Voluntario no encontrado en memoria.");
         return;
