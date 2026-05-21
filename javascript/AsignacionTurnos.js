@@ -388,8 +388,6 @@ async function deleteVolunteer(btn) {
         // Recargar la tabla actualizándola
         await loadVolunteers();
 
-        alert("Voluntario y persona eliminados con éxito.");
-
     } catch (error) {
         console.error("Error al intentar eliminar:", error);
         alert("No se pudo eliminar el registro. Inténtalo de nuevo.");

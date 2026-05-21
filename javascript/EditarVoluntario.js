@@ -147,7 +147,6 @@ async function guardarCambiosVoluntario() {
             })
         });
 
-        alert("Voluntario actualizado correctamente.");
         window.location.href = 'AsignacionTurnos.html';
 
     } catch (error) {

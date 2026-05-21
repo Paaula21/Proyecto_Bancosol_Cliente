@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="../css/popUpRegistro.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
     <link rel="stylesheet" href="../css/Header.css">
+    <link rel="stylesheet" href="../css/EditarVoluntario.css">
+
     <script src="../javascript/Header.js" defer></script>
     <script src="../javascript/RegistroVoluntarios.js" defer></script>
     <script src="../javascript/Sidebar.js" defer></script>
@@ -117,29 +119,17 @@
 
                     </div>
 
-                    <!-- OBSERVACIONES -->
-                    <div class="list-container">
-
-                        <div class="list-header">
-                            <h2>Observaciones del voluntario</h2>
-                            <br>
-                            <p>
-                                Documente las observaciones del voluntario si es necesario
-                            </p>
-                        </div>
-
-                        <div class="field-group">
-                            <input type="text" id="volunt-obs" name="volunt_obs">
-                        </div>
-
-                    </div>
-
                     <!-- BOTÓN -->
-                    <div class="contenedor">
+                    <div class="contenedor" style="display: flex; gap: 15px;">
 
                         <article>
-                            <button type="submit" class="btn-abrir-popup">
+                            <button type="submit" class="btn-submit" id="btn-guardar">
                                 Guardar
+                            </button>
+                        </article>
+                        <article>
+                            <button type="button" class="btn-cancel" id="btn-descartar">
+                                Cancelar
                             </button>
                         </article>
 
