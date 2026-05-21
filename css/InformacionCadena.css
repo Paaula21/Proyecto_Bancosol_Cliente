@@ -1,69 +1,29 @@
-/* ===================================================
-   InformacionCadena.css
-   Depende de: Common.css, TablaEstilos.css
-   =================================================== */
-
-/* ─── Layout principal ─── */
-.main-layout {
-    display: flex;
-    flex: 1;
-    overflow: hidden;
-}
-
-main {
-    padding: 24px 32px;
-    flex: 1;
-    overflow-y: auto;
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-    background-color: #f5f7f9;
-}
-
-/* ─── Panel de filtros ─── */
 .filters {
     background-color: #ffffff;
     border-radius: 8px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    padding: 20px 24px;
+    padding: 12px 16px;
     display: flex;
-    gap: 20px;
+    gap: 12px;
     align-items: flex-end;
 }
 
 .filter-group {
     display: flex;
     flex-direction: column;
-    gap: 8px;
-    flex: 1;
-    min-width: 200px;
-}
-
-.filter-group--small {
+    gap: 4px;
     flex: 1;
     min-width: 0;
 }
 
-.filter-group label {
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #111827;
-}
-
 .filter-group select,
 .filter-group input {
-    padding: 10px 12px;
+    padding: 8px 10px;
     border: 1px solid #d1d5db;
     border-radius: 6px;
     font-size: 0.875rem;
     background-color: #ffffff;
     color: #374151;
-}
-
-.filter-group select:focus,
-.filter-group input:focus {
-    outline: none;
-    border-color: #420098;
 }
 
 .filter-button {
@@ -72,16 +32,14 @@ main {
     align-items: flex-end;
 }
 
-/* ─── Wrapper lista + panel de detalle ─── */
 .content-wrapper {
     display: flex;
-    gap: 24px;
+    gap: 12px;
     align-items: stretch;
     flex: 1;
     min-height: 0;
 }
 
-/* ─── Contenedor de la lista ─── */
 .list-container {
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
@@ -96,224 +54,10 @@ main {
     flex-direction: column;
 }
 
-.list-header {
-    display: grid;
-    grid-template-columns: 1fr auto;
-    align-items: center;
-    margin-bottom: 24px;
-}
-
-.list-header h2 {
-    margin: 0;
-    font-size: 1.125rem;
-    font-weight: 600;
-}
-
-/* ─── Estilos de tabla (como InformacionTienda) ─── */
-thead {
-    position: sticky;
-    top: 0;
-    z-index: 1;
-    background-color: #f8fafc;
-}
-
-th {
-    padding: 12px 16px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    color: #111827;
-    border-bottom: 1px solid #e5e7eb;
-}
-
-td {
-    padding: 16px;
-    font-size: 0.875rem;
-    color: #374151;
-    border-bottom: 1px solid #f3f4f6;
-    vertical-align: middle;
-}
-
-tbody tr.selected {
-    background-color: #f5f0ff;
-}
-
-tbody tr:hover {
-    background-color: inherit;
-    cursor: default;
-}
-
-/* ─── Botones ─── */
-td.col-actions .btn--secondary,
-.list-container .btn--secondary {
-    background-color: #420098;
-    color: white;
-    border-color: transparent;
-}
-
-td.col-actions .btn--secondary:hover,
-.list-container .btn--secondary:hover {
-    background-color: #310073;
-}
-
-td.col-actions .btn--danger,
-.list-container .btn--danger {
-    background-color: transparent;
-    border: 1.5px solid #e74c3c;
-    color: #e74c3c;
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-td.col-actions .btn--danger:hover,
-.list-container .btn--danger:hover {
-    background-color: #c0392b;
-    border-color: #c0392b;
-    color: #ffffff;
-}
-
-/* ─── Tabla — wrapper con scroll ─── */
-table {
-    width: 100%;
-    border-collapse: collapse;
-    text-align: left;
-}
-
-.table-wrapper {
-    overflow-x: auto;
-    width: 100%;
-    flex: 1;
-    overflow-y: auto;
-    min-height: 0;
-}
-
-.table-wrapper.scrollable {
-    max-height: 300px;
-    overflow-y: auto;
-}
-
-/* th / td heredan de TablaEstilos.css (.data-table) y Common.css */
-th.col-actions,
-td.col-actions {
-    text-align: right;
-}
-
-td.col-actions {
-    text-align: right;
-    white-space: nowrap;
-    vertical-align: middle;
-}
-
-td.col-actions .btn {
-    margin-left: 8px;
-}
-td.col-actions .btn:first-child {
-    margin-left: 0;
-}
-
-/* ─── Panel de detalle lateral ─── */
-.detail-panel {
-    flex: 0 0 420px;
-    background-color: #ffffff;
-    border: 1px solid #e5e7eb;
-    border-radius: 8px;
-    padding: 0;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
-    display: flex;
-    flex-direction: column;
-    overflow: hidden;
-    align-self: stretch;
-}
-
-.detail-content {
-    flex: 1;
-    overflow-y: auto;
-    padding: 24px 24px 8px 24px;
-    min-height: 0;
-}
-
-.detail-actions-sticky {
-    flex-shrink: 0;
-    background-color: #ffffff;
-    border-top: 1px solid #e5e7eb;
-    padding: 12px 24px;
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    box-shadow: 0 -2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.detail-actions-sticky .btn-ficha:disabled {
-    opacity: 0.4;
-    cursor: not-allowed;
-}
-
-.detail-panel .estado-vacio {
-    text-align: center;
-    color: #9ca3af;
-    padding: 40px 20px;
-}
-
-.detail-panel .estado-vacio h3 {
-    font-size: 1.125rem;
-    font-weight: 600;
-    color: #111827;
-    margin: 0 0 8px 0;
-}
-
-.detail-panel .estado-vacio p {
-    margin: 0;
-    font-size: 0.875rem;
-}
-
-.detail-panel .btn-eliminar {
-    background-color: transparent;
-    border: 1.5px solid #e74c3c;
-    color: #e74c3c;
-    border-radius: 8px;
-    padding: 8px 18px;
-    font-weight: 600;
-    font-size: 0.875rem;
-    cursor: pointer;
-    transition: background 0.2s;
-}
-
-.detail-panel .btn-eliminar:hover {
-    background-color: #c0392b;
-    border-color: #c0392b;
-    color: #ffffff;
-}
-
-#form-campanas {
-    min-height: 80px;
-}
-
-#form-campanas option {
-    padding: 4px 6px;
-}
-
-#form-campanas option:checked {
-    background-color: #420098;
-    color: white;
-}
-
-.ficha-grid {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-}
-
-.ficha-grid .ficha-tarjeta-info {
-    margin-bottom: 0;
-}
-
-/* ─── Contador ─── */
-#contador-cadenas {
+#chains-counter {
     margin: 0;
     font-size: 0.875rem;
     color: #6b7280;
 }
+
 

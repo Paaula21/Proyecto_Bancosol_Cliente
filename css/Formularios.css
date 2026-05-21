@@ -1,4 +1,4 @@
-/*CSS de NuevaTienda y NuevaCadena*/
+/*CSS of NuevaTienda and NuevaCadena*/
 
 .form-container-centered {
     flex: 1;
@@ -81,12 +81,6 @@
     border-color: #420098;
 }
 
-form[id$="-form"] {
-    display: flex;
-    flex-direction: column;
-    gap: 24px;
-}
-
 .form-row {
     display: flex;
     gap: 16px;
@@ -97,15 +91,6 @@ form[id$="-form"] {
     flex: 1;
 }
 
-.form-row .box-tipo-via  { flex: 0 0 150px; }
-.form-row .box-numero    { flex: 0 0 90px;  }
-.form-row .box-cp        { flex: 0 0 110px; }
-.form-row .box-distrito  { flex: 0 0 90px;  }
-
-.field-group:only-child {
-    flex: 1;
-}
-
 .form-actions {
     display: flex;
     justify-content: flex-end;
@@ -113,50 +98,4 @@ form[id$="-form"] {
     margin-top: 0;
 }
 
-.btn-cancel {
-    padding: 12px 25px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    background: #fff;
-    border: 1px solid #ccc;
-    color: #555;
-    transition: background 0.2s, border-color 0.2s;
-}
 
-.btn-cancel:hover {
-    background: #f0f0f0;
-    border-color: #aaa;
-    color: #333;
-}
-
-.btn-save {
-    padding: 12px 25px;
-    border-radius: 6px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    background: #420098;
-    color: #fff;
-    border: 1px solid transparent;
-    transition: background 0.2s;
-}
-
-.btn-save:hover {
-    background: #310073;
-}
-
-.popup-icon--save {
-    background: #e0f2fe;
-    color: #0369a1;
-}
-
-.btn-confirm-del {
-    background: #420098;
-    transition: background 0.2s;
-}
-
-.btn-confirm-del:hover {
-    background: #310073;
-}

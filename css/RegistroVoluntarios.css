@@ -202,20 +202,6 @@ form {
     gap: 24px;
 }
 
-.btn--secondary {
-    background-color: white;
-    color: #374151;
-
-    padding: 10px 12px;
-    border-radius: 6px;
-    font-size: 13px;
-    font-size: 0.875rem;
-    cursor: pointer;
-    border: 1px solid #d1d5db;
-    background: transparent;
-    width: 150px;
-    display: block;
-    font-weight: 600;
 
     width: auto;
     min-width: 120px;

@@ -12,35 +12,35 @@ async function fetchJson(url) {
 }
 
 document.addEventListener('DOMContentLoaded', async () => {
-    await cargarSelects();
+    await loadSelects();
 
-    const datoEdicion = sessionStorage.getItem('establecimiento_editar');
-    if (datoEdicion) {
-        const est = JSON.parse(datoEdicion);
+    const editData = sessionStorage.getItem('establecimiento_editar');
+    if (editData) {
+        const est = JSON.parse(editData);
         document.querySelector('h1').textContent = 'Editar Establecimiento';
         document.querySelector('h3.ficha-titulo-principal').textContent = 'Modificar Ficha';
-        prellenarFormulario(est);
+        fillForm(est);
     }
 
-    document.getElementById('form-nueva-tienda').addEventListener('submit', async (e) => {
+    document.getElementById('form-new-store').addEventListener('submit', async (e) => {
         e.preventDefault();
-        await guardarTienda();
+        await saveStore();
     });
 
-    document.getElementById('btn-aceptar-exito').addEventListener('click', (e) => {
+    document.getElementById('btn-accept-success').addEventListener('click', (e) => {
         e.preventDefault();
         sessionStorage.removeItem('establecimiento_editar');
         window.location.href = 'InformacionTienda.html';
     });
 
-    document.getElementById('btn-aceptar-error').addEventListener('click', (e) => {
+    document.getElementById('btn-accept-error').addEventListener('click', (e) => {
         e.preventDefault();
-        document.getElementById('overlay-error').classList.remove('active');
-        document.getElementById('popup-error').classList.remove('active');
+        document.getElementById('error-overlay').classList.remove('active');
+        document.getElementById('error-popup').classList.remove('active');
     });
 });
 
-async function cargarSelects() {
+async function loadSelects() {
     const [chains, codigosPostales, users, campaigns] = await Promise.all([
         fetchJson(`${API_BASE}/cadena`),
         fetchJson(`${API_BASE}/codigo_postal`),
@@ -48,7 +48,7 @@ async function cargarSelects() {
         fetchJson(`${API_BASE}/campana`)
     ]);
 
-    const selectCadena = document.getElementById('nueva-cadena');
+    const selectCadena = document.getElementById('new-chain');
     chains.forEach(c => {
         const opt = document.createElement('option');
         opt.value = c.id_cadena;
@@ -56,7 +56,7 @@ async function cargarSelects() {
         selectCadena.appendChild(opt);
     });
 
-    const selectCp = document.getElementById('nueva-cp');
+    const selectCp = document.getElementById('new-zip');
     codigosPostales.forEach(cp => {
         const opt = document.createElement('option');
         opt.value = cp.id_cp;
@@ -64,7 +64,7 @@ async function cargarSelects() {
         selectCp.appendChild(opt);
     });
 
-    const selectCoord = document.getElementById('nueva-coordinador');
+    const selectCoord = document.getElementById('new-coordinator');
     users.filter(u => u.id_rol === 2).forEach(u => {
         const opt = document.createElement('option');
         opt.value = u.id_usuario;
@@ -72,7 +72,7 @@ async function cargarSelects() {
         selectCoord.appendChild(opt);
     });
 
-    const selectCamp = document.getElementById('nueva-campanas');
+    const selectCamp = document.getElementById('new-campaigns');
     campaigns.forEach(c => {
         const opt = document.createElement('option');
         opt.value = c.id_campana;
@@ -81,48 +81,42 @@ async function cargarSelects() {
     });
 }
 
-function prellenarFormulario(est) {
-    document.getElementById('nueva-nombre').value = est.nombre_resena || '';
-    document.getElementById('nueva-cadena').value = est.id_cadena || '';
-    document.getElementById('nueva-tipo-via').value = est.obj_direccion?.tipo_via || '';
-    document.getElementById('nueva-via').value = est.obj_direccion?.nombre_via || '';
-    document.getElementById('nueva-numero').value = est.obj_direccion?.numero || '';
-    document.getElementById('nueva-cp').value = est.obj_cp?.id_cp || '';
-    document.getElementById('nueva-lineales').value = est.lineales || '';
-    document.getElementById('nueva-coordinador').value = est.id_coordinador || '';
+function fillForm(est) {
+    document.getElementById('new-name').value = est.nombre_resena || '';
+    document.getElementById('new-chain').value = est.id_cadena || '';
+    document.getElementById('new-street-type').value = est.obj_direccion?.tipo_via || '';
+    document.getElementById('new-street').value = est.obj_direccion?.nombre_via || '';
+    document.getElementById('new-number').value = est.obj_direccion?.numero || '';
+    document.getElementById('new-zip').value = est.obj_cp?.id_cp || '';
+    document.getElementById('new-checkouts').value = est.lineales || '';
+    document.getElementById('new-coordinator').value = est.id_coordinador || '';
 
     if (est.campanasIds) {
-        const select = document.getElementById('nueva-campanas');
+        const select = document.getElementById('new-campaigns');
         Array.from(select.options).forEach(opt => {
             opt.selected = est.campanasIds.includes(opt.value);
         });
     }
 }
 
-async function guardarTienda() {
-    const btn = document.getElementById('btn-guardar-tienda');
-    const textoOriginal = btn.textContent;
-
+async function saveStore() {
     try {
-        btn.textContent = 'Guardando...';
-        btn.disabled = true;
-
-        const nombre = document.getElementById('nueva-nombre').value.trim();
-        const idCadena = document.getElementById('nueva-cadena').value;
-        const tipoVia = document.getElementById('nueva-tipo-via').value;
-        const nombreVia = document.getElementById('nueva-via').value.trim();
-        const numero = document.getElementById('nueva-numero').value.trim();
-        const idCp = document.getElementById('nueva-cp').value;
-        const lineales = parseInt(document.getElementById('nueva-lineales').value) || 0;
-        const idCoordinador = document.getElementById('nueva-coordinador').value;
+        const nombre = document.getElementById('new-name').value.trim();
+        const idCadena = document.getElementById('new-chain').value;
+        const tipoVia = document.getElementById('new-street-type').value;
+        const nombreVia = document.getElementById('new-street').value.trim();
+        const numero = document.getElementById('new-number').value.trim();
+        const idCp = document.getElementById('new-zip').value;
+        const lineales = parseInt(document.getElementById('new-checkouts').value) || 0;
+        const idCoordinador = document.getElementById('new-coordinator').value;
         const campanasSeleccionadas = Array.from(
-            document.getElementById('nueva-campanas').selectedOptions
+            document.getElementById('new-campaigns').selectedOptions
         ).map(o => o.value);
 
-        const datoEdicion = sessionStorage.getItem('establecimiento_editar');
+        const editData = sessionStorage.getItem('establecimiento_editar');
 
-        if (datoEdicion) {
-            const estOriginal = JSON.parse(datoEdicion);
+        if (editData) {
+            const estOriginal = JSON.parse(editData);
 
             if (estOriginal.obj_direccion) {
                 await fetch(`${API_BASE}/direccion/${estOriginal.obj_direccion.id}`, {
@@ -219,17 +213,14 @@ async function guardarTienda() {
             }
         }
 
-        document.getElementById('overlay-exito').classList.add('active');
-        document.getElementById('popup-exito').classList.add('active');
+        document.getElementById('save-overlay').classList.add('active');
+        document.getElementById('save-popup').classList.add('active');
 
     } catch (error) {
         console.error('Error al guardar el establecimiento:', error);
-        document.getElementById('texto-error-popup').textContent =
+        document.getElementById('error-popup-text').textContent =
             'No se pudo guardar el establecimiento. Revisa la consola y que json-server esté corriendo.';
-        document.getElementById('overlay-error').classList.add('active');
-        document.getElementById('popup-error').classList.add('active');
-    } finally {
-        btn.textContent = textoOriginal;
-        btn.disabled = false;
+        document.getElementById('error-overlay').classList.add('active');
+        document.getElementById('error-popup').classList.add('active');
     }
 }

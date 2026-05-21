@@ -1,9 +1,8 @@
-// ----- INITIAL CONFIGURATION -----
 const API_BASE = 'http://localhost:3000';
-const VISIBLE_ROWS = 6;
 
 let establishmentsData = [];
 let selectedEstablishmentId = null;
+let selectedEstablishmentInternalId = null;
 let campaignsData = [];
 let chainsCatalog = [];
 
@@ -11,45 +10,49 @@ document.addEventListener("DOMContentLoaded", () => {
     loadEstablishments();
     document.getElementById('btn-filter').addEventListener('click', applyFilters);
 
-    document.getElementById('btn-add-establecimiento').addEventListener('click', () => {
+    document.getElementById('btn-add').addEventListener('click', () => {
         showForm(null);
     });
 
-    document.getElementById('btn-editar-establecimiento').addEventListener('click', (e) => {
+    document.getElementById('btn-edit').addEventListener('click', (e) => {
         e.stopPropagation();
         const est = establishmentsData.find(e => e.id_establecimiento === selectedEstablishmentId);
         if (est) showForm(est);
     });
 
-    document.getElementById('btn-eliminar-establecimiento').addEventListener('click', (e) => {
+    document.getElementById('btn-delete').addEventListener('click', (e) => {
         e.stopPropagation();
         if (selectedEstablishmentId) {
-            document.getElementById('overlay-eliminar').classList.add('active');
-            document.getElementById('popup-eliminar').classList.add('active');
+            document.getElementById('delete-overlay').classList.add('active');
+            document.getElementById('delete-popup').classList.add('active');
         }
     });
 
-    document.getElementById('btn-cancelar-eliminar').addEventListener('click', (e) => {
+    document.getElementById('btn-cancel-delete').addEventListener('click', (e) => {
         e.preventDefault();
         hideDeletePopup();
     });
 
-    document.getElementById('btn-confirmar-eliminar').addEventListener('click', async (e) => {
+    document.getElementById('btn-confirm-delete').addEventListener('click', async (e) => {
         e.preventDefault();
         await deleteEstablishment(e.target);
     });
 
-    document.getElementById('btn-cancelar-formulario').addEventListener('click', () => {
+    document.getElementById('btn-cancel-form').addEventListener('click', () => {
         hideForm();
     });
 
-    document.getElementById('form-establecimiento').addEventListener('submit', async (e) => {
+    document.getElementById('establishment-form').addEventListener('submit', async (e) => {
         e.preventDefault();
-        await guardarEstablecimiento();
+        await saveEstablishment();
+    });
+
+    document.getElementById('btn-accept-success').addEventListener('click', (e) => {
+        e.preventDefault();
+        hideSuccessPopup();
     });
 });
 
-// ----- UTILITIES -----
 async function fetchJson(url) {
     const res = await fetch(url);
     if (!res.ok) throw new Error(`Error ${res.status} en ${url}`);
@@ -62,12 +65,7 @@ function capitalize(str) {
 }
 
 function clearSelection() {
-    document.querySelectorAll('#tabla-establecimientos tr').forEach(r => r.classList.remove('selected'));
-}
-
-function updateScrollable(list) {
-    const wrapper = document.querySelector('.table-wrapper');
-    wrapper.classList.toggle('scrollable', list.length > VISIBLE_ROWS);
+    document.querySelectorAll('#establishments-table tr').forEach(r => r.classList.remove('selected'));
 }
 
 function buildAddress(dir) {
@@ -94,7 +92,7 @@ function populateChainSelect(chains) {
 }
 
 function populateCampaignSelect(campaigns) {
-    const select = document.getElementById('filter-campanas');
+    const select = document.getElementById('filter-campaigns');
     while (select.options.length > 1) select.remove(1);
     campaigns.forEach(c => {
         const opt = document.createElement('option');
@@ -105,7 +103,7 @@ function populateCampaignSelect(campaigns) {
 }
 
 function populateFormCampaignSelect(campaigns) {
-    const select = document.getElementById('form-campanas');
+    const select = document.getElementById('form-campaigns');
     select.innerHTML = '';
     campaigns.forEach(c => {
         const opt = document.createElement('option');
@@ -115,19 +113,8 @@ function populateFormCampaignSelect(campaigns) {
     });
 }
 
-function populateFormChainSelect(chains) {
-    const select = document.getElementById('form-cadena');
-    while (select.options.length > 1) select.remove(1);
-    chains.forEach(c => {
-        const opt = document.createElement('option');
-        opt.value = c.id_cadena;
-        opt.textContent = c.nombre_cadena;
-        select.appendChild(opt);
-    });
-}
-
 function populateFormCoordinatorSelect(users) {
-    const select = document.getElementById('form-coordinador');
+    const select = document.getElementById('form-coordinator');
     users.filter(u => u.id_rol === 2).forEach(u => {
         const opt = document.createElement('option');
         opt.value = u.id_usuario;
@@ -158,19 +145,18 @@ function populateZoneSelect(zones) {
 }
 
 function setTableState(state, message = '') {
-    const tbody = document.getElementById('tabla-establecimientos');
-    const counter = document.getElementById('contador-establecimientos');
+    const tbody = document.getElementById('establishments-table');
+    const counter = document.getElementById('establishments-counter');
 
     if (state === 'loading') {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;">Cargando...</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" class="table-cell-loading">Cargando...</td></tr>`;
         counter.textContent = 'Cargando...';
     } else if (state === 'error') {
-        tbody.innerHTML = `<tr><td colspan="3" style="text-align:center;padding:20px;color:#dc2626;">${message}</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="3" class="table-cell-error">${message}</td></tr>`;
         counter.textContent = 'Error de conexión';
     }
 }
 
-// ----- FETCH AND PROCESS DATA -----
 async function loadEstablishments() {
     setTableState('loading');
     try {
@@ -216,8 +202,6 @@ async function loadEstablishments() {
                 id_zona: zona ? zona.id_zona : null,
                 nombre_coordinador: usuarioCoord ? capitalize(usuarioCoord.usuario) : "Sin asignar",
                 id_coordinador: asignacion ? asignacion.id_usuario_coordinador : null,
-                gran_recogida: asignaciones.some(a => a.id_tienda === est.id_establecimiento && a.id_campana === "GR2025"),
-                primavera: asignaciones.some(a => a.id_tienda === est.id_establecimiento && a.id_campana === "PRIM2025"),
                 campanasIds: asignaciones
                     .filter(a => a.id_tienda === est.id_establecimiento)
                     .map(a => a.id_campana),
@@ -235,7 +219,6 @@ async function loadEstablishments() {
     }
 }
 
-// ----- FILTER LOGIC -----
 function applyFilters() {
     const filters = {
         cadena:    document.getElementById('filter-chain').value,
@@ -245,7 +228,7 @@ function applyFilters() {
         codigo:    document.getElementById('filter-code').value.trim(),
         localidad: document.getElementById('filter-city').value.toLowerCase().trim(),
         zona:      document.getElementById('filter-zone').value,
-        campana:   document.getElementById('filter-campanas').value,
+        campana:   document.getElementById('filter-campaigns').value,
         coord:     document.getElementById('filter-coordinator').value
     };
 
@@ -270,7 +253,7 @@ function applyFilters() {
 // ----- TABLE RENDERING -----
 function createEstablishmentRow(est, onSelect) {
     const tr = document.createElement('tr');
-    tr.style.cursor = 'pointer';
+    tr.classList.add('row-selectable');
 
     tr.innerHTML = `
         <td>
@@ -289,7 +272,7 @@ function createEstablishmentRow(est, onSelect) {
 }
 
 function displayEstablishments(list) {
-    const tbody = document.getElementById('tabla-establecimientos');
+    const tbody = document.getElementById('establishments-table');
     tbody.innerHTML = '';
     list.forEach(est => tbody.appendChild(
         createEstablishmentRow(est, (e, tr) => {
@@ -298,26 +281,25 @@ function displayEstablishments(list) {
             showDetail(e);
         })
     ));
-    updateScrollable(list);
 }
 
 function updateCounter(total) {
-    document.getElementById('contador-establecimientos').textContent =
+    document.getElementById('establishments-counter').textContent =
         `${total} establecimiento${total !== 1 ? 's' : ''} encontrado${total !== 1 ? 's' : ''}`;
 }
 
-// ----- DETAIL PANEL -----
 function showDetail(est) {
     selectedEstablishmentId = est.id_establecimiento;
+    selectedEstablishmentInternalId = est.id;
 
-    document.getElementById('formulario-establecimiento').style.display = 'none';
-    document.getElementById('acciones-formulario').style.display = 'none';
-    document.getElementById('acciones-detalle').style.display = 'flex';
-    document.getElementById('estado-vacio-panel').style.display = 'none';
-    document.getElementById('datos-establecimiento').style.display = 'block';
+    document.getElementById('establishment-form-panel').style.display = 'none';
+    document.getElementById('form-actions-bar').style.display = 'none';
+    document.getElementById('detail-actions').style.display = 'flex';
+    document.getElementById('empty-state-panel').style.display = 'none';
+    document.getElementById('establishment-data').style.display = 'block';
 
-    document.getElementById('btn-editar-establecimiento').disabled = false;
-    document.getElementById('btn-eliminar-establecimiento').disabled = false;
+    document.getElementById('btn-edit').disabled = false;
+    document.getElementById('btn-delete').disabled = false;
 
     document.getElementById('ficha-nombre').textContent = est.nombre_resena;
     document.getElementById('ficha-cadena').textContent = est.nombre_cadena;
@@ -337,75 +319,68 @@ function showDetail(est) {
     });
 }
 
-// ----- INLINE FORM -----
 function showForm(est) {
-    document.getElementById('estado-vacio-panel').style.display = 'none';
-    document.getElementById('datos-establecimiento').style.display = 'none';
-    document.getElementById('formulario-establecimiento').style.display = 'block';
-    document.getElementById('acciones-detalle').style.display = 'none';
-    document.getElementById('acciones-formulario').style.display = 'flex';
+    document.getElementById('empty-state-panel').style.display = 'none';
+    document.getElementById('establishment-data').style.display = 'none';
+    document.getElementById('establishment-form-panel').style.display = 'block';
+    document.getElementById('detail-actions').style.display = 'none';
+    document.getElementById('form-actions-bar').style.display = 'flex';
 
     if (est) {
-        document.getElementById('form-titulo').textContent = 'Editar Establecimiento';
-        document.getElementById('form-nombre').value = est.nombre_resena || '';
-        document.getElementById('form-cadena').value = est.nombre_cadena || '';
-        document.getElementById('form-tipo-via').value = est.obj_direccion?.tipo_via || '';
-        document.getElementById('form-via').value = est.obj_direccion?.nombre_via || '';
-        document.getElementById('form-numero').value = est.obj_direccion?.numero || '';
-        document.getElementById('form-cp').value = est.obj_cp?.codigo || '';
-        document.getElementById('form-lineales').value = est.lineales || '';
-        document.getElementById('form-coordinador').value = est.id_coordinador || '';
+        document.getElementById('form-title').textContent = 'Editar Establecimiento';
+        document.getElementById('form-name').value = est.nombre_resena || '';
+        document.getElementById('form-chain').value = est.nombre_cadena || '';
+        document.getElementById('form-street-type').value = est.obj_direccion?.tipo_via || '';
+        document.getElementById('form-street').value = est.obj_direccion?.nombre_via || '';
+        document.getElementById('form-number').value = est.obj_direccion?.numero || '';
+        document.getElementById('form-zip').value = est.obj_cp?.codigo || '';
+        document.getElementById('form-checkouts').value = est.lineales || '';
+        document.getElementById('form-coordinator').value = est.id_coordinador || '';
 
         if (est.campanasIds) {
-            const select = document.getElementById('form-campanas');
+            const select = document.getElementById('form-campaigns');
             Array.from(select.options).forEach(opt => {
                 opt.selected = est.campanasIds.includes(opt.value);
             });
         }
     } else {
-        document.getElementById('form-titulo').textContent = 'Nuevo Establecimiento';
-        document.getElementById('form-establecimiento').reset();
-        Array.from(document.getElementById('form-campanas').options).forEach(o => o.selected = false);
+        document.getElementById('form-title').textContent = 'Nuevo Establecimiento';
+        document.getElementById('establishment-form').reset();
+        Array.from(document.getElementById('form-campaigns').options).forEach(o => o.selected = false);
     }
 
     selectedEstablishmentId = est ? est.id_establecimiento : 'new';
 }
 
 function hideForm() {
-    document.getElementById('formulario-establecimiento').style.display = 'none';
-    document.getElementById('acciones-formulario').style.display = 'none';
+    document.getElementById('establishment-form-panel').style.display = 'none';
+    document.getElementById('form-actions-bar').style.display = 'none';
 
     if (selectedEstablishmentId === 'new') {
-        document.getElementById('estado-vacio-panel').style.display = 'block';
-        document.getElementById('acciones-detalle').style.display = 'none';
+        document.getElementById('empty-state-panel').style.display = 'block';
+        document.getElementById('detail-actions').style.display = 'none';
     } else if (selectedEstablishmentId) {
-        document.getElementById('datos-establecimiento').style.display = 'block';
-        document.getElementById('acciones-detalle').style.display = 'flex';
-        document.getElementById('btn-editar-establecimiento').disabled = false;
-        document.getElementById('btn-eliminar-establecimiento').disabled = false;
+        document.getElementById('establishment-data').style.display = 'block';
+        document.getElementById('detail-actions').style.display = 'flex';
+        document.getElementById('btn-edit').disabled = false;
+        document.getElementById('btn-delete').disabled = false;
     } else {
-        document.getElementById('estado-vacio-panel').style.display = 'block';
-        document.getElementById('acciones-detalle').style.display = 'none';
+        document.getElementById('empty-state-panel').style.display = 'block';
+        document.getElementById('detail-actions').style.display = 'none';
     }
 }
 
-async function guardarEstablecimiento() {
-    const btn = document.getElementById('btn-guardar-establecimiento');
-    const textoOriginal = btn.textContent;
-
+async function saveEstablishment() {
     try {
-        btn.textContent = 'Guardando...';
-        btn.disabled = true;
-
-        const nombre = document.getElementById('form-nombre').value.trim();
-        const nombreCadena = document.getElementById('form-cadena').value.trim().toUpperCase();
+        const nombre = document.getElementById('form-name').value.trim();
+        const nombreCadena = document.getElementById('form-chain').value.trim().toUpperCase();
         let cadena = chainsCatalog.find(c => c.nombre_cadena.toUpperCase() === nombreCadena);
         if (!cadena) {
             const nuevoId = nombreCadena.replace(/\s+/g, '_').replace(/[^A-Z0-9_]/g, '');
             cadena = {
                 id: Math.random().toString(36).substring(2, 11),
                 id_cadena: nuevoId,
-                nombre_cadena: document.getElementById('form-cadena').value.trim()
+                nombre_cadena: document.getElementById('form-chain').value.trim()
             };
             const res = await fetch(`${API_BASE}/cadena`, {
                 method: 'POST',
@@ -416,14 +391,14 @@ async function guardarEstablecimiento() {
             chainsCatalog.push(cadena);
         }
         const idCadena = cadena.id_cadena;
-        const tipoVia = document.getElementById('form-tipo-via').value;
-        const nombreVia = document.getElementById('form-via').value.trim();
-        const numero = document.getElementById('form-numero').value.trim();
-        const codigoCp = document.getElementById('form-cp').value.trim();
-        const lineales = parseInt(document.getElementById('form-lineales').value) || 0;
-        const idCoordinador = document.getElementById('form-coordinador').value;
+        const tipoVia = document.getElementById('form-street-type').value;
+        const nombreVia = document.getElementById('form-street').value.trim();
+        const numero = document.getElementById('form-number').value.trim();
+        const codigoCp = document.getElementById('form-zip').value.trim();
+        const lineales = parseInt(document.getElementById('form-checkouts').value) || 0;
+        const idCoordinador = document.getElementById('form-coordinator').value;
         const campanasSeleccionadas = Array.from(
-            document.getElementById('form-campanas').selectedOptions
+            document.getElementById('form-campaigns').selectedOptions
         ).map(o => o.value);
 
         if (selectedEstablishmentId && selectedEstablishmentId !== 'new') {
@@ -593,38 +568,38 @@ async function guardarEstablecimiento() {
             }
         }
 
-        hideForm();
         selectedEstablishmentId = null;
-        await loadEstablishments();
+        hideForm();
+        document.getElementById('save-overlay').classList.add('active');
+        document.getElementById('save-popup').classList.add('active');
 
     } catch (error) {
         console.error('Error al guardar:', error);
         alert('Error al guardar el establecimiento. Revisa la consola.');
-    } finally {
-        btn.textContent = textoOriginal;
-        btn.disabled = false;
     }
+}
+
+function hideSuccessPopup() {
+    document.getElementById('save-overlay').classList.remove('active');
+    document.getElementById('save-popup').classList.remove('active');
+    selectedEstablishmentId = null;
+    loadEstablishments();
 }
 
 // ----- DELETE POPUP -----
 function hideDeletePopup() {
-    document.getElementById('overlay-eliminar').classList.remove('active');
-    document.getElementById('popup-eliminar').classList.remove('active');
+    document.getElementById('delete-overlay').classList.remove('active');
+    document.getElementById('delete-popup').classList.remove('active');
 }
 
 async function deleteEstablishment(btn) {
-    if (!selectedEstablishmentId) {
+    if (!selectedEstablishmentInternalId) {
         alert("Error: No se ha seleccionado ningún establecimiento.");
         return;
     }
 
-    const originalText = btn.textContent;
-
     try {
-        btn.textContent = "Eliminando...";
-        btn.disabled = true;
-
-        const response = await fetch(`${API_BASE}/establecimiento/${selectedEstablishmentId}`, {
+        const response = await fetch(`${API_BASE}/establecimiento/${selectedEstablishmentInternalId}`, {
             method: 'DELETE',
             headers: { 'Content-Type': 'application/json' }
         });
@@ -635,21 +610,18 @@ async function deleteEstablishment(btn) {
 
         hideDeletePopup();
         selectedEstablishmentId = null;
+        selectedEstablishmentInternalId = null;
 
-        document.getElementById('datos-establecimiento').style.display = 'none';
-        document.getElementById('formulario-establecimiento').style.display = 'none';
-        document.getElementById('acciones-formulario').style.display = 'none';
-        document.getElementById('acciones-detalle').style.display = 'none';
-        document.getElementById('estado-vacio-panel').style.display = 'block';
+        document.getElementById('establishment-data').style.display = 'none';
+        document.getElementById('establishment-form-panel').style.display = 'none';
+        document.getElementById('form-actions-bar').style.display = 'none';
+        document.getElementById('detail-actions').style.display = 'none';
+        document.getElementById('empty-state-panel').style.display = 'block';
 
         await loadEstablishments();
-        alert("Establecimiento eliminado con éxito");
 
     } catch (error) {
         console.error("Error al intentar eliminar el establecimiento:", error);
         alert("No se pudo eliminar el establecimiento. Asegúrate de que json-server esté corriendo.");
-    } finally {
-        btn.textContent = originalText;
-        btn.disabled = false;
     }
 }

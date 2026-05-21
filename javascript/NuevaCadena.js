@@ -1,11 +1,8 @@
-// ----- CONFIGURACIÓN INICIAL -----
-const API_BASE = 'http://localhost:3000';
-
 document.addEventListener("DOMContentLoaded", () => {
-    const datos = sessionStorage.getItem('cadena_editar');
-    if (!datos) return;
+    const data = sessionStorage.getItem('cadena_editar');
+    if (!data) return;
 
-    const cad = JSON.parse(datos);
+    const cad = JSON.parse(data);
 
     document.getElementById('form-title').textContent = 'Editar Cadena';
     document.getElementById('form-subtitle').textContent = 'Modifica los datos de la cadena';

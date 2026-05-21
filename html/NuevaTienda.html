@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="../css/Common.css">
     <link rel="stylesheet" href="../css/popUpRegistro.css">
     <link rel="stylesheet" href="../css/DetalleColaborador.css">
-    <link rel="stylesheet" href="../css/EditarColaborador.css">
+    <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/NuevaTienda.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
@@ -19,17 +19,17 @@
         <include-html src="../html/Sidebar.html"></include-html>
     </aside>
     <div class="right-content">
-        <header class="main-header">
+                <header>
             <nav>
-                <div class="header-branding">
-                    <img src="../images/icono.png" alt="Bancosol" class="header-logo">
-                    <div class="header-titles">
+                <div>
+                    <img src="../images/icono.png" alt="Bancosol">
+                    <div>
                         <h1>Nuevo Establecimiento</h1>
                         <p>Añadir un nuevo establecimiento a la base de datos</p>
                     </div>
                 </div>
                 <a href="InformacionTienda.html">
-                    <button class="btn btn--secondary">← Volver</button>
+                    <button class="btn btn--cancel">← Volver</button>
                 </a>
             </nav>
         </header>
@@ -40,21 +40,21 @@
 
                     <aside class="detail-panel">
                         <div class="detail-content">
-                            <div id="formulario-nueva-tienda" class="datos-colaborador">
+                            <div>
                                 <h3 class="ficha-titulo-principal">Ficha del Establecimiento</h3>
 
-                                <form id="form-nueva-tienda">
+                                <form id="form-new-store">
 
                                     <div class="ficha-tarjeta-info tarjeta-cabecera-edit">
                                         <h5>Nombre del Establecimiento</h5>
-                                        <input type="text" id="nueva-nombre" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour Hiper Centro">
+                                        <input type="text" id="new-name" class="input-ficha-lateral input-nombre-principal" required placeholder="Ej. Carrefour Hiper Centro">
                                     </div>
 
                                     <div class="ficha-tarjeta-info">
                                         <h5>Cadena</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="nueva-cadena"><strong>Cadena comercial:</strong></label>
-                                            <select id="nueva-cadena" class="select-ficha-lateral" required>
+                                            <label for="new-chain"><strong>Cadena comercial:</strong></label>
+                                            <select id="new-chain" class="select-ficha-lateral" required>
                                                 <option value="">Selecciona una cadena...</option>
                                             </select>
                                         </div>
@@ -63,8 +63,8 @@
                                     <div class="ficha-tarjeta-info">
                                         <h5>Dirección Postal</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="nueva-tipo-via"><strong>Tipo de Vía:</strong></label>
-                                            <select id="nueva-tipo-via" class="select-ficha-lateral">
+                                            <label for="new-street-type"><strong>Tipo de Vía:</strong></label>
+                                            <select id="new-street-type" class="select-ficha-lateral">
                                                 <option value="">Selecciona...</option>
                                                 <option value="Calle">Calle</option>
                                                 <option value="Avenida">Avenida</option>
@@ -72,16 +72,16 @@
                                             </select>
                                         </div>
                                         <div class="campo-formulario-ficha">
-                                            <label for="nueva-via"><strong>Nombre de la Vía:</strong></label>
-                                            <input type="text" id="nueva-via" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
+                                            <label for="new-street"><strong>Nombre de la Vía:</strong></label>
+                                            <input type="text" id="new-street" class="input-ficha-lateral" placeholder="Ej. Av. de Andalucía">
                                         </div>
                                         <div class="campo-formulario-ficha">
-                                            <label for="nueva-numero"><strong>Número:</strong></label>
-                                            <input type="text" id="nueva-numero" class="input-ficha-lateral" placeholder="Ej. 12">
+                                            <label for="new-number"><strong>Número:</strong></label>
+                                            <input type="text" id="new-number" class="input-ficha-lateral" placeholder="Ej. 12">
                                         </div>
                                         <div class="campo-formulario-ficha">
-                                            <label for="nueva-cp"><strong>Código Postal:</strong></label>
-                                            <select id="nueva-cp" class="select-ficha-lateral" required>
+                                            <label for="new-zip"><strong>Código Postal:</strong></label>
+                                            <select id="new-zip" class="select-ficha-lateral" required>
                                                 <option value="">Selecciona un CP...</option>
                                             </select>
                                         </div>
@@ -90,12 +90,12 @@
                                     <div class="ficha-tarjeta-info">
                                         <h5>Información General</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="nueva-lineales"><strong>Número de cajas:</strong></label>
-                                            <input type="number" id="nueva-lineales" class="input-ficha-lateral" placeholder="Número de lineales" min="0">
+                                            <label for="new-checkouts"><strong>Número de cajas:</strong></label>
+                                            <input type="number" id="new-checkouts" class="input-ficha-lateral" placeholder="Número de lineales" min="0">
                                         </div>
                                         <div class="campo-formulario-ficha">
-                                            <label for="nueva-coordinador"><strong>Coordinador:</strong></label>
-                                            <select id="nueva-coordinador" class="select-ficha-lateral">
+                                            <label for="new-coordinator"><strong>Coordinador:</strong></label>
+                                            <select id="new-coordinator" class="select-ficha-lateral">
                                                 <option value="">Sin asignar</option>
                                             </select>
                                         </div>
@@ -104,10 +104,10 @@
                                     <div class="ficha-tarjeta-info">
                                         <h5>Campañas</h5>
                                         <div class="campo-formulario-ficha">
-                                            <label for="nueva-campanas"><strong>Participación en campañas:</strong></label>
-                                            <select id="nueva-campanas" class="select-ficha-lateral" multiple size="4">
+                                            <label for="new-campaigns"><strong>Participación en campañas:</strong></label>
+                                            <select id="new-campaigns" class="select-ficha-lateral" multiple size="4">
                                             </select>
-                                            <small style="color:#6b7280; font-size:0.75rem; margin-top:4px;">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
+                                            <small class="form-hint">Mantén Ctrl (o Cmd en Mac) para seleccionar varias</small>
                                         </div>
                                     </div>
 
@@ -116,9 +116,9 @@
                         </div>
 
                         <div class="detail-actions-sticky">
-                            <button type="submit" form="form-nueva-tienda" id="btn-guardar-tienda" class="btn-ficha btn-guardar">Guardar</button>
+                            <button type="submit" form="form-new-store" class="btn btn--primary">Guardar</button>
                             <a href="InformacionTienda.html">
-                                <button type="button" class="btn-ficha btn-cancelar-edit">Cancelar</button>
+                                <button type="button" class="btn btn--cancel">Cancelar</button>
                             </a>
                         </div>
                     </aside>
@@ -129,25 +129,25 @@
     </div>
 </div>
 
-<div class="overlay" id="overlay-exito">
-    <div class="popup" id="popup-exito">
+<div class="overlay" id="save-overlay">
+    <div class="popup" id="save-popup">
         <h3>¡Guardado con éxito!</h3>
         <p>El establecimiento ha sido añadido correctamente a la base de datos.</p>
-        <div class="popup-actions">
+        <div>
             <form action="">
-                <button class="btn-add" id="btn-aceptar-exito">Aceptar</button>
+                <button class="btn btn--primary" id="btn-accept-success">Aceptar</button>
             </form>
         </div>
     </div>
 </div>
 
-<div class="overlay" id="overlay-error">
-    <div class="popup" id="popup-error">
+<div class="overlay" id="error-overlay">
+    <div class="popup" id="error-popup">
         <h3>Ha ocurrido un error</h3>
-        <p id="texto-error-popup">No se pudo guardar el establecimiento.</p>
-        <div class="popup-actions">
+        <p id="error-popup-text">No se pudo guardar el establecimiento.</p>
+        <div>
             <form action="">
-                <button class="btn-cerrar-popup" id="btn-aceptar-error">Aceptar</button>
+                <button class="btn btn--primary" id="btn-accept-error">Aceptar</button>
             </form>
         </div>
     </div>

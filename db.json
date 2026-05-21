@@ -1192,6 +1192,11 @@
       "codigo": "29635",
       "id_division": 14,
       "id": "UXTEDw8z7gU"
+    },
+    {
+      "id": "bdCCk2LK0R8",
+      "id_cp": 86,
+      "codigo": "prueba"
     }
   ],
   "cadena": [
@@ -1249,6 +1254,11 @@
       "id_cadena": "SUMA",
       "nombre_cadena": "SUMA",
       "id": "WBJJNP1aBzk"
+    },
+    {
+      "id": "8FtbUAbR1N4",
+      "id_cadena": "ALDI",
+      "nombre_cadena": "ALDI"
     }
   ],
   "campana": [
@@ -1316,29 +1326,24 @@
       "id": "4ZWBaVyhDmA"
     },
     {
-      "id": "cacsunqo31",
-      "id_campana": "GR2025",
-      "id_cadena": "ALCAMPO"
+      "id": "0sYgXXN6cUQ",
+      "id_cadena": "PRUEBA",
+      "id_campana": "GR2025"
     },
     {
-      "id": "ha360san39",
-      "id_campana": "GR2025",
-      "id_cadena": "CARREFOUR"
+      "id": "3DuF4GDI57M",
+      "id_cadena": "PRUEBA",
+      "id_campana": "PRIM2025"
     },
     {
-      "id": "jstk9stp67",
-      "id_campana": "GR2025",
-      "id_cadena": "DIA"
+      "id": "hg1hR7yDUbg",
+      "id_cadena": "PR",
+      "id_campana": "PRIM2025"
     },
     {
-      "id": "qrson6grcw",
-      "id_campana": "GR2025",
-      "id_cadena": "ECI"
-    },
-    {
-      "id": "z19tdo93ri",
-      "id_campana": "GR2025",
-      "id_cadena": "EL_JAM"
+      "id": "p2yQsCw5IVk",
+      "id_cadena": "SA",
+      "id_campana": "PRIM2025"
     }
   ],
   "direccion": [
@@ -6677,6 +6682,62 @@
       "numero": null,
       "id_cp": 85,
       "id": "03wW3dgaMEg"
+    },
+    {
+      "id": "_RWamn35RLM",
+      "id_direccion": 668,
+      "tipo_via": "",
+      "nombre_via": "",
+      "numero": null,
+      "id_cp": null
+    },
+    {
+      "id": "K5oYJpCYzrU",
+      "id_direccion": 669,
+      "tipo_via": "",
+      "nombre_via": "",
+      "numero": null,
+      "id_cp": null
+    },
+    {
+      "id": "0GBkbhPvJ3A",
+      "id_direccion": 670,
+      "tipo_via": "",
+      "nombre_via": "prueba",
+      "numero": "prueba",
+      "id_cp": 86
+    },
+    {
+      "id": "fjmUPv40ldY",
+      "id_direccion": 671,
+      "tipo_via": null,
+      "nombre_via": "rr",
+      "numero": "s/n",
+      "id_cp": 14
+    },
+    {
+      "id": "noOuAqd24aM",
+      "id_direccion": 672,
+      "tipo_via": "",
+      "nombre_via": "",
+      "numero": null,
+      "id_cp": null
+    },
+    {
+      "id": "u-gNiDy3J4c",
+      "id_direccion": 673,
+      "tipo_via": "",
+      "nombre_via": "",
+      "numero": null,
+      "id_cp": null
+    },
+    {
+      "id": "k0qC6xA0c-g",
+      "id_direccion": 674,
+      "tipo_via": "",
+      "nombre_via": "",
+      "numero": null,
+      "id_cp": null
     }
   ],
   "establecimiento": [
@@ -9569,6 +9630,39 @@
       "lineales": 1,
       "id_direccion": 358,
       "id": "MK7ktDt5XB4"
+    },
+    {
+      "id": "q02rmeWfyGM",
+      "id_establecimiento": 359,
+      "nombre_resena": "editado para comprobar",
+      "id_cadena": "PRUEBA",
+      "lineales": 1,
+      "id_direccion": 670,
+      "nombre_cadena": "prueba",
+      "localidad": "Desconocida",
+      "nombre_zona": "Sin zona",
+      "id_zona": null,
+      "nombre_coordinador": "Vicente",
+      "id_coordinador": 48,
+      "gran_recogida": true,
+      "primavera": true,
+      "campanasIds": [
+        "GR2025",
+        "PRIM2025"
+      ],
+      "obj_direccion": {
+        "id": "0GBkbhPvJ3A",
+        "id_direccion": 670,
+        "tipo_via": "",
+        "nombre_via": "prueba",
+        "numero": "prueba",
+        "id_cp": 86
+      },
+      "obj_cp": {
+        "id": "bdCCk2LK0R8",
+        "id_cp": 86,
+        "codigo": "prueba"
+      }
     }
   ],
   "colaborador": [
@@ -11734,6 +11828,13 @@
       "observaciones": null,
       "id_direccion": 667,
       "id": "zArPRVKvV4M"
+    },
+    {
+      "id": "9Bhh8qWueiY",
+      "id_colaborador": "A0524",
+      "nombre_colaborador": "prueba",
+      "observaciones": null,
+      "id_direccion": 671
     }
   ],
   "contacto_colaborador": [
@@ -11982,6 +12083,12 @@
       "id_colaborador": "SINC_88",
       "es_principal": true,
       "id": "hBMlbzZYEhs"
+    },
+    {
+      "id": "vRp6ibDW1e8",
+      "id_colaborador": "A0524",
+      "id_contacto": 63,
+      "es_principal": true
     }
   ],
   "rol": [
@@ -12497,6 +12604,14 @@
       "email": "ainhoitagar05@gmail.com",
       "observacion": null,
       "id": "TNKOcE2"
+    },
+    {
+      "id": "bwwR4lH8McE",
+      "id_persona": 63,
+      "nombre_completo": "pr",
+      "telefono": null,
+      "email": null,
+      "observacion": null
     }
   ],
   "usuario": [
@@ -12603,7 +12718,7 @@
     {
       "id_voluntario": 1,
       "id_persona": 51,
-      "preferencia_horario": "Mañana",
+      "preferencia_horario": "",
       "id_colaborador": null,
       "id": "eikJJjBuqdw"
     },
@@ -17583,6 +17698,18 @@
       "id_tienda": 358,
       "id_usuario_coordinador": 42,
       "id": "5SA9LAxsBvQ"
+    },
+    {
+      "id": "ElgdnTGtRfA",
+      "id_tienda": 359,
+      "id_usuario_coordinador": 48,
+      "id_campana": "GR2025"
+    },
+    {
+      "id": "OZ2tPoiB1nw",
+      "id_tienda": 359,
+      "id_usuario_coordinador": 48,
+      "id_campana": "PRIM2025"
     }
   ],
   "asignacion_turno_colaborador": [
