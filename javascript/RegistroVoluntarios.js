@@ -2,6 +2,11 @@ function maxNumero(lista, campo) {
     return Math.max(0, ...lista.map(item => Number(item?.[campo]) || 0));
 }
 
+document.getElementById('btn-descartar').addEventListener('click', () => {
+   window.location.href = 'AsignacionTurnos.html';
+});
+
+
 document.getElementById('form-voluntario').addEventListener('submit', async function (e) {
 
     e.preventDefault();
@@ -83,6 +88,7 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
         if (!responseVoluntario.ok) {
             throw new Error("Error al crear voluntario");
         }
+
 
         // ====================================
         // 6. MOSTRAR POPUP Y LIMPIAR FORMULARIO
