@@ -6,9 +6,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../css/Administrador.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
+    <link rel="stylesheet" href="../css/Header.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/Administrador.js" defer></script>
+    <script src="../javascript/Header.js"></script>
     <title>Dashboard - Vista de administrador</title>
 </head>
 
@@ -20,17 +22,8 @@
         </aside>
 
         <div class="right-container">
-            <header class="header-dashboard">
-                <img src="../images/icono.png" alt="App Icon" class="header-logo">
-                <div class="header-titles">
-                    <h1>Dashboard</h1>
-                    <p>Datos del sistema de gestión de campañas</p>
-                </div>
-                <div class="header-actions">
-                    <button class="notification-btn">
-                        <p>N</p>
-                    </button>
-                </div>
+            <header class="main-header">
+                <include-html src="../html/header.html"></include-html>
             </header>
 
             <main class="dashboard-container">

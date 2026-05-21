@@ -1,208 +1,147 @@
-// ----- CONFIGURACIÓN INICIAL -----
-const API_ENDPOINT = 'http://localhost:3000';
-
-// Leemos el ID de campaña de la URL al arrancar.
-// Ejemplo de URL: EditarCampana.html?id_campana=GR2025
-let parametrosURL = new URLSearchParams(window.location.search);
-let idCampana = parametrosURL.get('id_campana');
-
-// Snapshot de los datos originales cargados desde la API.
-// Se usa para revertir los cambios al pulsar "Descartar".
-let datosOriginales = null;
-
-// ----- EVENTO PRINCIPAL -----
-document.addEventListener('DOMContentLoaded', async function () {
-
-        if (!idCampana) {
-                console.log("URL completa:", window.location.href);
-                console.log("Search parameters:", window.location.search);
-                alert(`No se ha proporcionado un ID de campaña en la URL.\nURL actual: ${window.location.href}`);
-                return;
-        }
-
-        // Cargamos en paralelo los datos de la campaña, todas las cadenas
-        // disponibles y las cadenas que ya participan en esta campaña.
-        // Así solo hacemos una espera en lugar de tres seguidas
-        try {
-                let resultados = await Promise.all([
-                        fetchDatos('campana?id_campana=' + encodeURIComponent(idCampana)),
-                        fetchDatos('cadena'),
-                        fetchDatos('campana_cadena?id_campana=' + encodeURIComponent(idCampana))
-                ]);
-
-                let datosCampana = resultados[0];   // Array con la campaña (1 elemento)
-                let todasLasCadenas = resultados[1];   // Array con todas las cadenas de la db
-                let cadenasEnCampana = resultados[2];   // Array con las relaciones campana_cadena
-
-                // Rellenamos el formulario con los datos de la campaña
-                rellenarFormulario(datosCampana);
-
-                // Generamos los checkboxes con todas las cadenas y marcamos las participantes
-                generarCheckboxesCadenas(todasLasCadenas, cadenasEnCampana);
-
-                // Guardamos un snapshot de los valores originales para poder
-                // revertirlos si el usuario pulsa "Descartar"
-                if (datosCampana.length > 0) {
-                        let campana = datosCampana[0];
-                        datosOriginales = {
-                                nombre: campana.nombre_campana || '',
-                                fechaInicio: campana.fecha_inicio || '',
-                                fechaFin: campana.fecha_fin || '',
-                                estado: campana.estado || '',
-                                cadenas: new Set(cadenasEnCampana.map(function (rel) { return rel.id_cadena; }))
-                        };
-                }
-
-        } catch (error) {
-                console.error('Error al cargar los datos:', error);
-                alert('No se pudieron cargar los datos de la campaña.');
-        }
-
-        // El submit del formulario abre el popup de confirmación
-        // en lugar de guardar directamente
-        document.querySelector('#form-edit').addEventListener('submit', function (e) {
+document.addEventListener('DOMContentLoaded', function() {
+    document.addEventListener('click', async function (e) {
+        // Botón Editar en Ficha
+        if (e.target && e.target.id === 'btn-edit-campaign') {
                 e.preventDefault();
-                document.querySelector('#overlay-confirmar').classList.add('active');
-                document.querySelector('#popup-confirmar').classList.add('active');
-        });
 
-        // ----- BOTÓN CANCELAR (DESCARTAR CAMBIOS) -----
-        // Abre el popup de confirmación para descartar cambios
-        document.querySelector('#btn-cancelar').addEventListener('click', function () {
-                document.querySelector('#overlay-descartar').classList.add('active');
-                document.querySelector('#popup-descartar').classList.add('active');
-        });
-
-        // Confirmar descarte (Sí): vuelve a la lista de campañas
-        document.querySelector('#btn-confirmar-descarte').addEventListener('click', function () {
-                window.location.href = 'Campana.html';
-        });
-
-        // Cancelar descarte (No): cierra el popup sin hacer cambios
-        document.querySelector('#btn-cancelar-descarte').addEventListener('click', function () {
-                document.querySelector('#overlay-descartar').classList.remove('active');
-                document.querySelector('#popup-descartar').classList.remove('active');
-        });
-
-        // ----- LÓGICA POPUP CONFIRMACIÓN DE EDICIÓN -----
-        document.addEventListener('click', async function (e) {
-
-                // Cancelar: cierra el popup sin hacer nada
-                if (e.target && e.target.id === 'btn-cancelar-edicion') {
-                        e.preventDefault();
-                        document.querySelector('#overlay-confirmar').classList.remove('active');
-                        document.querySelector('#popup-confirmar').classList.remove('active');
+                if (!campanaSeleccionadaId) {
+                        alert("Error: No se ha seleccionado ninguna campaña.");
+                        return;
                 }
 
-                // Confirmar: cierra el popup y guarda los cambios
-                if (e.target && e.target.id === 'btn-confirmar-edicion') {
-                        e.preventDefault();
+                // Buscar campaña en memoria
+                let campana = todasLasCampanas.find(c => c.id_campana === campanaSeleccionadaId);
+                if (!campana) return;
 
-                        const btnConfirmar = e.target;
-                        const textoOriginal = btnConfirmar.textContent;
+                // Cargar datos en el formulario
+                document.querySelector('#name-campanya').value = campana.nombre_campana || '';
+                document.querySelector('#initial-date').value = campana.fecha_inicio || '';
+                document.querySelector('#final-date').value = campana.fecha_fin || '';
 
-                        try {
-                                btnConfirmar.textContent = 'Guardando...';
-                                btnConfirmar.disabled = true;
+                if (campana.estado) {
+                        let estadoSelect = document.querySelector('#status');
+                        let existeOpcion = Array.from(estadoSelect.options).some(opt => opt.value === campana.estado);
+                        if (existeOpcion) estadoSelect.value = campana.estado;
+                }
 
-                                document.querySelector('#overlay-confirmar').classList.remove('active');
-                                document.querySelector('#popup-confirmar').classList.remove('active');
+                // Cargar checkboxes de cadenas
+                try {
+                        let [todasLasCadenas, cadenasEnCampana] = await Promise.all([
+                                fetch(`${API_ENDPOINT}/cadena`).then(r => r.json()),
+                                fetch(`${API_ENDPOINT}/campana_cadena?id_campana=${encodeURIComponent(campana.id_campana)}`).then(r => r.json())
+                        ]);
+                        generarCheckboxesCadenas(todasLasCadenas, cadenasEnCampana);
+                } catch (error) {
+                        console.error('Error cargando cadenas para edición:', error);
+                }
 
-                                await guardarCampana();
+                document.querySelector('#campaign-data').style.display = 'none';
+                document.querySelector('#edit-campaign-container').style.display = 'block';
+                mostrarAccionesCampana('edicion');
+        }
 
-                        } finally {
-                                btnConfirmar.textContent = textoOriginal;
-                                btnConfirmar.disabled = false;
+        // Botón Cancelar en el Formulario
+        if (e.target && e.target.id === 'btn-cancel-edit-campaign') {
+                e.preventDefault();
+                document.querySelector('#edit-campaign-container').style.display = 'none';
+                document.querySelector('#campaign-data').style.display = 'block';
+                mostrarAccionesCampana('detalle');
+        }
+
+        // Botón de guardar explícito
+        if (e.target && e.target.id === 'btn-save-changes-campaign') {
+                e.preventDefault(); // Evitamos cualquier comportamiento extra
+
+                const form = document.querySelector('#form-edit-campaign');
+                if (form && !form.checkValidity()) {
+                        form.reportValidity();
+                        return;
+                }
+
+                const btnGuardar = e.target;
+                btnGuardar.textContent = 'Guardando...';
+                btnGuardar.disabled = true;
+
+                try {
+                        await guardarEdicionCampana();
+
+                        // Recargar datos de la tabla
+                        await cargarCampanas();
+
+                        // Volver a mostrar el detalle actualizado
+                        let campanaActualizada = todasLasCampanas.find(c => c.id_campana === campanaSeleccionadaId);
+                        document.querySelector('#edit-campaign-container').style.display = 'none';
+                        if (campanaActualizada) {
+                                mostrarDetalleCampana(campanaActualizada);
                         }
+
+                        // MOSTRAR POPUP (Forzamos el estilo por si acaso el CSS falla)
+                        const overlay = document.querySelector('#overlay-success-campaign');
+                        const popup = document.querySelector('#popup-success-campaign');
+
+                        overlay.style.visibility = 'visible'; // Forzado
+                        overlay.classList.add('active');
+                        popup.classList.add('active');
+
+                } catch (error) {
+                        console.error(error);
+                        const overlayErr = document.querySelector('#overlay-error-campaign');
+                        const popupErr = document.querySelector('#popup-error-campaign');
+                        document.querySelector('#error-text-popup-campaign').textContent = error.message;
+
+                        overlayErr.style.visibility = 'visible';
+                        overlayErr.classList.add('active');
+                        popupErr.classList.add('active');
+                } finally {
+                        btnGuardar.textContent = 'Guardar Cambios';
+                        btnGuardar.disabled = false;
                 }
-        });
+        }
+
+        // Aceptar en popup de éxito
+        if (e.target && e.target.id === 'btn-accept-edit-campaign') {
+                e.preventDefault();
+                const overlay = document.querySelector('#overlay-success-campaign');
+                const popup = document.querySelector('#popup-success-campaign');
+                if(overlay) {
+                    overlay.classList.remove('active');
+                    overlay.style.visibility = ''; 
+                }
+                if(popup) popup.classList.remove('active');
+        }
+
+        // Aceptar en popup de error
+        if (e.target && e.target.id === 'btn-accept-error-campaign') {
+                e.preventDefault();
+                const overlay = document.querySelector('#overlay-error-campaign');
+                const popup = document.querySelector('#popup-error-campaign');
+                if(overlay) {
+                    overlay.classList.remove('active');
+                    overlay.style.visibility = ''; 
+                }
+                if(popup) popup.classList.remove('active');
+        }
+    });
 });
 
-// ----- FUNCIÓN GENÉRICA DE FETCH -----
-// Reutilizamos esta función para no repetir la lógica de comprobación
-// de errores en cada petición (peticiones de red, tema 6)
-async function fetchDatos(recurso) {
-        let response = await fetch(`${API_ENDPOINT}/${recurso}`);
-        if (!response.ok) {
-                throw new Error('Error al obtener "' + recurso + '": ' + response.status);
-        }
-        return response.json();
-}
-
-// ----- RELLENO DEL FORMULARIO -----
-// Recibe el array que devuelve json-server y asigna cada campo
-// al input correspondiente del formulario
-function rellenarFormulario(datosCampana) {
-
-        if (datosCampana.length === 0) {
-                alert('No se encontró la campaña con el ID: ' + idCampana);
-                return;
-        }
-
-        let campana = datosCampana[0];
-
-        document.querySelector('#name-campanya').value = campana.nombre_campana || '';
-        document.querySelector('#initial-date').value = campana.fecha_inicio || '';
-        document.querySelector('#final-date').value = campana.fecha_fin || '';
-
-        // Para el select de estado convertimos el valor de la db al formato
-        // que usan los <option> del HTML (minúsculas, sin espacios)
-        if (campana.estado) {
-                let estadoSelect = document.querySelector('#status');
-                let estadoFormateado = campana.estado;
-
-                // Comprobamos que la opción exista en el select antes de asignarla
-                let existeOpcion = Array.from(estadoSelect.options).some(function (opt) {
-                        return opt.value === estadoFormateado;
-                });
-
-                if (existeOpcion) {
-                        estadoSelect.value = estadoFormateado;
-                }
-        }
-}
-
-// ----- GENERACIÓN DINÁMICA DE CHECKBOXES DE CADENAS -----
-// Recibe todas las cadenas de la db y las que ya participan en la campaña.
-// Crea un checkbox por cada cadena y marca las que ya están asignadas.
-// Los checkboxes se insertan en el contenedor con id "cadenas-container"
 function generarCheckboxesCadenas(todasLasCadenas, cadenasEnCampana) {
         let contenedor = document.querySelector('#checkbox-list');
+        if (!contenedor) return;
 
-        if (!contenedor) {
-                console.log('No se encontró el elemento #checkbox-list en el HTML.');
-                return;
-        }
+        contenedor.innerHTML = '';
+        let cadenasParticipantes = new Set(cadenasEnCampana.map(rel => rel.id_cadena));
 
-        // Vaciamos el contenedor por si tuviera algo previo
-        while (contenedor.firstChild) {
-                contenedor.removeChild(contenedor.firstChild);
-        }
-
-        // Construimos un Set con los id_cadena que ya participan en la campaña
-        // para poder comprobar rápidamente si una cadena está incluida (O(1) vs O(n))
-        let cadenasParticipantes = new Set(cadenasEnCampana.map(function (rel) {
-                return rel.id_cadena;
-        }));
-
-        // Creamos un checkbox por cada cadena disponible en la db
-        todasLasCadenas.forEach(function (cadena) {
-
-                // Contenedor del checkbox + etiqueta (para poder aplicar estilos)
+        todasLasCadenas.forEach(cadena => {
                 let divItem = document.createElement('div');
                 divItem.className = 'cadena-item';
 
-                // El checkbox en sí
                 let checkbox = document.createElement('input');
                 checkbox.type = 'checkbox';
-                checkbox.id = 'cadena-' + cadena.id_cadena;   // ej: cadena-MERCADONA
+                checkbox.id = 'cadena-' + cadena.id_cadena;
                 checkbox.value = cadena.id_cadena;
                 checkbox.name = 'cadenas';
-
-                // Lo marcamos si esta cadena ya participa en la campaña actual
                 checkbox.checked = cadenasParticipantes.has(cadena.id_cadena);
 
-                // Etiqueta asociada al checkbox (el for apunta al id del input)
                 let label = document.createElement('label');
                 label.htmlFor = 'cadena-' + cadena.id_cadena;
                 label.textContent = cadena.nombre_cadena;
@@ -213,85 +152,58 @@ function generarCheckboxesCadenas(todasLasCadenas, cadenasEnCampana) {
         });
 }
 
-// ----- GUARDADO DE CAMBIOS -----
-// Recoge los valores del formulario y actualiza la campaña en la db.
-// También actualiza la tabla campana_cadena con las cadenas seleccionadas
-async function guardarCampana() {
-
-        // Leemos los campos del formulario
+async function guardarEdicionCampana() {
         let nombre = document.querySelector('#name-campanya').value.trim();
         let fechaInicio = document.querySelector('#initial-date').value;
         let fechaFin = document.querySelector('#final-date').value;
         let estado = document.querySelector('#status').value;
 
-        // Recogemos qué checkboxes de cadenas están marcados
         let checkboxesMarcados = document.querySelectorAll('#checkbox-list input[type="checkbox"]:checked');
-        let cadenasSeleccionadas = Array.from(checkboxesMarcados).map(function (cb) {
-                return cb.value;   // El value de cada checkbox es el id_cadena
+        let cadenasSeleccionadas = Array.from(checkboxesMarcados).map(cb => cb.value);
+
+        // 1. Buscamos el ID interno de la campaña
+        let busqueda = await fetch(`${API_ENDPOINT}/campana?id_campana=${encodeURIComponent(campanaSeleccionadaId)}`).then(r => r.json());
+        if (busqueda.length === 0) throw new Error('Campaña no encontrada.');
+
+        let idInterno = busqueda[0].id;
+
+        // 2. Actualizar datos básicos
+        let responsePut = await fetch(`${API_ENDPOINT}/campana/${idInterno}`, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                        id: idInterno,
+                        id_campana: campanaSeleccionadaId,
+                        nombre_campana: nombre,
+                        fecha_inicio: fechaInicio,
+                        fecha_fin: fechaFin,
+                        estado: estado
+                })
         });
 
-        // Objeto con los datos actualizados de la campaña (PUT necesita el objeto completo)
-        let datosCampana = {
-                id_campana: idCampana,
-                nombre_campana: nombre,
-                fecha_inicio: fechaInicio,
-                fecha_fin: fechaFin,
-                estado: estado
-        };
+        if (!responsePut.ok) throw new Error('Error al actualizar datos básicos.');
 
-        try {
-                // ----- PASO 1: Actualizamos los datos básicos de la campaña -----
-                // Primero buscamos el id interno que usa json-server (distinto de id_campana)
-                let busqueda = await fetchDatos('campana?id_campana=' + encodeURIComponent(idCampana));
+        // 3. Gestionar Cadenas (Borrar antiguas y crear nuevas)
+        // Obtenemos las relaciones actuales de esta campaña
+        let relacionesActuales = await fetch(`${API_ENDPOINT}/campana_cadena?id_campana=${encodeURIComponent(campanaSeleccionadaId)}`).then(r => r.json());
 
-                if (busqueda.length === 0) {
-                        alert('No se encontró la campaña para guardar.');
-                        return;
-                }
+        // Borramos todas las existentes en paralelo
+        const borrarPromesas = relacionesActuales.map(rel =>
+                fetch(`${API_ENDPOINT}/campana_cadena/${rel.id}`, { method: 'DELETE' })
+        );
+        await Promise.all(borrarPromesas);
 
-                // json-server usa el campo "id" (numérico/autoincremental) para el PUT
-                let idInterno = busqueda[0].id;
-
-                let responsePut = await fetch(`${API_ENDPOINT}/campana/${idInterno}`, {
-                        method: 'PUT',
+        // Creamos las nuevas relaciones en paralelo
+        const crearPromesas = cadenasSeleccionadas.map(idCadena =>
+                fetch(`${API_ENDPOINT}/campana_cadena`, {
+                        method: 'POST',
                         headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify(datosCampana)
-                });
-
-                if (!responsePut.ok) {
-                        alert('Error al guardar la campaña.');
-                        return;
-                }
-
-                // ----- PASO 2: Actualizamos las cadenas participantes -----
-                // Borramos todas las relaciones actuales de esta campaña
-                // y luego creamos las nuevas con las cadenas seleccionadas.
-                // json-server no tiene DELETE masivo, así que borramos una a una
-                let relacionesActuales = await fetchDatos(
-                        'campana_cadena?id_campana=' + encodeURIComponent(idCampana)
-                );
-
-                // Borramos cada relación existente
-                for (let relacion of relacionesActuales) {
-                        await fetch(`${API_ENDPOINT}/campana_cadena/${relacion.id}`, {
-                                method: 'DELETE'
-                        });
-                }
-
-                // Creamos una relación nueva por cada cadena seleccionada
-                for (let idCadena of cadenasSeleccionadas) {
-                        await fetch(`${API_ENDPOINT}/campana_cadena`, {
-                                method: 'POST',
-                                headers: { 'Content-Type': 'application/json' },
-                                body: JSON.stringify({ id_campana: idCampana, id_cadena: idCadena })
-                        });
-                }
-
-                // Si todo fue bien, volvemos a la lista de campañas
-                window.location.href = 'Campana.html';
-
-        } catch (error) {
-                console.error('Error al guardar los cambios:', error);
-                alert('Error al guardar los cambios. Por favor, inténtalo de nuevo.');
-        }
+                        body: JSON.stringify({
+                                id: Math.random().toString(36).substring(2, 12),
+                                id_campana: campanaSeleccionadaId,
+                                id_cadena: idCadena
+                        })
+                })
+        );
+        await Promise.all(crearPromesas);
 }

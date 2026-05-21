@@ -10,17 +10,25 @@ let campanaSeleccionadaId = null;
 // Esperamos a que el DOM esté cargado antes de hacer nada
 document.addEventListener('DOMContentLoaded', async function () {
 
-
-
     // Escuchar eventos del popup
     document.addEventListener('click', async function (e) {
-        if (e.target && e.target.id === 'btn-cancelar-eliminar') {
+        if (e.target && e.target.id === 'btn-cancel-delete') {
             e.preventDefault();
-            document.getElementById('overlay-eliminar').classList.remove('active');
-            document.getElementById('popup-eliminar').classList.remove('active');
+            document.querySelector('#overlay-delete').classList.remove('active');
+            document.querySelector('#popup-delete').classList.remove('active');
         }
 
-        if (e.target && e.target.id === 'btn-confirmar-eliminar') {
+        if (e.target && e.target.id === 'btn-delete-campaign') {
+            e.preventDefault();
+            if (!campanaSeleccionadaId) {
+                alert("Error: No se ha seleccionado ninguna campaña.");
+                return;
+            }
+            document.querySelector('#overlay-delete').classList.add('active');
+            document.querySelector('#popup-delete').classList.add('active');
+        }
+
+        if (e.target && e.target.id === 'btn-confirm-delete') {
             e.preventDefault();
 
             if (!campanaSeleccionadaId) {
@@ -68,10 +76,15 @@ document.addEventListener('DOMContentLoaded', async function () {
                     });
                 }
 
-                document.getElementById('overlay-eliminar').classList.remove('active');
-                document.getElementById('popup-eliminar').classList.remove('active');
+                document.querySelector('#overlay-delete').classList.remove('active');
+                document.querySelector('#popup-delete').classList.remove('active');
 
                 campanaSeleccionadaId = null;
+
+                // Ocultar detalles panel al borrar
+                document.querySelector('#campaign-data').style.display = 'none';
+                document.querySelector('#empty-state-campaign').style.display = 'block';
+                mostrarAccionesCampana(null);
 
                 await cargarCampanas();
 
@@ -173,6 +186,20 @@ function renderizarTabla() {
     // para manipular el DOM de forma explícita (tema 4)
     campanasFiltradas.forEach(function (campana) {
         let tr = document.createElement('tr');
+        tr.style.cursor = 'pointer';
+        tr.addEventListener('click', function (e) {
+            // Ignoramos clics en enlaces o botones dentro de la fila (como Añadir voluntario)
+            if (e.target.tagName.toLowerCase() === 'a' || e.target.tagName.toLowerCase() === 'button') {
+                return;
+            }
+            
+            // Quitar clase selected de todas las filas
+            let todasFilas = tbody.querySelectorAll('tr');
+            todasFilas.forEach(f => f.classList.remove('selected'));
+            tr.classList.add('selected');
+            
+            mostrarDetalleCampana(campana);
+        });
 
         // Clase CSS del badge de estado: convertimos a minúsculas y reemplazamos espacios
         let estadoClase = campana.estado
@@ -219,34 +246,13 @@ function renderizarTabla() {
         // --- Columna 5: Acciones ---
         let td5 = document.createElement('td');
 
-        // Enlace para editar la campaña: pasamos el ID por la URL
-        let enlaceEditar = document.createElement('a');
-        enlaceEditar.href = 'EditarCampana.html?id_campana=' + encodeURIComponent(campana.id_campana);
-        enlaceEditar.className = 'btn-edit';
-        enlaceEditar.textContent = 'Editar';
-
         // Enlace para añadir voluntarios a la campaña
         let enlaceVoluntarios = document.createElement('a');
         enlaceVoluntarios.href = 'AsignaciónTurnos.html'; // Poner lista voluntarios
         enlaceVoluntarios.className = 'btn-edit';
         enlaceVoluntarios.textContent = 'Añadir voluntario';
 
-        // Botón para borrar la campaña
-        let btnBorrar = document.createElement('button');
-        btnBorrar.className = 'btn-delete';
-        btnBorrar.textContent = 'Eliminar';
-
-        btnBorrar.addEventListener('click', function () {
-            campanaSeleccionadaId = campana.id_campana;
-            document.getElementById('overlay-eliminar').classList.add('active');
-            document.getElementById('popup-eliminar').classList.add('active');
-        });
-
-        td5.appendChild(enlaceEditar);
-        td5.appendChild(document.createTextNode(' '));   // Separador entre botones
         td5.appendChild(enlaceVoluntarios);
-        td5.appendChild(document.createTextNode(' '));   // Separador entre botones
-        td5.appendChild(btnBorrar);
         tr.appendChild(td5);
 
         tbody.appendChild(tr);
@@ -304,5 +310,63 @@ function formatearFecha(fechaString) {
         return dia + '/' + mes + '/' + anio;
     } catch (e) {
         return fechaString;
+    }
+}
+
+// =============================================================
+// PANEL DE DETALLES
+// =============================================================
+
+function mostrarAccionesCampana(modo) {
+    const accionesDetalle = document.querySelector('#detail-actions-campaign');
+    const accionesEdicion = document.querySelector('#edit-actions-campaign');
+
+    if (accionesDetalle) accionesDetalle.style.display = modo === 'detalle' ? 'flex' : 'none';
+    if (accionesEdicion) accionesEdicion.style.display = modo === 'edicion' ? 'flex' : 'none';
+}
+
+async function mostrarDetalleCampana(campana) {
+    campanaSeleccionadaId = campana.id_campana;
+
+    document.querySelector('#empty-state-campaign').style.display = 'none';
+    const formEditar = document.querySelector('#edit-campaign-container');
+    if (formEditar) formEditar.style.display = 'none';
+    document.querySelector('#campaign-data').style.display = 'block';
+    mostrarAccionesCampana('detalle');
+
+    document.querySelector('#campaign-name').textContent = campana.nombre_campana || 'Sin nombre';
+    document.querySelector('#campaign-code').textContent = `ID: ${campana.id_campana}`;
+    document.querySelector('#campaign-start').textContent = formatearFecha(campana.fecha_inicio);
+    document.querySelector('#campaign-end').textContent = formatearFecha(campana.fecha_fin);
+    
+    let estadoClase = campana.estado ? campana.estado.toLowerCase().replace(' ', '-') : 'planificada';
+    let estadoSpan = document.querySelector('#campaign-status');
+    estadoSpan.className = 'estado-badge estado-' + estadoClase;
+    estadoSpan.textContent = campana.estado || 'Planificada';
+
+    // Cargar cadenas participantes
+    try {
+        let [cadenasDb, relaciones] = await Promise.all([
+            fetch(`${API_ENDPOINT}/cadena`).then(r => r.json()),
+            fetch(`${API_ENDPOINT}/campana_cadena?id_campana=${encodeURIComponent(campana.id_campana)}`).then(r => r.json())
+        ]);
+
+        let ulCadenas = document.querySelector('#campaign-chains');
+        ulCadenas.innerHTML = '';
+        
+        if (relaciones.length === 0) {
+            let li = document.createElement('li');
+            li.textContent = "No hay cadenas participantes";
+            ulCadenas.appendChild(li);
+        } else {
+            relaciones.forEach(rel => {
+                let cadenaDb = cadenasDb.find(c => c.id_cadena === rel.id_cadena);
+                let li = document.createElement('li');
+                li.textContent = cadenaDb ? cadenaDb.nombre_cadena : rel.id_cadena;
+                ulCadenas.appendChild(li);
+            });
+        }
+    } catch (e) {
+        console.error("Error cargando cadenas participantes", e);
     }
 }

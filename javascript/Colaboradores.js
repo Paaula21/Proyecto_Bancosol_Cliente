@@ -4,6 +4,14 @@ const API_BASE = 'http://localhost:3000';
 let colaboradoresGlobal = [];
 let colaboradorSeleccionadoId = null;
 
+function mostrarAccionesColaborador(modo) {
+    const accionesDetalle = document.getElementById('acciones-detalle-colaborador');
+    const accionesEdicion = document.getElementById('acciones-edicion-colaborador');
+
+    if (accionesDetalle) accionesDetalle.style.display = modo === 'detalle' ? 'flex' : 'none';
+    if (accionesEdicion) accionesEdicion.style.display = modo === 'edicion' ? 'flex' : 'none';
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     cargarDatosColaboradores();
 
@@ -17,6 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('estado-vacio').style.display = 'none';
             document.getElementById('datos-colaborador').style.display = 'none';
             document.getElementById('formulario-editar-colaborador').style.display = 'none';
+            mostrarAccionesColaborador(null);
             
             const panelAnadir = document.getElementById('formulario-anadir-colaborador');
             if(panelAnadir) panelAnadir.style.display = 'block';
@@ -163,7 +172,10 @@ async function mostrarDetalle(c) {
     colaboradorSeleccionadoId = c.id;
 
     document.getElementById('estado-vacio').style.display = 'none';
+    document.getElementById('formulario-editar-colaborador')?.style.setProperty('display', 'none');
+    document.getElementById('formulario-anadir-colaborador')?.style.setProperty('display', 'none');
     document.getElementById('datos-colaborador').style.display = 'block';
+    mostrarAccionesColaborador('detalle');
 
     document.getElementById('ficha-nombre').textContent = c.nombre_colaborador;
     document.getElementById('ficha-codigo').textContent = `Código: ${c.id_colaborador}`;

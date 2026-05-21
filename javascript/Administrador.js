@@ -26,7 +26,6 @@ async function cargarDashboard() {
                         fetchDatos('division_territorial'),
                         fetchDatos('codigo_postal'),
                         fetchDatos('direccion'),
-                        fetchDatos('notificacion'),
                         fetchDatos('persona')
                 ]);
 
@@ -39,14 +38,12 @@ async function cargarDashboard() {
                 let divisiones = resultados[5];
                 let codigosPostales = resultados[6];
                 let direcciones = resultados[7];
-                let notificaciones = resultados[8];
-                let personas = resultados[9];
+                let personas = resultados[8];
 
                 // Llamamos a cada función de renderizado con los datos que necesita
                 mostrarResumen(campanas, establecimientos, colaboradores, coordinadores, zonas);
                 mostrarProximasCampanas(campanas);
                 mostrarCoberturaPorZona(establecimientos, direcciones, codigosPostales, divisiones, zonas);
-                mostrarActividadReciente(notificaciones, personas);
 
         } catch (error) {
                 // Si cualquiera de las peticiones falla, lo mostramos en consola
@@ -74,7 +71,7 @@ function mostrarResumen(campanas, establecimientos, colaboradores, coordinadores
 
         // Filtramos las campañas que están activas o planificadas
         let campanasActivas = campanas.filter(function (c) {
-                return c.estado === 'Planificada' || c.estado === 'Activa';
+                return c.estado === 'Activa';
         });
 
         // Construimos el subtítulo con los nombres de las campañas activas
@@ -174,25 +171,25 @@ function mostrarProximasCampanas(campanas) {
 // y renderiza las barras de progreso animadas
 function mostrarCoberturaPorZona(establecimientos, direcciones, codigosPostales, divisiones, zonas) {
 
-        // Paso 1: Construimos un mapa de id_division → id_zona
+        // Construimos un mapa de id_division → id_zona
         let divisionAZona = {};
         divisiones.forEach(function (d) {
                 divisionAZona[d.id_division] = d.id_zona;
         });
 
-        // Paso 2: Construimos un mapa de id_cp → id_zona (usando el mapa anterior)
+        // Construimos un mapa de id_cp → id_zona (usando el mapa anterior)
         let cpAZona = {};
         codigosPostales.forEach(function (cp) {
                 cpAZona[cp.id_cp] = divisionAZona[cp.id_division];
         });
 
-        // Paso 3: Construimos un mapa de id_direccion → id_zona
+        // Construimos un mapa de id_direccion → id_zona
         let direccionAZona = {};
         direcciones.forEach(function (d) {
                 direccionAZona[d.id_direccion] = cpAZona[d.id_cp];
         });
 
-        // Paso 4: Contamos cuántas tiendas pertenecen a cada zona
+        // Contamos cuántas tiendas pertenecen a cada zona
         let conteo = {};
         establecimientos.forEach(function (e) {
                 let idZona = direccionAZona[e.id_direccion];
@@ -257,7 +254,6 @@ function mostrarCoberturaPorZona(establecimientos, direcciones, codigosPostales,
                 contenedor.appendChild(item);
 
                 // Animamos la barra usando setTimeout con un retardo escalonado
-                // (JavaScript asíncrono, tema 5: temporizadores con setTimeout)
                 // Cada barra entra 80ms después de la anterior para un efecto en cascada
                 setTimeout(function () {
                         barra.style.width = porcentaje + '%';

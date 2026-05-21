@@ -7,9 +7,15 @@
     <link rel="stylesheet" href="../css/Campana.css">
     <link rel="stylesheet" href="../css/Sidebar.css">
     <link rel="stylesheet" href="../css/popUpRegistro.css">
+    <link rel="stylesheet" href="../css/Header.css">
+    <link rel="stylesheet" href="../css/DetalleColaborador.css">
+    <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
+    <link rel="stylesheet" href="../css/EditarCampana.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/Campana.js" defer></script>
+    <script src="../javascript/EditarCampana.js" defer></script>
+    <script src="../javascript/Header.js"></script>
     <title>Vista de campañas</title>
 </head>
 
@@ -20,17 +26,8 @@
         </aside>
 
         <div class="right-container">
-            <header class="header-dashboard">
-                <img src="../images/icono.png" alt="App Icon" class="header-logo">
-                <div class="header-titles">
-                    <h1>Campañas</h1>
-                    <p>Información general y gestión de las campañas</p>
-                </div>
-                <div class="header-actions">
-                    <button class="notification-btn" title="Notificaciones">
-                        <p>N</p>
-                    </button>
-                </div>
+            <header class="main-header">
+                <include-html src="../html/header.html"></include-html>
             </header>
 
             <main class="campana-container">
@@ -63,7 +60,7 @@
                             <h2>Listado de Campañas</h2>
                             <p id="total-campanas">Cargando campañas...</p>
                             <button type="button" class="btn-add"
-                                onclick="window.location.href='CreacionCampanya.html'">Añadir</button>
+                                onclick="window.location.href='CreacionCampanya.html'">Añadir campaña</button>
                         </header>
 
                         <table>
@@ -81,20 +78,62 @@
                             </tbody>
                         </table>
                     </section>
+                    <aside class="detail-panel" id="detail-panel">
+                        <div class="detail-content">
+                            <include-html src="../html/DetalleCampana.html"></include-html>
+                            <include-html src="../html/EditarCampana.html"></include-html>
+                        </div>
+                        <div class="detail-actions-sticky" id="detail-actions-campaign" style="display: none;">
+                            <button type="button" id="btn-edit-campaign" class="btn-ficha btn-editar">
+                                Editar Campaña
+                            </button>
+                            <button type="button" id="btn-delete-campaign" class="btn-ficha btn-eliminar">
+                                Eliminar
+                            </button>
+                        </div>
+                        <div class="detail-actions-sticky" id="edit-actions-campaign" style="display: none;">
+                            <button type="button" id="btn-save-changes-campaign" class="btn-ficha btn-guardar">
+                                Guardar Cambios
+                            </button>
+                            <button type="button" id="btn-cancel-edit-campaign" class="btn-ficha btn-cancel-edit">
+                                Cancelar
+                            </button>
+                        </div>
+                    </aside>
                 </div>
             </main>
         </div>
     </div>
 
-    <div class="overlay" id="overlay-eliminar">
-        <div class="popup" id="popup-eliminar">
+    <div class="overlay" id="overlay-delete">
+        <div class="popup" id="popup-delete">
             <h3>¿Eliminar Campaña?</h3>
             <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta campaña de la base de datos?</p>
-            <div class="popup-actions">
+            <div class="botones">
                 <form action="" onsubmit="return false;">
-                    <button class="btn-add btn-rojo" id="btn-confirmar-eliminar">Eliminar</button>
-                    <button class="btn-cerrar-popup" id="btn-cancelar-eliminar">Cancelar</button>
+                    <button class="btn-add btn-rojo" id="btn-confirm-delete">Eliminar</button>
+                    <button class="btn-cerrar-popup" id="btn-cancel-delete">Cancelar</button>
                 </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay-success-campaign">
+        <div class="popup" id="popup-success-campaign">
+            <h3>¡Guardado con éxito!</h3>
+            <p>La campaña y sus cadenas asociadas se han actualizado correctamente.</p>
+            <div class="botones">
+                <button type="button" class="btn-add" id="btn-accept-edit-campaign">Aceptar</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="overlay" id="overlay-error-campaign">
+        <div class="popup" id="popup-error-campaign">
+            <h3>Ha ocurrido un error</h3>
+            <p id="error-text-popup-campaign">No se han podido guardar los cambios en el servidor.</p>
+            <div class="botones">
+                <button type="button" class="btn-cerrar-popup" id="btn-accept-error-campaign">Aceptar</button>
             </div>
         </div>
     </div>

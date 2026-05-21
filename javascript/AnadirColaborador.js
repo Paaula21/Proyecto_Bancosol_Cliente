@@ -204,6 +204,7 @@ document.addEventListener('click', async function(e) {
         e.preventDefault();
         document.getElementById('formulario-anadir-colaborador').style.display = 'none';
         document.getElementById('estado-vacio')?.style.setProperty('display', 'block');
+        mostrarAccionesColaborador(null);
         resetFormularioNuevoColaborador();
     }
 
@@ -227,6 +228,7 @@ document.addEventListener('click', async function(e) {
             document.getElementById('formulario-anadir-colaborador').style.display = 'none';
             document.getElementById('datos-colaborador')?.style.setProperty('display', 'none');
             document.getElementById('estado-vacio')?.style.setProperty('display', 'block');
+            mostrarAccionesColaborador(null);
             resetFormularioNuevoColaborador();
         } catch (error) {
             console.error("Error en el proceso de guardado:", error);
@@ -316,4 +318,3 @@ async function guardarColaborador() {
 
     await Promise.all(guardados);
 }
-
