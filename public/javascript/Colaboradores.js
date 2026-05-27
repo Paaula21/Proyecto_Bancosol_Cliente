@@ -7,9 +7,11 @@ let colaboradorSeleccionadoId = null;
 function mostrarAccionesColaborador(modo) {
     const accionesDetalle = document.getElementById('acciones-detalle-colaborador');
     const accionesEdicion = document.getElementById('acciones-edicion-colaborador');
+    const accionesAnadir = document.getElementById('acciones-anadir-colaborador');
 
     if (accionesDetalle) accionesDetalle.style.display = modo === 'detalle' ? 'flex' : 'none';
     if (accionesEdicion) accionesEdicion.style.display = modo === 'edicion' ? 'flex' : 'none';
+    if (accionesAnadir) accionesAnadir.style.display = modo === 'anadir' ? 'flex' : 'none';
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -25,7 +27,7 @@ document.addEventListener("DOMContentLoaded", () => {
             document.getElementById('estado-vacio').style.display = 'none';
             document.getElementById('datos-colaborador').style.display = 'none';
             document.getElementById('formulario-editar-colaborador').style.display = 'none';
-            mostrarAccionesColaborador(null);
+            mostrarAccionesColaborador('anadir');
             
             const panelAnadir = document.getElementById('formulario-anadir-colaborador');
             if(panelAnadir) panelAnadir.style.display = 'block';
