@@ -7,3 +7,12 @@ En esta versión del proyecto solo se puede entrar como administrador con el las
     contraseña: "admin1234"
 
 La función de recordar al usuario está implementada pero la de recuperar contraseña no.
+
+
+////////////////////////////////////////////////////////
+//////////////MEJORAR ESCRITURA A FUTURO////////////////
+////////////////////////////////////////////////////////
+ Parainiciar con react la aplicación, es necesario encender el json-server (lo de arriba)
+ y iniciar el servidos de react (pnpm start)
+
+ Tras esto, escribir en el navegador http://4000/html/login.html
