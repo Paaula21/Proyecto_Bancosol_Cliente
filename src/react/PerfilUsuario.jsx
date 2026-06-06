@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-
 export default function Perfil() {
     const [passwords, setPasswords] = useState({
         actual: '',
@@ -58,98 +57,89 @@ export default function Perfil() {
         console.log("Datos a enviar:", passwords);
         alert("Contraseña actualizada con éxito");
     };
-//Falta refactorizar el css en un archivo aparte
     return (
-        <div className="main-container" style={{ display: 'flex', minHeight: '100vh', backgroundColor: '#f8fafc' }}>
+        <div className="app-container">
             {/* SIDEBAR */}
             <aside className="sidebar">
                 <include-html src="/html/Sidebar.html"></include-html>
             </aside>
 
-            <div className="right-container" style={{ flex: 1, display: 'flex', flexDirection: 'column', width: '100%' }}>
+            <div className="right-content" >
                 {/* HEADER */}
                 <header className="main-header">
                     <include-html src="/html/Header.html"></include-html>
                 </header>
 
                 {/* CONTENIDO PRINCIPAL */}
-                <main className="dashboard-container" style={{ backgroundColor: '#f5f7f9', padding: '32px', boxSizing: 'border-box', width: '100%' }}>
+                <main className="content-wrapper" >
 
-                    <div style={{ backgroundColor: '#ffffff', border: '1px solid #e5e7eb', borderRadius: '12px', padding: '32px', width: '100%', boxSizing: 'border-box', boxShadow: '0 1px 3px rgba(0,0,0,0.05)' }}>
+                    <div className='content'>
 
-                        <h3 style={{ marginTop: 0, fontSize: '18px', color: '#111827', marginBottom: '8px' }}>
+                        <h3 className='title'>
                             Información del Perfil
                         </h3>
 
                         {/* Datos del perfil */}
-                        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px', marginBottom: '40px' }}>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <label style={{ fontWeight: '500', fontSize: '14px', color: '#374151' }}>Nombre</label>
-                                <input type="text" readOnly value="J.M. Cobos" style={{ padding: '10px 14px', borderRadius: '6px', border: '1px solid #d1d5db', backgroundColor: '#f9fafb', color: '#6b7280', outline: 'none' }} />
+                        <div className='data-perfil'>
+                            <div className='data-item'>
+                                <label className='label-name'>Nombre</label>
+                                <input type="text" readOnly value="J.M. Cobos" className='input' />
                             </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                <label style={{ fontWeight: '500', fontSize: '14px', color: '#374151' }}>Rol en el sistema</label>
-                                <input type="text" readOnly value="Administrador" style={{ padding: '10px 14px', borderRadius: '6px', border: '1px solid #d1d5db', backgroundColor: '#f9fafb', color: '#6b7280', outline: 'none' }} />
-                            </div>
-                            <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', gridColumn: '1 / -1' }}>
-                                <label style={{ fontWeight: '500', fontSize: '14px', color: '#374151' }}>Correo Electrónico</label>
-                                <input type="email" readOnly value="admin@bancosol.org" style={{ padding: '10px 14px', borderRadius: '6px', border: '1px solid #d1d5db', backgroundColor: '#f9fafb', color: '#6b7280', outline: 'none' }} />
+                            <div className='data-item'>
+                                <label className='label-name'>Rol en el sistema</label>
+                                <input type="text" readOnly value="Administrador" className='input' />
                             </div>
                         </div>
+                    </div>
+                    <div className='content'>
                         {/* Sección de actualización de contraseña */}
-                        <h3 style={{ marginTop: 0, fontSize: '18px', color: '#111827', marginBottom: '8px' }}>
+                        <h3 className='title'>
                             Contraseña
                         </h3>
-                        <p style={{ color: '#6b7280', fontSize: '14px', marginBottom: '24px', borderBottom: '1px solid #e5e7eb', paddingBottom: '16px' }}>
-                            Actualice su contraseña de acceso a la plataforma
-                        </p>
 
-                        <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '24px' }}>
+                        <form onSubmit={handleSubmit} className='form'>
                             
-                            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '24px' }}>
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', gridColumn: '1 / -1' }}>
-                                    <label style={{ fontWeight: '500', fontSize: '14px', color: '#374151' }}>Contraseña actual</label>
+                            <div className='table-data'>
+                                <div className='data-item'>
+                                    <label className='label-name'>Contraseña actual</label>
                                     <input
+                                        className='input'
                                         type="password"
                                         name="actual"
                                         required
-                                        style={{ padding: '10px 14px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none', maxWidth: '500px' }}
                                         value={passwords.actual}
                                         onChange={handleChange}
                                     />
                                 </div>
-
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                    <label style={{ fontWeight: '500', fontSize: '14px', color: '#374151' }}>Nueva contraseña</label>
+                                <div className='data-item'>
+                                    <label className='label-name'>Nueva contraseña</label>
                                     <input
+                                        className='input'
                                         type="password"
                                         name="nueva"
                                         required
-                                        style={{ padding: '10px 14px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none' }}
                                         value={passwords.nueva}
                                         onChange={handleChange}
                                     />
                                 </div>
 
-                                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                                    <label style={{ fontWeight: '500', fontSize: '14px', color: '#374151' }}>Confirmar nueva contraseña</label>
+                                <div className='data-item'>
+                                    <label className='label-name'>Confirmar nueva contraseña</label>
                                     <input
+                                        className='input'
                                         type="password"
                                         name="confirmacion"
                                         required
-                                        style={{ padding: '10px 14px', borderRadius: '6px', border: '1px solid #d1d5db', outline: 'none' }}
                                         value={passwords.confirmacion}
                                         onChange={handleChange}
                                     />
                                 </div>
                             </div>
 
-                            <div style={{ display: 'flex', marginTop: '10px' }}>
+                            <div>
                                 <button
                                     type="submit"
-                                    style={{ padding: '10px 24px', backgroundColor: '#420098', color: 'white', border: 'none', borderRadius: '6px', cursor: 'pointer', fontWeight: '500', fontSize: '14px', transition: 'background-color 0.2s' }}
-                                    onMouseOver={(e) => e.target.style.backgroundColor = '#2d006b'}
-                                    onMouseOut={(e) => e.target.style.backgroundColor = '#420098'}
+                                    className="btn btn--primary"
                                 >
                                     Guardar Cambios
                                 </button>
