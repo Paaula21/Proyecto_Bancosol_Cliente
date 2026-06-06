@@ -15,4 +15,4 @@ La función de recordar al usuario está implementada pero la de recuperar contr
  Parainiciar con react la aplicación, es necesario encender el json-server (lo de arriba)
  y iniciar el servidos de react (pnpm start)
 
- Tras esto, escribir en el navegador http://4000/html/login.html
+ Tras esto, escribir en el navegador http://localhost:4000/html/login.html
