@@ -4,50 +4,81 @@ import Perfil from './react/PerfilUsuario';
 import { UserProvider } from './react/ContextoUsuario'; 
 import Sidebar from './react/Sidebar'; 
 import Header from './react/Header';
+import Notificaciones from './react/Notificaciones';
+import './App.css';
 
 export default function App() {
     return (
         <UserProvider>
             <BrowserRouter>
-                {/* Aseguramos que el contenedor ocupe toda la pantalla */}
-                <div className="app-container" style={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+                <div className="app-container">
                     
                     <Sidebar />
                     
-                    {/*flex-direction: column para apilar el Header y las páginas */
-                    /*flexGrow: 1 para que el contenedor se estire y deje espacio en la pantalla */}
-                    <div className="main-content" style={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>                        
+                    <div className="main-content">                        
                         
                         <Header />
 
-                        {/* Contenedor dinámico que ocupará el espacio sobrante debajo del Header */}
-                        <div style={{ flexGrow: 1, overflow: 'hidden' }}>
+                        <div className="routes-container">
                             <Routes>
+                                {/* RUTA DE PERFIL */}
                                 <Route path="/perfil" element={<Perfil />} />
                                 
                                 {/* RUTAS DEL MENÚ CON IFRAMES */}
+                                <Route path="/dashboard" element={
+                                    <iframe 
+                                        src="/html/Administrador.html" 
+                                        className="content-iframe"
+                                        title="Dashboard"
+                                    />
+                                } />
+
                                 <Route path="/campanas" element={
                                     <iframe 
                                         src="/html/Campana.html" 
-                                        style={{ width: '100%', height: '100%', border: 'none' }}
+                                        className="content-iframe"
                                         title="Campañas"
                                     />
                                 } />
 
-                                <Route path="/dashboard" element={
+                                <Route path="/cadenas" element={
                                     <iframe 
-                                        src="/html/Administrador.html" 
-                                        style={{ width: '100%', height: '100%', border: 'none' }}
-                                        title="Dashboard"
+                                        src="/html/InformacionCadena.html" 
+                                        className="content-iframe"
+                                        title="Cadenas"
                                     />
                                 } />
+
+                                <Route path="/tiendas" element={
+                                    <iframe 
+                                        src="/html/InformacionTienda.html" 
+                                        className="content-iframe"
+                                        title="Tiendas"
+                                    />
+                                } />
+
+                                <Route path="/colaboradores" element={
+                                    <iframe 
+                                        src="/html/Colaboradores.html" 
+                                        className="content-iframe"
+                                        title="Colaboradores"
+                                    />
+                                } />
+
+                                <Route path="/voluntarios" element={
+                                    <iframe 
+                                        src="/html/AsignacionTurnos.html" 
+                                        className="content-iframe"
+                                        title="Voluntarios"
+                                    />
+                                } />
+
+                                <Route path="/notificaciones" element={<Notificaciones />} />
                                 
-                                {/* Añade los demás igual... */}
-                                
-                                {/* Ruta de la nueva ventana de notificaciones */}
-                                <Route path="/notificaciones" element={
-                                    <div style={{ padding: '20px' }}>
-                                        <h2>Tus Notificaciones</h2>
+                                {/* RUTAS PENDIENTES DE IMPLEMENTAR */}
+                                <Route path="/configuracion" element={
+                                    <div>
+                                        <h2>Configuración</h2>
                                         <p>Por implementar.</p>
                                     </div>
                                 } />

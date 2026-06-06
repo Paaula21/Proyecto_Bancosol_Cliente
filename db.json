@@ -12490,18 +12490,6 @@
   ],
   "notificacion": [
     {
-      "id_notificacion": 1,
-      "id_persona_destino": 42,
-      "id_tipo": "CAMPANA",
-      "titulo": "Gran Recogida 2025 planificada",
-      "mensaje": "Se ha planificado la Gran Recogida 2025 para los días 22 y 23 de noviembre de 2025.",
-      "leida": false,
-      "fecha_creacion": "2025-09-01T10:00:00",
-      "fecha_envio_programado": null,
-      "id_asignacion_ref": null,
-      "id": "8K_xgQrKAJc"
-    },
-    {
       "id_notificacion": 2,
       "id_persona_destino": 43,
       "id_tipo": "CAMPANA",
@@ -12536,18 +12524,6 @@
       "fecha_envio_programado": null,
       "id_asignacion_ref": null,
       "id": "yym9LR7NGao"
-    },
-    {
-      "id_notificacion": 5,
-      "id_persona_destino": 46,
-      "id_tipo": "CAMPANA",
-      "titulo": "Gran Recogida 2025 planificada",
-      "mensaje": "Se ha planificado la Gran Recogida 2025 para los días 22 y 23 de noviembre de 2025.",
-      "leida": false,
-      "fecha_creacion": "2025-09-01T10:00:00",
-      "fecha_envio_programado": null,
-      "id_asignacion_ref": null,
-      "id": "pOrYV05QG8Q"
     }
   ],
   "asignacion_coordinador": [

@@ -25,7 +25,7 @@ export default function Sidebar() {
     return (
         <aside className="sidebar">
             {/* Si entras al perfil, también se puede marcar como activo si quisieras */}
-            <Link to="/perfil" data-titulo="Perfil de usuario" data-subtitulo="Ajustes del usuario">
+            <Link to="/perfil" className="enlace-perfil" data-titulo="Perfil de usuario" data-subtitulo="Ajustes del usuario">
                 <div className="user-block">
                     <div className="avatar avatar-jc">{usuario.nombre.charAt(0).toUpperCase()}</div>
                     <div className="user-info">
