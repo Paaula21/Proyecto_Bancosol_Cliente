@@ -15,29 +15,6 @@ export default function Perfil() {
         script.src = '/javascript/IncludeHTML.js';
         document.head.appendChild(script);
     }
-
-
-    // Valores del header añadidos en el sidebar
-    const timer = setTimeout(() => {
-        const enlacePerfil = document.querySelector('a[href="/perfil"]');
-        
-        if (enlacePerfil) {
-            const tituloDinamico = enlacePerfil.getAttribute('data-titulo');
-            const subtituloDinamico = enlacePerfil.getAttribute('data-subtitulo');
-
-            const headerTitulo = document.querySelector('.main-header h1, #header-titulo');
-            const headerSubtitulo = document.querySelector('.main-header p, #header-subtitulo');
-
-            if (headerTitulo && tituloDinamico) {
-                headerTitulo.textContent = tituloDinamico;
-            }
-            if (headerSubtitulo && subtituloDinamico) {
-                headerSubtitulo.textContent = subtituloDinamico;
-            }
-        }
-    }, 150);
-
-    return () => clearTimeout(timer);
 }, []);
 
     //Para los cambios de contraseña
@@ -59,16 +36,8 @@ export default function Perfil() {
     };
     return (
         <div className="app-container">
-            {/* SIDEBAR */}
-            <aside className="sidebar">
-                <include-html src="/html/Sidebar.html"></include-html>
-            </aside>
 
             <div className="right-content" >
-                {/* HEADER */}
-                <header className="main-header">
-                    <include-html src="/html/Header.html"></include-html>
-                </header>
 
                 {/* CONTENIDO PRINCIPAL */}
                 <main className="content-wrapper" >
