@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="../css/AsignacionTurnos.css">
+    <link rel="stylesheet" href="../css/Sidebar.css">
+    <link rel="stylesheet" href="../css/Header.css">
+    <link rel="stylesheet" href="../css/Common.css">
+
+    <script src="../javascript/Header.js" defer></script>
+    <script src="../javascript/Sidebar.js" defer></script>
+    <script src="../javascript/IncludeHTML.js"></script>
+    <script src="../javascript/AsignacionTurnosTienda.js" defer></script>
+
+    <title>Asignación de turnos</title>
+</head>
+<body>
+
+<div class="app-container">
+
+    <!-- <aside class="sidebar">
+        <include-html src="../html/Sidebar.html"></include-html>
+    </aside> -->
+
+    <div class="right-content">
+
+        <!-- <header class="main-header">
+            <include-html src="../html/header.html"></include-html>
+        </header> -->
+
+        <div class="main-layout">
+            <main>
+                <div class="list-container" id="panel-tiendas" style="display: none; margin-bottom: 24px;">
+                    <div class="list-header">
+                        <div>
+                            <h2 id="titulo-campana-tiendas">Tiendas de la Campaña</h2>
+                            <p>Seleccione un establecimiento para asignar voluntarios</p>
+                        </div>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>Establecimiento</th>
+                                <th>Cadena</th>
+                                <th>ID Tienda</th>
+                                <th>Acción</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tabla-tiendas-campana">
+                            <tr><td colspan="4" style="text-align: center;">Cargando tiendas...</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <section class="filters" id="filtros-voluntarios" style="display: none; margin-bottom: 24px;">
+                    <div class="filter-group">
+                        <label for="filter-turnos">Disponibilidad Horaria</label>
+                        <select id="filter-turnos">
+                            <option value=""> Todos los turnos </option>
+                            <option value="lunes-mañana">Lunes mañana</option>
+                            <option value="martes-mañana">Martes mañana</option>
+                        </select>
+                    </div>
+                    <div class="filter-button">
+                        <button type="button" id="btn-filter" class="btn btn--primary">Filtrar</button>
+                    </div>
+                </section>
+
+                <div class="list-container" id="panel-voluntarios" style="display: none;">
+                    <div class="list-header">
+                        <div>
+                            <h2 id="titulo-voluntarios-asignar">Listado de Voluntarios</h2>
+                            <p id="contador-voluntarios">Seleccione una tienda primero.</p>
+                        </div>
+                        <button type="button" class="btn btn--primary" onclick="window.location.href='RegistroVoluntarios.html'">Añadir Voluntario</button>
+                    </div>
+                    <div class="table-wrapper">
+                        <table class="data-table">
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Contacto</th>
+                                <th>Disponibilidad</th>
+                                <th>Acciones</th>
+                            </tr>
+                            </thead>
+                            <tbody id="tabla-voluntarios">
+                            <tr><td colspan="4" style="text-align: center; padding: 20px;">Seleccione una tienda arriba para ver los voluntarios.</td></tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+</div>
+
+<div id="overlay-eliminar" class="overlay"></div>
+<div id="popup-eliminar" class="popup-confirmacion">
+    <h3>¿Estás seguro de que deseas eliminar este voluntario?</h3>
+    <p>Esta acción eliminará de forma permanente al voluntario y a la persona vinculada en la base de datos.</p>
+    <div class="popup-actions">
+        <button type="button" id="btn-cancelar-eliminar" class="btn-cancelar">Cancelar</button>
+        <button type="button" id="btn-confirmar-eliminar" class="btn-confirmar">Eliminar definitivamente</button>
+    </div>
+</div>
+
+</body>
+</html>

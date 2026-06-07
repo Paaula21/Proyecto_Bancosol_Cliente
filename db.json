@@ -12428,7 +12428,7 @@
     {
       "id_voluntario": 1,
       "id_persona": 51,
-      "preferencia_horario": "lunes-mañana",
+      "preferencia_horario": "lunes-mañana, martes-mañana",
       "id_colaborador": null,
       "id": "eikJJjBuqdw"
     },

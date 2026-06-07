@@ -246,13 +246,22 @@ function renderizarTabla() {
         // --- Columna 5: Acciones ---
         let td5 = document.createElement('td');
 
-        // Enlace para añadir voluntarios a la campaña
-        let enlaceVoluntarios = document.createElement('a');
-        enlaceVoluntarios.href = 'AsignacionTurnos.html'; // Poner lista voluntarios
-        enlaceVoluntarios.className = 'btn-edit';
-        enlaceVoluntarios.textContent = 'Añadir voluntario';
+// Usamos un botón en lugar de un enlace para tener más control
+        let btnAñadirTurnos = document.createElement('button');
+        btnAñadirTurnos.className = 'btn-edit';
+        btnAñadirTurnos.textContent = 'Añadir turnos';
 
-        td5.appendChild(enlaceVoluntarios);
+// Añadimos el evento de clic que fuerza la redirección
+        btnAñadirTurnos.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+
+            // Fíjate en el "/html/" al principio de la ruta. Esto fuerza al servidor
+            // a buscar el archivo físico en la carpeta public/html/
+            window.location.href = `/html/AsignaciónTurnosTienda.html?id_campana=${encodeURIComponent(campana.id_campana)}`;
+        });
+
+        td5.appendChild(btnAñadirTurnos);
         tr.appendChild(td5);
 
         tbody.appendChild(tr);

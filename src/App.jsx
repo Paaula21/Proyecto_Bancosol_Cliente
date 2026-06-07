@@ -67,7 +67,7 @@ export default function App() {
 
                                 <Route path="/voluntarios" element={
                                     <iframe 
-                                        src="/html/AsignacionTurnos.html" 
+                                        src="/html/AsignacionTurnos.html"
                                         className="content-iframe"
                                         title="Voluntarios"
                                     />
