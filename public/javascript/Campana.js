@@ -244,20 +244,16 @@ function renderizarTabla() {
         tr.appendChild(td4);
 
         // --- Columna 5: Acciones ---
+        // Dentro del bucle o función donde generas las filas de las campañas:
         let td5 = document.createElement('td');
-
-// Usamos un botón en lugar de un enlace para tener más control
         let btnAñadirTurnos = document.createElement('button');
         btnAñadirTurnos.className = 'btn-edit';
         btnAñadirTurnos.textContent = 'Añadir turnos';
 
-// Añadimos el evento de clic que fuerza la redirección
         btnAñadirTurnos.addEventListener('click', (e) => {
             e.preventDefault();
             e.stopPropagation();
-
-            // Fíjate en el "/html/" al principio de la ruta. Esto fuerza al servidor
-            // a buscar el archivo físico en la carpeta public/html/
+            // Redirige a la página de tiendas pasando el ID de la campaña por URL
             window.location.href = `/html/AsignaciónTurnosTienda.html?id_campana=${encodeURIComponent(campana.id_campana)}`;
         });
 
