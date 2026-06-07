@@ -5,6 +5,7 @@ import { UserProvider } from './react/ContextoUsuario';
 import Sidebar from './react/Sidebar'; 
 import Header from './react/Header';
 import Notificaciones from './react/Notificaciones';
+import AsignacionTurnosFinal from './react/AsignacionTurnosFinal';
 import './App.css';
 
 export default function App() {
@@ -72,6 +73,8 @@ export default function App() {
                                         title="Voluntarios"
                                     />
                                 } />
+
+                                <Route path="/gestion-final-turnos" element={<AsignacionTurnosFinal />} />
 
                                 <Route path="/notificaciones" element={<Notificaciones />} />
                                 

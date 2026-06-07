@@ -1,0 +1,114 @@
+/* src/AsignacionTurnosFinal.css */
+
+.shifts-main-container {
+    padding: 16px 24px;
+    width: 100%;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, sans-serif;
+}
+
+.list-container {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+.list-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.list-header h2 {
+    margin: 0;
+    font-size: 1.35rem;
+    color: #111827;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    margin-top: 12px;
+    border: 1px solid #e5e7eb;
+    border-radius: 6px;
+}
+
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+.data-table th {
+    background-color: #f8fafc;
+    color: #475569;
+    font-weight: 600;
+    padding: 10px 16px;
+    border-bottom: 2px solid #e2e8f0;
+    font-size: 0.8rem;
+    text-transform: uppercase;
+}
+
+.data-table td {
+    padding: 8px 16px;
+    border-bottom: 1px solid #e2e8f0;
+    vertical-align: middle;
+    color: #334155;
+    background-color: #ffffff;
+    font-size: 0.85rem;
+}
+
+.data-table tbody tr:hover td {
+    background-color: #f1f5f9;
+}
+
+.select-turno {
+    width: 100%;
+    max-width: 280px;
+    padding: 6px 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    background-color: #ffffff;
+    color: #334155;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.2s ease;
+}
+
+.select-turno:focus {
+    border-color: #420098;
+    box-shadow: 0 0 0 2px rgba(66, 0, 152, 0.15);
+}
+
+.popup-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 16px;
+    padding-top: 16px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.btn-confirmar {
+    padding: 8px 18px;
+    background-color: #420098;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-cancelar {
+    padding: 8px 18px;
+    background-color: #ffffff;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    border-radius: 6px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+}
