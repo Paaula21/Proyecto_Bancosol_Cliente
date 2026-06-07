@@ -78,6 +78,7 @@ document.querySelector('#form-login').addEventListener('submit', async function 
                 sessionStorage.setItem('id_rol', usuarioEncontrado.id_rol);
                 sessionStorage.setItem('id_usuario', usuarioEncontrado.id_usuario);
                 sessionStorage.setItem('username', username);
+                sessionStorage.setItem('id', usuarioEncontrado.id);
 
                 // Buscamos la página de destino según el rol del usuario
                 let paginaDestino = DIRECCION_POR_ROL[usuarioEncontrado.id_rol];

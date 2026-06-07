@@ -1,10 +1,22 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import {UserContext} from './ContextoUsuario';
 export default function Perfil() {
+    const API_BASE = 'http://localhost:3000';
+
+    const {usuario} = useContext(UserContext);
     const [passwords, setPasswords] = useState({
         actual: '',
         nueva: '',
         confirmacion: ''
     });
+
+    const roles = {
+        '1' : 'Administrador',
+        '2' : 'Coordinador',
+        '3' : 'Colaborador'
+    }
+
+    const [mensaje, setMensaje] = useState({ texto: '', tipo: '' });
 
     useEffect(() => {
     // Script para incluir el sidebar y header como htmls separados
@@ -24,15 +36,44 @@ export default function Perfil() {
             [e.target.name]: e.target.value
         });
     };
-    // Hay que gus¡ardarlos en la base de datos (NO FUNCIONAL)
-    const handleSubmit = (e) => {
-        e.preventDefault();
+    //Para guardar la contraseña en la base de datos
+    const handleSubmit = async (e) => {
+        e.preventDefault(); 
+        
+        // Caso en el que las contraseñas no coinciden
         if (passwords.nueva !== passwords.confirmacion) {
-            alert("Las contraseñas nuevas no coinciden");
+            setMensaje({ texto: 'Las contraseñas nuevas no coinciden.', tipo: 'error' });
             return;
         }
-        console.log("Datos a enviar:", passwords);
-        alert("Contraseña actualizada con éxito");
+        //Caso en el que la contraseña no tiene más de 8 caracteres
+        if (passwords.nueva.length < 8) { 
+            setMensaje({ texto: 'La nueva contraseña debe tener al menos 8 caracteres.', tipo: 'error' });
+            return;
+        }
+
+        try {
+            const urlUsuario = `${API_BASE}/usuario/${usuario.id}`;
+            const response = await fetch(urlUsuario, {
+                method: 'PATCH', 
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    contrasenia: passwords.nueva
+                })
+            });
+
+            if (response.ok) {
+                setMensaje({ texto: '¡Contraseña actualizada con éxito!', tipo: 'exito' });
+                setPasswords({ actual: '', nueva: '', confirmacion: '' });
+            } else {
+                const errorData = await response.text();
+                setMensaje({ texto: errorData || 'La contraseña actual no es correcta.', tipo: 'error' });
+            }
+        } catch (error) {
+            console.error("Error en la petición:", error);
+            setMensaje({ texto: 'Error de conexión con el servidor.', tipo: 'error' });
+        }
     };
     return (
         <div className="app-container">
@@ -52,11 +93,11 @@ export default function Perfil() {
                         <div className='data-perfil'>
                             <div className='data-item'>
                                 <label className='label-name'>Nombre</label>
-                                <input type="text" readOnly value="J.M. Cobos" className='input' />
+                                <input type="text" readOnly value={usuario.nombre} className='input' />
                             </div>
                             <div className='data-item'>
                                 <label className='label-name'>Rol en el sistema</label>
-                                <input type="text" readOnly value="Administrador" className='input' />
+                                <input type="text" readOnly value={roles[usuario.rol] || 'Desconocido'} className='input' />
                             </div>
                         </div>
                     </div>
@@ -106,6 +147,15 @@ export default function Perfil() {
                             </div>
 
                             <div>
+                                {mensaje.texto && (
+                    <div style={{ 
+                        color: mensaje.tipo === 'error' ? 'red' : 'green', 
+                        marginBottom: '15px',
+                        fontWeight: 'bold'
+                    }}>
+                        {mensaje.texto}
+                    </div>
+                )}
                                 <button
                                     type="submit"
                                     className="btn btn--primary"
