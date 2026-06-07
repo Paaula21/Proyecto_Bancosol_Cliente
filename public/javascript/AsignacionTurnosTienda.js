@@ -1,184 +1,148 @@
 // ----- CONFIGURACIÓN INICIAL ----- //
 const API_BASE = 'http://localhost:3000';
 
+// Almacenes en memoria para filtrar en tiempo real sin saturar a peticiones al servidor
+let tiendasDeEstaCampana = [];
+let cadenasGlobal = [];
+let idCampanaActual = '';
+
 document.addEventListener("DOMContentLoaded", () => {
-    console.log("¡[OK] El archivo AsignacionTurnosTienda.js se ha cargado e iniciado con éxito!");
-
-    // 1. Forzamos a que el panel de las tiendas sea visible (tu HTML viene con display: none)
     const panelTiendas = document.getElementById('panel-tiendas');
-    if (panelTiendas) {
-        panelTiendas.style.display = 'block';
-        console.log("¡[OK] Panel de tiendas hecho visible!");
-    } else {
-        console.error("[ERROR] No se encontró el contenedor '#panel-tiendas' en el HTML.");
-    }
+    if (panelTiendas) panelTiendas.style.display = 'block';
 
-    // 2. Extraemos el ID de la campaña desde la URL
     const urlParams = new URLSearchParams(window.location.search);
-    const idCampana = urlParams.get('id_campana');
-    console.log("-> ID de campaña detectado en la URL:", idCampana);
+    idCampanaActual = urlParams.get('id_campana');
 
     const tbodyTiendas = document.getElementById('tabla-tiendas-campana');
-    if (!tbodyTiendas) {
-        console.error("[ERROR] No se encontró el 'id=tabla-tiendas-campana' en el HTML.");
-        return;
-    }
+    if (!tbodyTiendas) return;
 
-    // Si la URL no trae la campaña, lo reflejamos de inmediato en la tabla
-    if (!idCampana) {
+    if (!idCampanaActual) {
         tbodyTiendas.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red; font-weight: bold;">Error: No se recibió ninguna campaña (?id_campana=...) en la URL.</td></tr>';
         return;
     }
 
-    // Actualizamos el título principal
     const titulo = document.getElementById('titulo-campana-tiendas');
-    if (titulo) titulo.textContent = `Tiendas de la Campaña: ${idCampana}`;
+    if (titulo) titulo.textContent = `Tiendas de la Campaña: ${idCampanaActual}`;
 
-    // Disparamos la carga de datos
-    cargarTiendasDeCampana(idCampana);
+    // --- ESCUCHADORES DE EVENTOS PARA LOS FILTROS ---
+    const selectCadena = document.getElementById('filter-cadena');
+    const inputIdTienda = document.getElementById('filter-id-tienda');
+
+    if (selectCadena) selectCadena.addEventListener('change', aplicarFiltros);
+    if (inputIdTienda) inputIdTienda.addEventListener('input', aplicarFiltros);
+
+    // Cargar los datos iniciales de la API
+    cargarTiendasDeCampana(idCampanaActual);
 });
 
 async function cargarTiendasDeCampana(idCampana) {
     const tbodyTiendas = document.getElementById('tabla-tiendas-campana');
-
-    // Cambiamos el texto original del HTML por uno nuevo para comprobar que el JS responde
     tbodyTiendas.innerHTML = '<tr><td colspan="4" style="text-align:center; color: #2563eb;">Conectando con el servidor base...</td></tr>';
 
     try {
-        console.log("1. Solicitando relaciones campana_cadena para:", idCampana);
+        // 1. Obtener relaciones campana_cadena
         const resCampanaCadena = await fetch(`${API_BASE}/campana_cadena?id_campana=${idCampana}`);
-        if (!resCampanaCadena.ok) throw new Error(`Fallo en campana_cadena (${resCampanaCadena.status})`);
         const campanaCadenas = await resCampanaCadena.json();
-        console.log("   Datos recibidos de campana_cadena:", campanaCadenas);
-
-        // Mapeamos los IDs de las cadenas autorizadas
         const idsCadenasDeCampana = campanaCadenas.map(cc => cc.id_cadena);
-        console.log("   Cadenas autorizadas para esta campaña:", idsCadenasDeCampana);
 
         if (idsCadenasDeCampana.length === 0) {
-            tbodyTiendas.innerHTML = `<tr><td colspan="4" style="text-align: center; font-weight: bold; color: #d97706;">La campaña ${idCampana} existe, pero no tiene ninguna cadena vinculada en la base de datos.</td></tr>`;
+            tbodyTiendas.innerHTML = `<tr><td colspan="4" style="text-align: center; font-weight: bold; color: #d97706;">La campaña ${idCampana} no tiene ninguna cadena vinculada.</td></tr>`;
             return;
         }
 
-        console.log("2. Solicitando nombres de las cadenas comerciales...");
+        // 2. Obtener maestras de cadenas y establecimientos
         const resCadenas = await fetch(`${API_BASE}/cadena`);
-        if (!resCadenas.ok) throw new Error("Fallo al obtener la lista global de cadenas");
-        const cadenas = await resCadenas.json();
+        cadenasGlobal = await resCadenas.json();
 
-        console.log("3. Solicitando listado completo de establecimientos...");
         const resTiendas = await fetch(`${API_BASE}/establecimiento`);
-        if (!resTiendas.ok) throw new Error("Fallo al obtener los establecimientos");
         const todasLasTiendas = await resTiendas.json();
 
-        // 4. Aplicamos el filtro cruzado
-        console.log("4. Filtrando tiendas...");
-        const tiendasFiltradas = todasLasTiendas.filter(tienda =>
+        // 3. Filtrar y guardar en memoria global las tiendas autorizadas
+        tiendasDeEstaCampana = todasLasTiendas.filter(tienda =>
             idsCadenasDeCampana.includes(tienda.id_cadena)
         );
-        console.log("   Tiendas que superaron el filtro:", tiendasFiltradas);
 
-        // Limpiamos el texto de carga antes de renderizar
-        tbodyTiendas.innerHTML = '';
+        // 4. Llenar dinámicamente el desplegable de Cadenas (solo con las que participan en esta campaña)
+        poblarDesplegableCadenas(idsCadenasDeCampana);
 
-        if (tiendasFiltradas.length === 0) {
-            tbodyTiendas.innerHTML = `<tr><td colspan="4" style="text-align: center;">No se encontraron tiendas físicas para las cadenas asignadas a la campaña ${idCampana}.</td></tr>`;
-            return;
+        // 5. Renderizar las tiendas por primera vez
+        renderizarTablaTiendas(tiendasDeEstaCampana);
+
+    } catch (error) {
+        console.error("Error al cargar datos:", error);
+        tbodyTiendas.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red; font-weight: bold;">Error al cargar datos: ${error.message}</td></tr>`;
+    }
+}
+
+// Llenar el <select> con las cadenas asociadas
+function poblarDesplegableCadenas(idsCadenasDeCampana) {
+    const selectCadena = document.getElementById('filter-cadena');
+    if (!selectCadena) return;
+
+    // Limpiar opciones previas manteniendo la primera ("Todas")
+    selectCadena.innerHTML = '<option value="">Todas las cadenas</option>';
+
+    cadenasGlobal.forEach(cadena => {
+        if (idsCadenasDeCampana.includes(cadena.id_cadena)) {
+            const option = document.createElement('option');
+            option.value = cadena.id_cadena;
+            option.textContent = cadena.nombre_cadena;
+            selectCadena.appendChild(option);
         }
-
-        // 5. Inyectamos las filas filtradas
-        tiendasFiltradas.forEach(tienda => {
-            const cadenaObj = cadenas.find(c => c.id_cadena === tienda.id_cadena);
-            const tr = document.createElement('tr');
-
-            tr.innerHTML = `
-                <td><strong>${tienda.nombre_resena || 'Sin nombre'}</strong></td>
-                <td>${cadenaObj ? cadenaObj.nombre_cadena : tienda.id_cadena}</td>
-                <td>${tienda.id_establecimiento}</td>
-                <td><button class="btn btn--primary btn-seleccionar-tienda" data-id="${tienda.id_establecimiento}">Asignar turnos</button></td>
-            `;
-            tbodyTiendas.appendChild(tr);
-        });
-
-        console.log("¡[ÉXITO] Tabla de tiendas generada por completo!");
-
-    } catch (error) {
-        console.error("[ERROR CRÍTICO] Ocurrió un fallo durante la carga:", error);
-        tbodyTiendas.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red; font-weight: bold;">Error al cargar datos: ${error.message}. Asegúrate de que json-server esté corriendo en el puerto 3000.</td></tr>`;
-    }
+    });
 }
 
-async function loadVolunteers() {
-    const tbody = document.getElementById('tabla-voluntarios');
-    tbody.innerHTML = `<tr><td colspan="4" style="text-align:center;">Cargando voluntarios...</td></tr>`;
+// Función encargada de aplicar de manera combinada ambos filtros
+function aplicarFiltros() {
+    const selectCadena = document.getElementById('filter-cadena');
+    const inputIdTienda = document.getElementById('filter-id-tienda');
 
-    try {
-        const [voluntarios, personas] = await Promise.all([
-            fetch(`${API_BASE}/voluntario`).then(r => r.json()),
-            fetch(`${API_BASE}/persona`).then(r => r.json())
-        ]);
+    const cadenaSeleccionada = selectCadena ? selectCadena.value : '';
+    const idBuscado = inputIdTienda ? inputIdTienda.value.trim() : '';
 
-        volunteersData = voluntarios.map(vol => {
-            const per = personas.find(p => String(p.id_persona) === String(vol.id_persona));
-            return {
-                id_voluntario: vol.id_voluntario,
-                nombre: per ? per.nombre_completo : "Desconocido",
-                contacto: per ? per.email : "Sin email",
-                disponibilidad: vol.preferencia_horario || "No especificada"
-            };
-        });
+    // Filtrado combinado sobre el array en memoria
+    const tiendasFiltradas = tiendasDeEstaCampana.filter(tienda => {
+        // Validación filtro de Cadena
+        const cumpleCadena = cadenaSeleccionada === '' || tienda.id_cadena === cadenaSeleccionada;
 
-        displayVolunt(volunteersData);
-    } catch (error) {
-        console.error('Error al cargar voluntarios:', error);
-    }
-}
+        // Validación filtro de Escritura ID (coincidencia parcial)
+        const cumpleId = idBuscado === '' || String(tienda.id_establecimiento).includes(idBuscado);
 
-function displayVolunt(voluntarios) {
-    const tbody = document.getElementById('tabla-voluntarios');
-    tbody.innerHTML = "";
-
-    voluntarios.forEach(vol => {
-        let tr = document.createElement('tr');
-
-        tr.innerHTML = `
-            <td><strong>${vol.nombre}</strong></td>
-            <td>${vol.contacto}</td>
-            <td>${vol.disponibilidad}</td>
-            <td>
-                <button class="btn btn--primary" onclick="asignarTurno(${vol.id_voluntario})">
-                    Asignar aquí
-                </button>
-            </td>
-        `;
-        tbody.appendChild(tr);
+        return cumpleCadena && cumpleId;
     });
 
-    document.getElementById('contador-voluntarios').textContent = `${voluntarios.length} voluntarios disponibles`;
+    renderizarTablaTiendas(tiendasFiltradas);
 }
 
-async function asignarTurno(idVoluntario) {
-    if (!idTiendaSeleccionada || !idCampanaURL) {
-        alert("Asegúrate de haber seleccionado una campaña y una tienda.");
+// Pintar filas en el HTML basado en un array recibido
+function renderizarTablaTiendas(listaTiendas) {
+    const tbodyTiendas = document.getElementById('tabla-tiendas-campana');
+    if (!tbodyTiendas) return;
+
+    tbodyTiendas.innerHTML = '';
+
+    if (listaTiendas.length === 0) {
+        tbodyTiendas.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #6b7280;">No se encontraron tiendas con los filtros aplicados.</td></tr>';
         return;
     }
 
-    try {
-        const idGenerado = Math.random().toString(36).substring(2, 11);
-        await fetch(`${API_BASE}/asignacion_turno_colaborador`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-                id: idGenerado,
-                id_asignacion_turno: Date.now(),
-                id_campana: idCampanaURL,
-                id_tienda: parseInt(idTiendaSeleccionada),
-                id_voluntario: idVoluntario,
-                fecha: new Date().toISOString().split('T')[0] // Fecha por defecto
-            })
-        });
+    listaTiendas.forEach(tienda => {
+        const cadenaObj = cadenasGlobal.find(c => c.id_cadena === tienda.id_cadena);
+        const tr = document.createElement('tr');
 
-        alert("Voluntario asignado a la tienda correctamente.");
-    } catch (error) {
-        console.error("Error al asignar:", error);
-    }
+        tr.innerHTML = `
+            <td><strong>${tienda.nombre_resena || 'Sin nombre'}</strong></td>
+            <td>${cadenaObj ? cadenaObj.nombre_cadena : tienda.id_cadena}</td>
+            <td>${tienda.id_establecimiento}</td>
+            <td><button class="btn btn--primary btn-seleccionar-tienda" data-id="${tienda.id_establecimiento}" onclick="abrirTurnosTienda(${tienda.id_establecimiento}, '${tienda.nombre_resena}', '${idCampanaActual}')">Asignar turnos</button></td>
+        `;
+        tbodyTiendas.appendChild(tr);
+    });
 }
+
+// Función del botón Asignar Turnos
+window.abrirTurnosTienda = function(idTienda, nombreTienda, idCampana) {
+    console.log(`Abriendo asignación para Tienda: ${idTienda}, Campaña: ${idCampana}`);
+    // Descomenta y ajusta si quieres redirigir a tu siguiente pantalla:
+    // window.location.href = `AsignarTurnos.html?id_campana=${encodeURIComponent(idCampana)}&id_tienda=${encodeURIComponent(idTienda)}`;
+};

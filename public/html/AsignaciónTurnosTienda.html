@@ -34,7 +34,20 @@
                     <div class="list-header">
                         <div>
                             <h2 id="titulo-campana-tiendas">Tiendas de la Campaña</h2>
-                            <p>Seleccione un establecimiento para asignar voluntarios</p>
+                        </div>
+                    </div>
+
+                    <div class="filter-bar" style="display: flex; gap: 20px; margin-bottom: 16px; background: #f9fafb; padding: 16px; border-radius: 8px; border: 1px solid #e5e7eb;">
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label for="filter-cadena" style="font-weight: 600; font-size: 14px; color: #374151;">Filtrar por Cadena:</label>
+                            <select id="filter-cadena" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #d1d5db; min-width: 180px; background-color: #fff; font-size: 14px;">
+                                <option value="">Todas las cadenas</option>
+                            </select>
+                        </div>
+
+                        <div style="display: flex; flex-direction: column; gap: 6px;">
+                            <label for="filter-id-tienda" style="font-weight: 600; font-size: 14px; color: #374151;">Buscar por ID Tienda:</label>
+                            <input type="text" id="filter-id-tienda" placeholder="Ej: 32" style="padding: 8px 12px; border-radius: 6px; border: 1px solid #d1d5db; max-width: 140px; font-size: 14px;">
                         </div>
                     </div>
                     <div class="table-wrapper">
@@ -48,7 +61,7 @@
                             </tr>
                             </thead>
                             <tbody id="tabla-tiendas-campana">
-                            <tr><td colspan="4" style="text-align: center;">Cargando tiendas...</td></tr>
+                            <tr><td colspan="4" style="text-align: center; padding: 20px;">Cargando tiendas...</td></tr>
                             </tbody>
                         </table>
                     </div>
