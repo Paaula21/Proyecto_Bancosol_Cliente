@@ -1,72 +1,109 @@
+// ----- CONFIGURACIÓN INICIAL ----- //
 const API_BASE = 'http://localhost:3000';
-let parametrosURL = new URLSearchParams(window.location.search);
-let idCampanaURL = parametrosURL.get('id_campana');
 
-let volunteersData = [];
-let idTiendaSeleccionada = null;
+document.addEventListener("DOMContentLoaded", () => {
+    console.log("¡[OK] El archivo AsignacionTurnosTienda.js se ha cargado e iniciado con éxito!");
 
-document.addEventListener("DOMContentLoaded", async () => {
-    if (idCampanaURL) {
-        document.getElementById('panel-tiendas').style.display = 'block';
-        document.getElementById('titulo-campana-tiendas').textContent = `Tiendas de la Campaña: ${idCampanaURL}`;
-        await cargarTiendasCampana(idCampanaURL);
+    // 1. Forzamos a que el panel de las tiendas sea visible (tu HTML viene con display: none)
+    const panelTiendas = document.getElementById('panel-tiendas');
+    if (panelTiendas) {
+        panelTiendas.style.display = 'block';
+        console.log("¡[OK] Panel de tiendas hecho visible!");
     } else {
-        // Comportamiento normal si se entra desde el menú lateral
-        document.getElementById('panel-voluntarios').style.display = 'block';
-        document.getElementById('filtros-voluntarios').style.display = 'flex';
-        loadVolunteers();
+        console.error("[ERROR] No se encontró el contenedor '#panel-tiendas' en el HTML.");
     }
+
+    // 2. Extraemos el ID de la campaña desde la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const idCampana = urlParams.get('id_campana');
+    console.log("-> ID de campaña detectado en la URL:", idCampana);
+
+    const tbodyTiendas = document.getElementById('tabla-tiendas-campana');
+    if (!tbodyTiendas) {
+        console.error("[ERROR] No se encontró el 'id=tabla-tiendas-campana' en el HTML.");
+        return;
+    }
+
+    // Si la URL no trae la campaña, lo reflejamos de inmediato en la tabla
+    if (!idCampana) {
+        tbodyTiendas.innerHTML = '<tr><td colspan="4" style="text-align: center; color: red; font-weight: bold;">Error: No se recibió ninguna campaña (?id_campana=...) en la URL.</td></tr>';
+        return;
+    }
+
+    // Actualizamos el título principal
+    const titulo = document.getElementById('titulo-campana-tiendas');
+    if (titulo) titulo.textContent = `Tiendas de la Campaña: ${idCampana}`;
+
+    // Disparamos la carga de datos
+    cargarTiendasDeCampana(idCampana);
 });
 
-async function cargarTiendasCampana(idCampana) {
+async function cargarTiendasDeCampana(idCampana) {
+    const tbodyTiendas = document.getElementById('tabla-tiendas-campana');
+
+    // Cambiamos el texto original del HTML por uno nuevo para comprobar que el JS responde
+    tbodyTiendas.innerHTML = '<tr><td colspan="4" style="text-align:center; color: #2563eb;">Conectando con el servidor base...</td></tr>';
+
     try {
-        const [establecimientos, asignaciones, cadenas] = await Promise.all([
-            fetch(`${API_BASE}/establecimiento`).then(r => r.json()),
-            fetch(`${API_BASE}/asignacion_coordinador`).then(r => r.json()),
-            fetch(`${API_BASE}/cadena`).then(r => r.json())
-        ]);
+        console.log("1. Solicitando relaciones campana_cadena para:", idCampana);
+        const resCampanaCadena = await fetch(`${API_BASE}/campana_cadena?id_campana=${idCampana}`);
+        if (!resCampanaCadena.ok) throw new Error(`Fallo en campana_cadena (${resCampanaCadena.status})`);
+        const campanaCadenas = await resCampanaCadena.json();
+        console.log("   Datos recibidos de campana_cadena:", campanaCadenas);
 
-        const tiendasIds = asignaciones
-            .filter(a => a.id_campana === idCampana)
-            .map(a => a.id_tienda);
+        // Mapeamos los IDs de las cadenas autorizadas
+        const idsCadenasDeCampana = campanaCadenas.map(cc => cc.id_cadena);
+        console.log("   Cadenas autorizadas para esta campaña:", idsCadenasDeCampana);
 
-        const tiendasFiltradas = establecimientos.filter(est => tiendasIds.includes(est.id_establecimiento));
-
-        const tbodyTiendas = document.getElementById('tabla-tiendas-campana');
-        tbodyTiendas.innerHTML = '';
-
-        if (tiendasFiltradas.length === 0) {
-            tbodyTiendas.innerHTML = '<tr><td colspan="4" style="text-align:center;">No hay tiendas asignadas a esta campaña.</td></tr>';
+        if (idsCadenasDeCampana.length === 0) {
+            tbodyTiendas.innerHTML = `<tr><td colspan="4" style="text-align: center; font-weight: bold; color: #d97706;">La campaña ${idCampana} existe, pero no tiene ninguna cadena vinculada en la base de datos.</td></tr>`;
             return;
         }
 
+        console.log("2. Solicitando nombres de las cadenas comerciales...");
+        const resCadenas = await fetch(`${API_BASE}/cadena`);
+        if (!resCadenas.ok) throw new Error("Fallo al obtener la lista global de cadenas");
+        const cadenas = await resCadenas.json();
+
+        console.log("3. Solicitando listado completo de establecimientos...");
+        const resTiendas = await fetch(`${API_BASE}/establecimiento`);
+        if (!resTiendas.ok) throw new Error("Fallo al obtener los establecimientos");
+        const todasLasTiendas = await resTiendas.json();
+
+        // 4. Aplicamos el filtro cruzado
+        console.log("4. Filtrando tiendas...");
+        const tiendasFiltradas = todasLasTiendas.filter(tienda =>
+            idsCadenasDeCampana.includes(tienda.id_cadena)
+        );
+        console.log("   Tiendas que superaron el filtro:", tiendasFiltradas);
+
+        // Limpiamos el texto de carga antes de renderizar
+        tbodyTiendas.innerHTML = '';
+
+        if (tiendasFiltradas.length === 0) {
+            tbodyTiendas.innerHTML = `<tr><td colspan="4" style="text-align: center;">No se encontraron tiendas físicas para las cadenas asignadas a la campaña ${idCampana}.</td></tr>`;
+            return;
+        }
+
+        // 5. Inyectamos las filas filtradas
         tiendasFiltradas.forEach(tienda => {
             const cadenaObj = cadenas.find(c => c.id_cadena === tienda.id_cadena);
             const tr = document.createElement('tr');
 
             tr.innerHTML = `
-        <td><strong>${tienda.nombre_resena}</strong></td>
-        <td>${cadenaObj ? cadenaObj.nombre_cadena : tienda.id_cadena}</td>
-        <td>${tienda.id_establecimiento}</td> <td><button class="btn btn--primary btn-seleccionar-tienda" data-id="${tienda.id_establecimiento}">Asignar turnos</button></td>
-    `;
+                <td><strong>${tienda.nombre_resena || 'Sin nombre'}</strong></td>
+                <td>${cadenaObj ? cadenaObj.nombre_cadena : tienda.id_cadena}</td>
+                <td>${tienda.id_establecimiento}</td>
+                <td><button class="btn btn--primary btn-seleccionar-tienda" data-id="${tienda.id_establecimiento}">Asignar turnos</button></td>
+            `;
             tbodyTiendas.appendChild(tr);
         });
 
-        document.querySelectorAll('.btn-seleccionar-tienda').forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                // Quitar selección previa
-                document.querySelectorAll('#tabla-tiendas-campana tr').forEach(r => r.classList.remove('selected'));
-                e.target.closest('tr').classList.add('selected');
-
-                idTiendaSeleccionada = e.target.getAttribute('data-id');
-                document.getElementById('filtros-voluntarios').style.display = 'flex';
-                document.getElementById('panel-voluntarios').style.display = 'block';
-                loadVolunteers();
-            });
-        });
+        console.log("¡[ÉXITO] Tabla de tiendas generada por completo!");
 
     } catch (error) {
-        console.error("Error al cargar tiendas:", error);
+        console.error("[ERROR CRÍTICO] Ocurrió un fallo durante la carga:", error);
+        tbodyTiendas.innerHTML = `<tr><td colspan="4" style="text-align: center; color: red; font-weight: bold;">Error al cargar datos: ${error.message}. Asegúrate de que json-server esté corriendo en el puerto 3000.</td></tr>`;
     }
 }
 
