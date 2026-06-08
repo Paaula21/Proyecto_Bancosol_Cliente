@@ -8,6 +8,9 @@
     box-sizing: border-box;
     box-shadow: 0 1px 3px rgba(0,0,0,0.05); 
 }
+.content-double{
+    flex: 1;
+}
 .content-wrapper {
     display: flex;
     gap: 24px;
@@ -59,3 +62,34 @@
     flex-direction: column;
     gap: 24px;
 }
+
+.selection-content{
+    display: flex;
+    align-items: left;
+    gap: 10px;
+    font-size: 15px;
+    margin-bottom: 25px;
+}
+
+.label-selection {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 15px;
+    margin-top: 4px;
+    margin-bottom: 4px;
+}
+
+.selection{
+    transform: scale(1.2);
+    cursor: pointer;
+}
+
+.section-union {
+    display: flex;
+    flex-direction: row;
+    gap: 30px;
+    flex-wrap: wrap;
+}
+
