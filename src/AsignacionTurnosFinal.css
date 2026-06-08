@@ -91,24 +91,50 @@
     border-top: 1px solid #e5e7eb;
 }
 
-.btn-confirmar {
-    padding: 8px 18px;
+/* Botones de acción del formulario */
+/* Botones de acción del formulario */
+.btn--primary {
     background-color: #420098;
-    color: #ffffff;
-    border: none;
+    color: white; /* Asegúrate de añadir el color del texto */
+    padding: 10px 12px;
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
+    /* CAMBIO: Un borde muy pequeño y sutil del mismo tono que el fondo para que se note la forma */
+    border: 1px solid #310073;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.btn-cancelar {
-    padding: 8px 18px;
-    background-color: #ffffff;
+.btn--primary:hover {
+    background-color: #310073;
+    border-color: #20004d; /* Un borde un poco más oscuro al pasar el ratón */
+}
+
+.btn--cancel {
+    background-color: #f3f4f6;
     color: #374151;
-    border: 1px solid #d1d5db;
+    padding: 10px 12px;
     border-radius: 6px;
-    font-size: 0.85rem;
+    font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
+    /* CAMBIO: borde definido aquí una sola vez */
+    border: 1px solid #d1d5db;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.btn--cancel:hover {
+    background-color: #e5e7eb;
+    border-color: #b3b7bd; /* Un borde un poco más marcado al pasar el ratón */
+}
+
+.popup-actions .btn--primary,
+.popup-actions .btn--cancel {
+    flex: 1; /* Esto asegura que ocupen el mismo espacio si lo necesitas */
+    max-width: 150px; /* Opcional: para que no sean excesivamente largos */
 }
