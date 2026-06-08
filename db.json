@@ -12327,7 +12327,7 @@
   "usuario": [
     {
       "id_usuario": 42,
-      "id_rol": 2,
+      "id_rol": 3,
       "contrasenia": "arantxa",
       "usuario": "arantxa",
       "id": "kpJuIGdbgm4"

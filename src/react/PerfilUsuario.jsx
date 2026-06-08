@@ -17,14 +17,22 @@ export default function Perfil() {
         '2': 'Coordinador',
         '3': 'Colaborador'
     }
-
-    const opcionesExportacion = [
-        { id: 'campana', label: 'Campañas' },
-        { id: 'cadena', label: 'Cadenas Comerciales' },
-        { id: 'establecimiento', label: 'Tiendas' },
-        { id: 'colaborador', label: 'Colaboradores' },
-        { id: 'voluntario', label: 'Voluntarios' }
-    ];
+    const opcionesExportacion = [];
+    if (usuario.rol === '1' || usuario.rol === '2') {
+        opcionesExportacion.push(
+            { id: 'campana', label: 'Campañas' },
+            { id: 'cadena', label: 'Cadenas Comerciales' },
+            { id: 'establecimiento', label: 'Tiendas' },
+            { id: 'colaborador', label: 'Colaboradores' },
+            { id: 'voluntario', label: 'Voluntarios' }
+        );
+    }else if (usuario.rol === '3') {
+        opcionesExportacion.push(
+            { id: 'campana', label: 'Campañas' },
+            { id: 'voluntario', label: 'Voluntarios' }
+        );
+    }
+    
 
     const handleCheckboxChange = (endpointId) => {
         if (tablasExportar.includes(endpointId)) {
@@ -186,7 +194,6 @@ export default function Perfil() {
 
                         </div>
                         {/* Exportación de los datos */}
-                        {(usuario.rol === '1' || usuario.rol === '2') && (
                             <div className='content content-double'>
                                 <h3 className="title">Exportar Datos del Sistema</h3>
 
@@ -194,7 +201,7 @@ export default function Perfil() {
                                     <label className="label-name" >
                                         Tablas a exportar:
                                     </label>
-                                    
+
                                     <div className='selection-content' style={{ display: 'flex', flexDirection: 'column', gap: '10px', padding: '5px' }}>
                                         {opcionesExportacion.map((opcion) => (
                                             <label
@@ -224,7 +231,6 @@ export default function Perfil() {
                                     </button>
                                 )}
                             </div>
-                        )}
                     </div>
                 </main>
             </div>
