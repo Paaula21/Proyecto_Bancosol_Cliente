@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { UserContext } from './ContextoUsuario'; 
-import { Link, useLocation } from 'react-router-dom'; // IMPORTANTE: Importamos useLocation
+import { Link, useLocation } from 'react-router-dom'; // IMPORTANTE: Importamos useLocation para saber en qué ruta estamos y marcar el menú activo
 
 export default function Sidebar() {
     const { usuario } = useContext(UserContext);
@@ -50,6 +50,9 @@ export default function Sidebar() {
                         <li id="cadena" className={verificarActivo('/cadenas')}>
                             <Link to="/cadenas">Cadenas</Link>
                         </li>
+                        <li id="voluntarios" className={verificarActivo('/voluntarios')}>
+                            <Link to="/voluntarios">Voluntarios</Link>
+                        </li>
                     </>
                 )}
 
@@ -61,18 +64,12 @@ export default function Sidebar() {
                         <li id="colaboradores" className={verificarActivo('/colaboradores')}>
                             <Link to="/colaboradores">Colaboradores</Link>
                         </li>
-                        <li id="voluntarios" className={verificarActivo('/voluntarios')}>
-                            <Link to="/voluntarios">Voluntarios</Link>
-                        </li>
                     </>
                 )}
             </ul>
 
             <div className="bottom-menu">
                 <ul>
-                    <li id="btn-configuracion" className={verificarActivo('/configuracion')}>
-                        <Link to="/configuracion">Configuración</Link>
-                    </li>
                     <li id="btn-logout">
                         <a href="#cerrar-sesion" onClick={(e) => {
                             e.preventDefault();

@@ -9,6 +9,20 @@ import AsignacionTurnosFinal from './react/AsignacionTurnosFinal';
 import './App.css';
 
 export default function App() {
+
+    // Leemos la sesión antes de que React dibuje nada en pantalla.
+    const rolUsuario = sessionStorage.getItem('id_rol');
+
+    // Si no hay rol (o es 0), el usuario NO ha iniciado sesión.
+    if (!rolUsuario || rolUsuario === '0') {
+        // Lo redirigimos a tu página de Login original
+        window.location.href = '/html/Login.html';
+        
+        // Devolvemos 'null' para que React no pinte el menú de "Invitado"
+        // mientras el navegador cambia de página.
+        return null; 
+    }
+
     return (
         <UserProvider>
             <BrowserRouter>
@@ -77,14 +91,6 @@ export default function App() {
                                 <Route path="/gestion-final-turnos" element={<AsignacionTurnosFinal />} />
 
                                 <Route path="/notificaciones" element={<Notificaciones />} />
-                                
-                                {/* RUTAS PENDIENTES DE IMPLEMENTAR */}
-                                <Route path="/configuracion" element={
-                                    <div>
-                                        <h2>Configuración</h2>
-                                        <p>Por implementar.</p>
-                                    </div>
-                                } />
                                 
                             </Routes>
                         </div>

@@ -5,9 +5,9 @@ const API_ENDPOINT = 'http://localhost:3000';
 // Diccionario que relaciona cada id_rol con su página de destino.
 // Cuando añadamos nuevas páginas, solo hay que actualizar este objeto
 const DIRECCION_POR_ROL = {
-        1: '/dashboard-admin',       // Administrador
-        2: '/dashboard-coordinador', // Coordinador
-        3: '/dashboard-colaborador'  // Colaborador
+        1: '/dashboard',       // Administrador
+        2: '/dashboard', // Coordinador
+        3: '/dashboard'  // Colaborador
 };
 
 // ----- EVENTO: RECORDARME -----
