@@ -6,6 +6,7 @@ import Sidebar from './react/Sidebar';
 import Header from './react/Header';
 import Notificaciones from './react/Notificaciones';
 import AsignacionTurnosFinal from './react/AsignacionTurnosFinal';
+import Historial from './react/Historial';
 import './App.css';
 
 export default function App() {
@@ -89,6 +90,8 @@ export default function App() {
                                 } />
 
                                 <Route path="/gestion-final-turnos" element={<AsignacionTurnosFinal />} />
+
+                                <Route path="/historial" element={<Historial />} />
 
                                 <Route path="/notificaciones" element={<Notificaciones />} />
                                 

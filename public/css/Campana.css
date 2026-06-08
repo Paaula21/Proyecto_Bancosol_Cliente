@@ -226,6 +226,25 @@ body {
     background-color: #310073;
 }
 
+.btn-history {
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    border: 1px solid #420098;
+    background-color: #420098;
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    transition: background-color 0.2s;
+}
+
+.btn-history:hover {
+    background-color: #310073;
+}
+
 table {
     width: 100%;
     border-collapse: collapse;

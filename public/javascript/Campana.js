@@ -375,3 +375,7 @@ async function mostrarDetalleCampana(campana) {
         console.error("Error cargando cadenas participantes", e);
     }
 }
+
+window.abrirHistorial = function() {
+    window.parent.location.href = `/historial`;
+};
