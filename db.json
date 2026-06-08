@@ -17695,6 +17695,24 @@
       "hora_fin": "21:00:00",
       "id_voluntario": null,
       "id": "KCi-fvev9pY"
+    },
+    {
+      "id_campana": "GR2025",
+      "id_tienda": 1,
+      "fecha": "2025-11-17",
+      "hora_inicio": "09:00:00",
+      "hora_fin": "14:00:00",
+      "id_voluntario": 1,
+      "id": "bxnAT0X"
+    },
+    {
+      "id_campana": "GR2025",
+      "id_tienda": 1,
+      "fecha": "2025-11-17",
+      "hora_inicio": "16:00:00",
+      "hora_fin": "21:00:00",
+      "id_voluntario": 3,
+      "id": "-12lHMj"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -5,6 +5,7 @@
     width: 100%;
     box-sizing: border-box;
     font-family: system-ui, -apple-system, sans-serif;
+    background-color: #f5f7f9;
 }
 
 .list-container {

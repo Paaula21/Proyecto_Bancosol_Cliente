@@ -23,15 +23,20 @@ export default function Header() {
             return;
         }
 
+        if (rutaActual.includes("gestion-final-turnos")) {
+            setTitulo("Asignación de turnos");
+            setSubtitulo("Control y asignación de voluntarios");
+        }
+
         const titulosMenu = {
             'dashboard': { t: 'Dashboard', s: 'Resumen general de los datos' },
             'campanas': { t: 'Campañas', s: 'Gestión y planificación de campañas activas' },
             'cadenas': { t: 'Cadenas', s: 'Administración de cadenas de supermercados' },
             'tiendas': { t: 'Tiendas', s: 'Gestión de establecimientos participantes' },
             'colaboradores': { t: 'Colaboradores', s: 'Gestión de entidades colaboradoras y voluntarios' },
-            'voluntarios': { t: 'Asignación de turnos', s: 'Control y asignación de voluntarios' },
             'perfil': { t: 'Perfil de usuario', s: 'Ajustes del usuario' },
-            'notificaciones': { t: 'Notificaciones', s: 'Bandeja de avisos y alertas' } 
+            'notificaciones': { t: 'Notificaciones', s: 'Bandeja de avisos y alertas' },
+            'voluntarios': { t: 'Voluntarios', s: 'Gestión de voluntarios' }
         };
 
         const info = titulosMenu[rutaActual];
