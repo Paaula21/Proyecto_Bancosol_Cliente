@@ -6876,6 +6876,14 @@
       "nombre_via": "s",
       "numero": "s",
       "id_cp": 92
+    },
+    {
+      "id": "nuo1uy4pg",
+      "id_direccion": 686,
+      "tipo_via": "",
+      "nombre_via": "",
+      "numero": null,
+      "id_cp": null
     }
   ],
   "establecimiento": [
@@ -12471,6 +12479,36 @@
       "id": "OmBf9VBxjV8"
     }
   ],
+  "incidencia": [
+    {
+      "rol": "Coordinador",
+      "nombre_persona": "prueba",
+      "id_campana": "GR2025",
+      "id_cadena": "",
+      "tienda": "",
+      "turno_dia": "Lunes",
+      "turno_franja": "Mañana",
+      "urgencia": "Media",
+      "descripcion": "prueba",
+      "aspectos_positivos": "",
+      "fecha_creacion": "2026-06-08T20:59:57.577Z",
+      "id": 1
+    },
+    {
+      "rol": "Coordinador",
+      "nombre_persona": "prueba",
+      "id_campana": "GR2025",
+      "id_cadena": "",
+      "tienda": "",
+      "turno_dia": "Lunes",
+      "turno_franja": "Mañana",
+      "urgencia": "Baja",
+      "descripcion": "prueba",
+      "aspectos_positivos": "",
+      "fecha_creacion": "2026-06-08T21:13:04.497Z",
+      "id": 2
+    }
+  ],
   "tipo_notificacion": [
     {
       "id_tipo": "ASIGNACION",
@@ -12496,6 +12534,11 @@
       "id_tipo": "GENERAL",
       "descripcion": "Notificación general del sistema",
       "id": "bBZ5epjrl_Y"
+    },
+    {
+      "id_tipo": "INCIDENCIA",
+      "descripcion": "Notificación generada automáticamente al registrar una incidencia",
+      "id": "incidencia_tipo_001"
     }
   ],
   "notificacion": [

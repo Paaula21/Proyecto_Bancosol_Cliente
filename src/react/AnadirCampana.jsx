@@ -6,6 +6,7 @@ export default function AnadirCampana() {
     const [cadenasDisponibles, setCadenas] = useState([]);
     const [enviando, setEnviando] = useState(false);
     const [error, setError] = useState(null);
+    const [mostrarPopupExito, setMostrarPopupExito] = useState(false);
     const [formData, setFormData] = useState({
         nombre_campana: '',
         fecha_inicio: '',
@@ -71,7 +72,7 @@ export default function AnadirCampana() {
                 if (!resCadena.ok) throw new Error('Error al asociar cadena');
             }
 
-            navigate('/campanas');
+            setMostrarPopupExito(true);
         } catch (err) {
             setError(err.message);
         } finally {
@@ -81,17 +82,17 @@ export default function AnadirCampana() {
 
     const handleClose = () => navigate('/campanas');
 
+    const handleAceptarExito = () => {
+        setMostrarPopupExito(false);
+        navigate('/campanas');
+    };
+
     return (
         <>
-            <link rel="stylesheet" href="/css/DetalleColaborador.css" />
-            <link rel="stylesheet" href="/css/EditarAnadirColaborador.css" />
-            <link rel="stylesheet" href="/css/EditarCampana.css" />
-            <link rel="stylesheet" href="/css/Common.css" />
-
             <div className="crear-campana-page">
                 <div className="form-page-card">
                     <div className="form-card-scroll">
-                        <div className="datos-colaborador" style={{ padding: '24px' }}>
+                        <div className="datos-colaborador">
                             <h3 className="ficha-titulo-principal">Crear Campaña</h3>
                             <form id="form-create-campaign" onSubmit={handleSubmit}>
 
@@ -151,7 +152,7 @@ export default function AnadirCampana() {
                                     </div>
                                 </div>
 
-                                {error && <p style={{ color: '#e74c3c', fontSize: '0.875rem' }}>{error}</p>}
+                                {error && <p className="error-message">{error}</p>}
                             </form>
                         </div>
                     </div>
@@ -168,6 +169,23 @@ export default function AnadirCampana() {
                     </div>
                 </div>
             </div>
+
+            {mostrarPopupExito && (
+                <div className="overlay active">
+                    <div className="popup active">
+                        <h3>¡Campaña creada!</h3>
+                        <p>La campaña ha sido creada con éxito.</p>
+                        <div className="botones">
+                            <button
+                                className="btn-add"
+                                onClick={handleAceptarExito}
+                            >
+                                Aceptar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     );
 }
