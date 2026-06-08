@@ -1376,14 +1376,24 @@
       "id": "4ZWBaVyhDmA"
     },
     {
-      "id": "knem3iid5b",
+      "id": "6yrfwicfii",
       "id_campana": "GR2025",
       "id_cadena": "ALCAMPO"
     },
     {
-      "id": "6gai7ntmfx",
+      "id": "du184zj5jx",
       "id_campana": "GR2025",
       "id_cadena": "CARREFOUR"
+    },
+    {
+      "id": "8kixts182e",
+      "id_campana": "GR2025",
+      "id_cadena": "DIA"
+    },
+    {
+      "id": "h90pmxi76i",
+      "id_campana": "GR2025",
+      "id_cadena": "ECI"
     }
   ],
   "direccion": [
@@ -12495,7 +12505,7 @@
       "id_tipo": "CAMPANA",
       "titulo": "Gran Recogida 2025 planificada",
       "mensaje": "Se ha planificado la Gran Recogida 2025 para los días 22 y 23 de noviembre de 2025.",
-      "leida": false,
+      "leida": true,
       "fecha_creacion": "2025-09-01T10:00:00",
       "fecha_envio_programado": null,
       "id_asignacion_ref": null,
@@ -12507,7 +12517,7 @@
       "id_tipo": "CAMPANA",
       "titulo": "Gran Recogida 2025 planificada",
       "mensaje": "Se ha planificado la Gran Recogida 2025 para los días 22 y 23 de noviembre de 2025.",
-      "leida": false,
+      "leida": true,
       "fecha_creacion": "2025-09-01T10:00:00",
       "fecha_envio_programado": null,
       "id_asignacion_ref": null,
@@ -12519,7 +12529,7 @@
       "id_tipo": "CAMPANA",
       "titulo": "Gran Recogida 2025 planificada",
       "mensaje": "Se ha planificado la Gran Recogida 2025 para los días 22 y 23 de noviembre de 2025.",
-      "leida": false,
+      "leida": true,
       "fecha_creacion": "2025-09-01T10:00:00",
       "fecha_envio_programado": null,
       "id_asignacion_ref": null,

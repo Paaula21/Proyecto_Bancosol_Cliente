@@ -109,11 +109,10 @@
         <div class="popup" id="popup-delete">
             <h3>¿Eliminar Campaña?</h3>
             <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta campaña de la base de datos?</p>
-            <div class="botones">
-                <form action="" onsubmit="return false;">
-                    <button class="btn-add btn-rojo" id="btn-confirm-delete">Eliminar</button>
-                    <button class="btn-cerrar-popup" id="btn-cancel-delete">Cancelar</button>
-                </form>
+            
+            <div class="popup-actions">
+                <button class="btn-add btn-rojo" id="btn-confirm-delete">Eliminar</button>
+                <button class="btn-cerrar-popup" id="btn-cancel-delete">Cancelar</button>
             </div>
         </div>
     </div>
@@ -122,8 +121,8 @@
         <div class="popup" id="popup-success-campaign">
             <h3>¡Guardado con éxito!</h3>
             <p>La campaña y sus cadenas asociadas se han actualizado correctamente.</p>
-            <div class="botones">
-                <button type="button" class="btn-add" id="btn-accept-edit-campaign">Aceptar</button>
+            <div class="popup-actions">
+                <button type="button" class="btn-cerrar-popup" id="btn-accept-edit-campaign">Aceptar</button>
             </div>
         </div>
     </div>
@@ -132,7 +131,7 @@
         <div class="popup" id="popup-error-campaign">
             <h3>Ha ocurrido un error</h3>
             <p id="error-text-popup-campaign">No se han podido guardar los cambios en el servidor.</p>
-            <div class="botones">
+            <div class="popup-actions">
                 <button type="button" class="btn-cerrar-popup" id="btn-accept-error-campaign">Aceptar</button>
             </div>
         </div>

@@ -28,6 +28,7 @@ export default function Header() {
             setSubtitulo("Control y asignación de voluntarios");
         }
 
+
         const titulosMenu = {
             'dashboard': { t: 'Dashboard', s: 'Resumen general de los datos' },
             'campanas': { t: 'Campañas', s: 'Gestión y planificación de campañas activas' },
@@ -36,7 +37,8 @@ export default function Header() {
             'colaboradores': { t: 'Colaboradores', s: 'Gestión de entidades colaboradoras y voluntarios' },
             'perfil': { t: 'Perfil de usuario', s: 'Ajustes del usuario' },
             'notificaciones': { t: 'Notificaciones', s: 'Bandeja de avisos y alertas' },
-            'voluntarios': { t: 'Voluntarios', s: 'Gestión de voluntarios' }
+            'voluntarios': { t: 'Voluntarios', s: 'Gestión de voluntarios' },
+            'historial': { t: 'Historial', s: 'Registro de actividades y eventos pasados' },
         };
 
         const info = titulosMenu[rutaActual];

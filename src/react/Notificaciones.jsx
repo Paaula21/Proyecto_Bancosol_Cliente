@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useFetch } from './useFetch'; 
 
 export default function Notificaciones() {
-    const { datos: notificacionesBrutas, cargando, eliminarDato } = useFetch('http://localhost:3000/notificacion');
+    // 1. Extraemos tu nueva función marcarComoLeida
+    const { datos: notificacionesBrutas, cargando, eliminarDato, marcarComoLeida } = useFetch('http://localhost:3000/notificacion');
     
+    // 2. Ya no hace falta el array de "leidas". Solo guardamos la que está seleccionada.
     const [seleccionada, setSeleccionada] = useState(null);
-    const [leidas, setLeidas] = useState([]);
     const [mostrarPopup, setMostrarPopup] = useState(false);
 
     const notificaciones = [...notificacionesBrutas].sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
@@ -17,11 +18,13 @@ export default function Notificaciones() {
         });
     };
 
+    // 3. Cuando hacemos clic, avisamos a la base de datos
     const handleSeleccionar = (notif) => {
         setSeleccionada(notif);
         
-        if (!notif.leida && !leidas.includes(notif.id)) {
-            setLeidas([...leidas, notif.id]);
+        // Si en la base de datos dice que no estaba leída, la marcamos
+        if (!notif.leida) {
+            marcarComoLeida(notif.id);
         }
     };
 
@@ -46,10 +49,8 @@ export default function Notificaciones() {
             <link rel="stylesheet" href="/css/popUpRegistro.css" />
 
             <main className="campana-container notificaciones-main">
-
                 <div className="content-wrapper">
                     
-                    {/* COLUMNA IZQUIERDA */}
                     <section className="list-container">
                         <header className="list-header">
                             <h2>Listado de Avisos</h2>
@@ -65,7 +66,8 @@ export default function Notificaciones() {
                         ) : (
                             <div className="notificaciones-list">
                                 {notificaciones.map((notif) => {
-                                    const esLeida = notif.leida || leidas.includes(notif.id);
+                                    // Comprobamos directamente si la BD dice que está leída
+                                    const esLeida = notif.leida; 
                                     const estaSeleccionada = seleccionada?.id === notif.id;
 
                                     return (
@@ -82,6 +84,7 @@ export default function Notificaciones() {
                                                 <span className="notif-item-date">
                                                     {formatearFecha(notif.fecha_creacion).split(',')[0]}
                                                 </span>
+                                                {/* Etiqueta nueva si en la BD leida es false */}
                                                 {!esLeida && (
                                                     <span className="notif-item-new-badge">Nueva</span>
                                                 )}
@@ -93,7 +96,6 @@ export default function Notificaciones() {
                         )}
                     </section>
                     
-                    {/* COLUMNA DERECHA */}
                     <aside className="detail-panel" id="detail-panel">
                         <div className="detail-content">
                             
@@ -145,7 +147,6 @@ export default function Notificaciones() {
                 </div>
             </main>
 
-            {/* POPUP DE CONFIRMACIÓN (Ahora sí, 100% libre de estilos inline) */}
             {mostrarPopup && (
                 <div className="overlay active">
                     <div className="popup active">

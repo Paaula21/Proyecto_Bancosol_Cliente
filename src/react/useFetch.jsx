@@ -4,7 +4,6 @@ export function useFetch(url) {
     const [datos, setDatos] = useState([]);
     const [cargando, setCargando] = useState(true);
 
-    // Efecto para LEER los datos (GET)
     useEffect(() => {
         let ignore = false; 
 
@@ -29,27 +28,40 @@ export function useFetch(url) {
         };
     }, [url]);
 
-    // Efecto para BORRAR datos (DELETE)
     const eliminarDato = async (id) => {
         try {
-            // Hacemos la petición DELETE a la base de datos
-            const respuesta = await fetch(`${url}/${id}`, {
-                method: 'DELETE'
-            });
-
+            const respuesta = await fetch(`${url}/${id}`, { method: 'DELETE' });
             if (respuesta.ok) {
-                // Si el servidor lo borra bien, lo quitamos de nuestra variable local
-                // usando filter() (como sugiere vuestro temario para Arrays en estado)
                 setDatos(datosActuales => datosActuales.filter(item => item.id !== id));
-                return true; // Indicamos que salió bien
+                return true; 
             }
             return false;
         } catch (error) {
             console.error("Error al eliminar:", error);
-            return false; // Indicamos que salió mal
+            return false; 
         }
     };
 
-    // Ahora el hook devuelve los datos, si está cargando, Y la función para borrar
-    return { datos, cargando, eliminarDato };
+    const marcarComoLeida = async (id) => {
+        try {
+            // Avisamos al json-server de que cambie el campo a true
+            const respuesta = await fetch(`${url}/${id}`, {
+                method: 'PATCH',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ leida: true })
+            });
+
+            if (respuesta.ok) {
+                // Si el servidor lo guarda bien, lo actualizamos también en nuestra pantalla al momento
+                setDatos(datosActuales => datosActuales.map(item => 
+                    item.id === id ? { ...item, leida: true } : item
+                ));
+            }
+        } catch (error) {
+            console.error("Error al marcar como leída:", error);
+        }
+    };
+
+    // Devolvemos la nueva función para poder usarla
+    return { datos, cargando, eliminarDato, marcarComoLeida };
 }
