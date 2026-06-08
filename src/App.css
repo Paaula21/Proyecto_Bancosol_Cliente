@@ -147,3 +147,35 @@
     background-color: #c0392b;
     border-color: #c0392b;
 }
+
+/* --- ESTILOS PARA CREAR CAMPAÑA --- */
+.crear-campana-page {
+    padding: 24px 32px;
+    height: 100%;
+    background-color: #f5f7f9;
+}
+
+/* --- ESTILOS PARA INCIDENCIAS --- */
+.incidencias-page {
+    padding: 24px 32px;
+    height: 100%;
+    background-color: #f5f7f9;
+}
+
+/* --- TARJETA CONTENEDORA PARA FORMULARIOS DE PÁGINA COMPLETA --- */
+.form-page-card {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+}
+
+.form-card-scroll {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+}

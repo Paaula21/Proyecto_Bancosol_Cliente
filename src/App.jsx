@@ -7,6 +7,8 @@ import Header from './react/Header';
 import Notificaciones from './react/Notificaciones';
 import AsignacionTurnosFinal from './react/AsignacionTurnosFinal';
 import Historial from './react/Historial';
+import AnadirCampana from './react/AnadirCampana';
+import PaginaIncidencias from './react/PaginaIncidencias';
 import './App.css';
 
 export default function App() {
@@ -92,6 +94,10 @@ export default function App() {
                                 <Route path="/gestion-final-turnos" element={<AsignacionTurnosFinal />} />
 
                                 <Route path="/historial" element={<Historial />} />
+
+                                <Route path="/crear-campana" element={<AnadirCampana />} />
+
+                                <Route path="/incidencias" element={<PaginaIncidencias />} />
 
                                 <Route path="/notificaciones" element={<Notificaciones />} />
                                 

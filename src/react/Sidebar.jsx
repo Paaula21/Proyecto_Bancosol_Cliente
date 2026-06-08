@@ -53,6 +53,9 @@ export default function Sidebar() {
                         <li id="voluntarios" className={verificarActivo('/voluntarios')}>
                             <Link to="/voluntarios">Voluntarios</Link>
                         </li>
+                        <li id="incidencias" className={verificarActivo('/incidencias')}>
+                            <Link to="/incidencias">Incidencias</Link>
+                        </li>
                     </>
                 )}
 

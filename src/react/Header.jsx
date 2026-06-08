@@ -39,6 +39,8 @@ export default function Header() {
             'notificaciones': { t: 'Notificaciones', s: 'Bandeja de avisos y alertas' },
             'voluntarios': { t: 'Voluntarios', s: 'Gestión de voluntarios' },
             'historial': { t: 'Historial', s: 'Registro de actividades y eventos pasados' },
+            'crear-campana': { t: 'Nueva Campaña', s: 'Completa los datos para crear una nueva campaña' },
+            'incidencias': { t: 'Incidencias', s: 'Registro y seguimiento de incidencias de campaña' },
         };
 
         const info = titulosMenu[rutaActual];
