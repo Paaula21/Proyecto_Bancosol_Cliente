@@ -125,9 +125,9 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
     };
 
     const urgencias = [
-        { value: 'Baja', label: 'Baja', color: '#27ae60' },
-        { value: 'Media', label: 'Media', color: '#f39c12' },
-        { value: 'Alta', label: 'Alta', color: '#e74c3c' }
+        { value: 'Baja', label: 'Baja' },
+        { value: 'Media', label: 'Media' },
+        { value: 'Alta', label: 'Alta' }
     ];
 
     return (

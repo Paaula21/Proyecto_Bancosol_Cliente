@@ -111,7 +111,7 @@ export default function CrearCampana() {
                 {/* Campo: Cadenas Participantes creadas dinámicamente */}
                 <div className="ficha-tarjeta-info sin-margen-inferior">
                     <h5>Cadenas Participantes</h5>
-                    <p className="checkbox-section-title" style={{ marginBottom: '10px', fontSize: '14px', color: '#555' }}>
+                    <p className="checkbox-section-title">
                         Seleccione las cadenas:
                     </p>
                     <div className="checkbox-list" id="checkbox-list">
@@ -123,7 +123,7 @@ export default function CrearCampana() {
                                     checked={cadenasSeleccionadas.includes(cadena)}
                                     onChange={() => manejarCheckbox(cadena)}
                                 />
-                                <label htmlFor={`cadena-${cadena}`} style={{ marginLeft: '5px' }}>
+                                <label htmlFor={`cadena-${cadena}`}>
                                     {cadena}
                                 </label>
                             </div>
@@ -132,7 +132,7 @@ export default function CrearCampana() {
                 </div>
 
                 {/* Añadimos un botón para activar el envío */}
-                <div style={{ marginTop: '20px' }}>
+                <div>
                     <button type="submit" className="btn-guardar">Crear Campaña</button>
                 </div>
             </form>
