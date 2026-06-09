@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="../css/DetalleColaborador.css">
     <link rel="stylesheet" href="../css/EditarAnadirColaborador.css">
     <link rel="stylesheet" href="../css/EditarCampana.css">
+    <link rel="stylesheet" href="../css/Common.css">
     <script src="../javascript/IncludeHTML.js"></script>
     <script src="../javascript/Sidebar.js" defer></script>
     <script src="../javascript/Campana.js" defer></script>
@@ -112,35 +113,42 @@
         </div>
     </div>
 
+    <!-- POPUP DE ELIMINAR -->
     <div class="overlay" id="overlay-delete">
         <div class="popup" id="popup-delete">
             <h3>¿Eliminar Campaña?</h3>
             <p>Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar esta campaña de la base de datos?</p>
-            <div class="botones">
+            <div>
                 <form action="" onsubmit="return false;">
-                    <button class="btn-add btn-rojo" id="btn-confirm-delete">Eliminar</button>
-                    <button class="btn-cerrar-popup" id="btn-cancel-delete">Cancelar</button>
+                    <button class="btn btn--delete" id="btn-confirm-delete">Eliminar</button>
+                    <button class="btn btn--cancel" id="btn-cancel-delete">Cancelar</button>
                 </form>
             </div>
         </div>
     </div>
 
+    <!-- POPUP DE ÉXITO -->
     <div class="overlay" id="overlay-success-campaign">
         <div class="popup" id="popup-success-campaign">
             <h3>¡Guardado con éxito!</h3>
             <p>La campaña y sus cadenas asociadas se han actualizado correctamente.</p>
-            <div class="botones">
-                <button type="button" class="btn-add" id="btn-accept-edit-campaign">Aceptar</button>
+            <div>
+                <form action="" onsubmit="return false;">
+                    <button type="button" class="btn btn--primary" id="btn-accept-edit-campaign">Aceptar</button>
+                </form>
             </div>
         </div>
     </div>
 
+    <!-- POPUP DE ERROR -->
     <div class="overlay" id="overlay-error-campaign">
         <div class="popup" id="popup-error-campaign">
             <h3>Ha ocurrido un error</h3>
             <p id="error-text-popup-campaign">No se han podido guardar los cambios en el servidor.</p>
-            <div class="botones">
-                <button type="button" class="btn-cerrar-popup" id="btn-accept-error-campaign">Aceptar</button>
+            <div>
+                <form action="" onsubmit="return false;">
+                    <button type="button" class="btn btn--primary" id="btn-accept-error-campaign">Aceptar</button>
+                </form>
             </div>
         </div>
     </div>

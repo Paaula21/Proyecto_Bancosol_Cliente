@@ -8,7 +8,8 @@ export function useFetch(url) {
         let ignore = false; 
 
         setCargando(true);
-        fetch(url)
+        // AÑADIMOS cache: 'no-store' PARA OBLIGAR A TRAER DATOS FRESCOS
+        fetch(url, { cache: 'no-store' })
             .then(respuesta => respuesta.json())
             .then(json => {
                 if (!ignore) {
@@ -44,7 +45,6 @@ export function useFetch(url) {
 
     const marcarComoLeida = async (id) => {
         try {
-            // Avisamos al json-server de que cambie el campo a true
             const respuesta = await fetch(`${url}/${id}`, {
                 method: 'PATCH',
                 headers: { 'Content-Type': 'application/json' },
@@ -52,7 +52,6 @@ export function useFetch(url) {
             });
 
             if (respuesta.ok) {
-                // Si el servidor lo guarda bien, lo actualizamos también en nuestra pantalla al momento
                 setDatos(datosActuales => datosActuales.map(item => 
                     item.id === id ? { ...item, leida: true } : item
                 ));
@@ -62,6 +61,5 @@ export function useFetch(url) {
         }
     };
 
-    // Devolvemos la nueva función para poder usarla
     return { datos, cargando, eliminarDato, marcarComoLeida };
 }

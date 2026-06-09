@@ -1303,7 +1303,11 @@
     {
       "id_cadena": "SUMA",
       "nombre_cadena": "SUMA",
-      "id": "WBJJNP1aBzk"
+      "id": "WBJJNP1aBzk",
+      "num_establecimientos": 3,
+      "campanasIds": [
+        "PRIM2025"
+      ]
     },
     {
       "id": "8FtbUAbR1N4",
@@ -1316,7 +1320,7 @@
       "id": "5SeIvi5sb8A",
       "id_campana": "GR2025",
       "nombre_campana": "Campaña Verano 2025",
-      "fecha_inicio": "2024-05-15",
+      "fecha_inicio": "2024-05-04",
       "fecha_fin": "2024-08-29",
       "estado": "Activa"
     },
@@ -1327,6 +1331,14 @@
       "fecha_fin": "2025-04-06",
       "estado": "Activa",
       "id": "9g9lf4Q7RKU"
+    },
+    {
+      "id_campana": "CAMPAN2026",
+      "nombre_campana": "campana",
+      "fecha_inicio": "2026-11-15",
+      "fecha_fin": "2026-11-16",
+      "estado": "Planificada",
+      "id": "_YQ6D_B"
     }
   ],
   "campana_cadena": [
@@ -1371,24 +1383,39 @@
       "id": "qpIVM3tte38"
     },
     {
-      "id_campana": "PRIM2025",
-      "id_cadena": "SUMA",
-      "id": "4ZWBaVyhDmA"
-    },
-    {
-      "id": "egg3pvy12y",
+      "id": "ioluis4jkm",
       "id_campana": "GR2025",
       "id_cadena": "ALCAMPO"
     },
     {
-      "id": "jsi7qtppn1",
+      "id": "4jj2kkv6st",
       "id_campana": "GR2025",
       "id_cadena": "CARREFOUR"
     },
     {
-      "id": "ftr7kh66xn",
+      "id": "7uk2nfjmh1",
       "id_campana": "GR2025",
       "id_cadena": "DIA"
+    },
+    {
+      "id": "lvt0gtpvfa",
+      "id_campana": "GR2025",
+      "id_cadena": "ECI"
+    },
+    {
+      "id": "ccgiudqofb",
+      "id_campana": "GR2025",
+      "id_cadena": "ALDI"
+    },
+    {
+      "id": "r9whs17y2",
+      "id_cadena": "SUMA",
+      "id_campana": "PRIM2025"
+    },
+    {
+      "id_campana": "CAMPAN2026",
+      "id_cadena": "ALCAMPO",
+      "id": "kv6DQOe"
     }
   ],
   "direccion": [
@@ -12550,28 +12577,16 @@
       "id": "Xm2AZVrRHgI"
     },
     {
-      "id_notificacion": 3,
-      "id_persona_destino": 44,
+      "id": "mr3rrxispn",
+      "id_notificacion": 1781025961905,
+      "id_persona_destino": 50,
       "id_tipo": "CAMPANA",
-      "titulo": "Gran Recogida 2025 planificada",
-      "mensaje": "Se ha planificado la Gran Recogida 2025 para los días 22 y 23 de noviembre de 2025.",
-      "leida": true,
-      "fecha_creacion": "2025-09-01T10:00:00",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"campana\" y está lista para ser gestionada.",
+      "leida": false,
+      "fecha_creacion": "2026-06-09T17:26:01.906Z",
       "fecha_envio_programado": null,
-      "id_asignacion_ref": null,
-      "id": "hbgYZcyc9ng"
-    },
-    {
-      "id_notificacion": 4,
-      "id_persona_destino": 45,
-      "id_tipo": "CAMPANA",
-      "titulo": "Gran Recogida 2025 planificada",
-      "mensaje": "Se ha planificado la Gran Recogida 2025 para los días 22 y 23 de noviembre de 2025.",
-      "leida": true,
-      "fecha_creacion": "2025-09-01T10:00:00",
-      "fecha_envio_programado": null,
-      "id_asignacion_ref": null,
-      "id": "yym9LR7NGao"
+      "id_asignacion_ref": null
     }
   ],
   "asignacion_coordinador": [
@@ -17805,6 +17820,114 @@
       "campaignName": "Campaña Verano 2025",
       "timestamp": "2026-06-09T10:14:06.755Z",
       "id": 7
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-09T15:09:27.000Z",
+      "id": 8
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-09T15:09:47.329Z",
+      "id": 9
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-09T15:10:08.990Z",
+      "id": 10
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T15:14:35.612Z",
+      "id": 11
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T15:14:41.970Z",
+      "id": 12
+    },
+    {
+      "action": "create",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T15:17:40.894Z",
+      "id": 13
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T15:17:50.897Z",
+      "id": 14
+    },
+    {
+      "action": "create",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T15:19:48.989Z",
+      "id": 15
+    },
+    {
+      "action": "edit",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T15:20:02.247Z",
+      "id": 16
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T15:20:13.794Z",
+      "id": 17
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T17:03:09.103Z",
+      "id": 18
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T17:03:12.037Z",
+      "id": 19
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T17:07:37.521Z",
+      "id": 20
+    },
+    {
+      "action": "create",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T17:21:25.311Z",
+      "id": 21
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T17:21:54.862Z",
+      "id": 22
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T17:21:57.972Z",
+      "id": 23
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T17:22:15.339Z",
+      "id": 24
+    },
+    {
+      "action": "create",
+      "campaignName": "campana",
+      "timestamp": "2026-06-09T17:26:01.857Z",
+      "id": 25
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

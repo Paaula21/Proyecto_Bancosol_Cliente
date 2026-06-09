@@ -102,8 +102,6 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 await cargarCampanas();
 
-                alert("Campaña eliminada con éxito");
-
             } catch (error) {
                 console.error("Error al intentar eliminar la campaña:", error);
                 alert("No se pudo eliminar la campaña. Inténtalo de nuevo.");

@@ -47,6 +47,7 @@ export default function Notificaciones() {
             <link rel="stylesheet" href="/css/Campana.css" />
             <link rel="stylesheet" href="/css/DetalleColaborador.css" />
             <link rel="stylesheet" href="/css/popUpRegistro.css" />
+            <link rel="stylesheet" href="/css/Common.css" />
 
             <main className="campana-container notificaciones-main">
                 <div className="content-wrapper">
@@ -147,6 +148,7 @@ export default function Notificaciones() {
                 </div>
             </main>
 
+            {/* POPUP DE CONFIRMACIÓN */}
             {mostrarPopup && (
                 <div className="overlay active">
                     <div className="popup active">
@@ -155,19 +157,23 @@ export default function Notificaciones() {
                             Esta acción no se puede deshacer. ¿Estás seguro de que deseas eliminar este mensaje?
                         </p>
                         
-                        <div className="botones">
-                            <button 
-                                className="btn-add btn-confirmar-borrado" 
-                                onClick={handleConfirmarBorrado}
-                            >
-                                Eliminar
-                            </button>
-                            <button 
-                                className="btn-cerrar-popup" 
-                                onClick={() => setMostrarPopup(false)}
-                            >
-                                Cancelar
-                            </button>
+                        <div>
+                            {/* Usamos onSubmit para evitar que la página recargue si pulsan Enter */}
+                            <form action="" onSubmit={(e) => e.preventDefault()}>
+                                {/* Clases idénticas a las de tu compañera */}
+                                <button 
+                                    className="btn btn--delete" 
+                                    onClick={handleConfirmarBorrado}
+                                >
+                                    Eliminar
+                                </button>
+                                <button 
+                                    className="btn btn--cancel" 
+                                    onClick={() => setMostrarPopup(false)}
+                                >
+                                    Cancelar
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </div>

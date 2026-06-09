@@ -1,7 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useNotificaciones } from './useNotificaciones'; // importamos el hook para enviar notificaciones
 
 export default function AnadirCampana() {
+
+    const { enviarNotificacion } = useNotificaciones(); // obtenemos la función para enviar notificaciones
+
     const navigate = useNavigate();
     const [cadenasDisponibles, setCadenas] = useState([]);
     const [enviando, setEnviando] = useState(false);
@@ -72,7 +76,7 @@ export default function AnadirCampana() {
                 if (!resCadena.ok) throw new Error('Error al asociar cadena');
             }
 
-            // NUEVO: Registrar acción en el historial
+            // Registrar acción en el historial
             await fetch('http://localhost:3000/historial', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -82,6 +86,13 @@ export default function AnadirCampana() {
                     timestamp: new Date().toISOString()
                 })
             });
+
+            // Enviar notificación de creación de campaña
+            await enviarNotificacion(
+                "Nueva Campaña Creada", // El título
+                `Se ha creado la campaña "${formData.nombre_campana}" y está lista para ser gestionada.`, // El mensaje (usando la variable del formulario)
+                "CAMPANA" // El tipo de notificación para que salga de color moradito
+            );
 
             setMostrarPopupExito(true);
         } catch (err) {
