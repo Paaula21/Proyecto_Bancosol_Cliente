@@ -67,32 +67,50 @@ export default function AnadirCampana() {
 
             if (!res.ok) throw new Error('Error al crear la campaña');
 
+            // Asociar cadenas de forma individual para que el fallo de una no bloquee las demás
+            const erroresCadena = [];
             for (const idCadena of formData.cadenasSeleccionadas) {
-                const resCadena = await fetch('http://localhost:3000/campana_cadena', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ id_campana: idCampana, id_cadena: idCadena })
-                });
-                if (!resCadena.ok) throw new Error('Error al asociar cadena');
+                try {
+                    const resCadena = await fetch('http://localhost:3000/campana_cadena', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ id_campana: idCampana, id_cadena: idCadena })
+                    });
+                    if (!resCadena.ok) erroresCadena.push(idCadena);
+                } catch {
+                    erroresCadena.push(idCadena);
+                }
+            }
+
+            if (erroresCadena.length > 0) {
+                console.error('Error al asociar algunas cadenas:', erroresCadena);
             }
 
             // Registrar acción en el historial
-            await fetch('http://localhost:3000/historial', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    action: 'create',
-                    campaignName: formData.nombre_campana,
-                    timestamp: new Date().toISOString()
-                })
-            });
+            try {
+                await fetch('http://localhost:3000/historial', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'create',
+                        campaignName: formData.nombre_campana,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+            } catch (errHistorial) {
+                console.error('Error al registrar historial:', errHistorial);
+            }
 
             // Enviar notificación de creación de campaña
-            await enviarNotificacion(
-                "Nueva Campaña Creada", // El título
-                `Se ha creado la campaña "${formData.nombre_campana}" y está lista para ser gestionada.`, // El mensaje (usando la variable del formulario)
-                "CAMPANA" // El tipo de notificación para que salga de color moradito
-            );
+            try {
+                await enviarNotificacion(
+                    "Nueva Campaña Creada",
+                    `Se ha creado la campaña "${formData.nombre_campana}" y está lista para ser gestionada.`,
+                    "CAMPANA"
+                );
+            } catch (errNotif) {
+                console.error('Error al enviar notificación:', errNotif);
+            }
 
             setMostrarPopupExito(true);
         } catch (err) {

@@ -17940,6 +17940,12 @@
       "campaignName": "campana",
       "timestamp": "2026-06-09T17:26:01.857Z",
       "id": 25
+    },
+    {
+      "action": "delete",
+      "campaignName": "prueba",
+      "timestamp": "2026-06-09T20:00:34.158Z",
+      "id": 26
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"
