@@ -1376,24 +1376,19 @@
       "id": "4ZWBaVyhDmA"
     },
     {
-      "id": "6yrfwicfii",
+      "id": "egg3pvy12y",
       "id_campana": "GR2025",
       "id_cadena": "ALCAMPO"
     },
     {
-      "id": "du184zj5jx",
+      "id": "jsi7qtppn1",
       "id_campana": "GR2025",
       "id_cadena": "CARREFOUR"
     },
     {
-      "id": "8kixts182e",
+      "id": "ftr7kh66xn",
       "id_campana": "GR2025",
       "id_cadena": "DIA"
-    },
-    {
-      "id": "h90pmxi76i",
-      "id_campana": "GR2025",
-      "id_cadena": "ECI"
     }
   ],
   "direccion": [
@@ -17766,6 +17761,50 @@
       "hora_fin": "21:00:00",
       "id_voluntario": 3,
       "id": "-12lHMj"
+    }
+  ],
+  "historial": [
+    {
+      "action": "create",
+      "campaignName": "Campaña de Prueba",
+      "timestamp": "2026-06-09T09:57:10.013Z",
+      "id": 1
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-09T09:57:24.362Z",
+      "id": 2
+    },
+    {
+      "action": "delete",
+      "campaignName": "Campaña de Prueba",
+      "timestamp": "2026-06-09T09:57:38.770Z",
+      "id": 3
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-09T10:08:14.853Z",
+      "id": 4
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-09T10:08:26.843Z",
+      "id": 5
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-09T10:14:02.059Z",
+      "id": 6
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-09T10:14:06.755Z",
+      "id": 7
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

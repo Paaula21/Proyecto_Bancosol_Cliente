@@ -54,6 +54,9 @@ document.addEventListener('DOMContentLoaded', async function () {
 
                 let idInterno = busqueda[0].id;
 
+                // NUEVO: Guardamos el nombre antes de destruir el registro
+                let nombreCampanaBorrada = busqueda[0].nombre_campana;
+
                 // Borramos la campaña usando su id interno
                 let deleteResponse = await fetch(`${API_ENDPOINT}/campana/${idInterno}`, {
                     method: 'DELETE',
@@ -75,6 +78,17 @@ document.addEventListener('DOMContentLoaded', async function () {
                         method: 'DELETE'
                     });
                 }
+
+                // NUEVO: Registrar eliminación en el historial
+                await fetch(`${API_ENDPOINT}/historial`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'delete',
+                        campaignName: nombreCampanaBorrada,
+                        timestamp: new Date().toISOString()
+                    })
+                });
 
                 document.querySelector('#overlay-delete').classList.remove('active');
                 document.querySelector('#popup-delete').classList.remove('active');

@@ -69,6 +69,18 @@ document.addEventListener('DOMContentLoaded', function() {
             try {
                 await guardarEdicionCampana();
 
+                // NUEVO: Registrar edición en el historial
+                const nombreEditado = document.querySelector('#name-campanya').value.trim();
+                await fetch('http://localhost:3000/historial', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        action: 'edit',
+                        campaignName: nombreEditado,
+                        timestamp: new Date().toISOString()
+                    })
+                });
+
                 // Recargar datos de la tabla
                 await cargarCampanas();
 

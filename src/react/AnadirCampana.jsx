@@ -72,6 +72,17 @@ export default function AnadirCampana() {
                 if (!resCadena.ok) throw new Error('Error al asociar cadena');
             }
 
+            // NUEVO: Registrar acción en el historial
+            await fetch('http://localhost:3000/historial', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    action: 'create',
+                    campaignName: formData.nombre_campana,
+                    timestamp: new Date().toISOString()
+                })
+            });
+
             setMostrarPopupExito(true);
         } catch (err) {
             setError(err.message);
