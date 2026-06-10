@@ -1,4 +1,3 @@
-// ----- INITIAL CONFIGURATION ----- //
 const API_BASE = 'http://localhost:3000';
 const VISIBLE_ROWS = 6;
 
@@ -13,12 +12,10 @@ async function fetchDatos(recurso) {
 let parametrosURL = new URLSearchParams(window.location.search);
 let idVoluntario = parametrosURL.get('id_voluntario');
 
-// CORRECCIÓN: Inicializamos como array vacío, ya que loadVolunteers() se encargará de llenarlo correctamente
+// Inicializamos array vacío y loadVolunteers() se encarga de llenarlo
 let volunteersData = [];
 let selectedVolunteerId = null;
 
-
-// ----- MAIN EVENT ----- //
 document.addEventListener("DOMContentLoaded", () => {
 
     loadVolunteers();
@@ -29,17 +26,16 @@ document.addEventListener("DOMContentLoaded", () => {
         btnFilter.addEventListener('click', applyFilters);
     }
 
-    // Botón editar global (Salvaguardado por si no existe en el HTML)
+    // Botón editar
     const btnEditarGlobal = document.getElementById('btn-editar-voluntario');
     if (btnEditarGlobal) {
         btnEditarGlobal.addEventListener('click', (e) => {
             e.stopPropagation();
-            // CORRECCIÓN: Comparamos convirtiendo ambos a String para evitar conflictos de Tipo (String vs Number)
             const vol = volunteersData.find(
                 v => String(v.id_voluntario) === String(selectedVolunteerId)
             );
             if (vol) {
-                // Guarda los datos en sessionStorage (por si los necesitas en la otra página)
+                // Guarda los datos en sessionStorage
                 sessionStorage.setItem('voluntario_editar', JSON.stringify(vol));
 
                 // Redirige a EditarVoluntario.html pasando el ID por la URL
@@ -50,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Botón eliminar global (Salvaguardado por si no existe en el HTML)
+    // Botón eliminar
     const btnEliminarGlobal = document.getElementById('btn-eliminar-voluntario');
     if (btnEliminarGlobal) {
         btnEliminarGlobal.addEventListener('click', (e) => {
@@ -66,7 +62,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Cancelar eliminar modal
+    // Cancelar eliminar
     const btnCancelarEliminar = document.getElementById('btn-cancelar-eliminar');
     if (btnCancelarEliminar) {
         btnCancelarEliminar.addEventListener('click', (e) => {
@@ -75,7 +71,7 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Confirmar eliminar modal
+    // Confirmar eliminar
     const btnConfirmarEliminar = document.getElementById('btn-confirmar-eliminar');
     if (btnConfirmarEliminar) {
         btnConfirmarEliminar.addEventListener('click', async (e) => {
@@ -86,8 +82,6 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-// ----- UTILITIES -----
-
 async function fetchJson(url) {
     const res = await fetch(url);
     if (!res.ok) {
@@ -96,12 +90,10 @@ async function fetchJson(url) {
     return res.json();
 }
 
-
 function clearSelection() {
     document.querySelectorAll('#tabla-voluntarios tr')
         .forEach(r => r.classList.remove('selected'));
 }
-
 
 function updateScrollable(list) {
     const wrapper = document.querySelector('.table-wrapper');
@@ -109,7 +101,6 @@ function updateScrollable(list) {
         wrapper.classList.toggle('scrollable', list.length > VISIBLE_ROWS);
     }
 }
-
 
 function setTableState(state, message = '') {
     const tbody = document.getElementById('tabla-voluntarios');
@@ -127,9 +118,6 @@ function setTableState(state, message = '') {
     }
 }
 
-
-// ----- FETCH AND PROCESS DATA -----
-
 async function loadVolunteers() {
     setTableState('loading');
 
@@ -138,7 +126,7 @@ async function loadVolunteers() {
         const personas = await fetchJson(`${API_BASE}/persona`);
 
         volunteersData = voluntarios.map(vol => {
-            // CORRECCIÓN: Comparación segura de IDs convirtiéndolos a String
+
             const per = personas.find(p => String(p.id_persona) === String(vol.id_persona));
 
             return {
@@ -166,9 +154,6 @@ async function loadVolunteers() {
     }
 }
 
-
-// ----- FILTER LOGIC -----
-
 function applyFilters() {
     const inputTurnos = document.getElementById('filter-turnos');
     const selectedTurno = inputTurnos ? inputTurnos.value.trim().toLowerCase() : '';
@@ -190,9 +175,6 @@ function applyFilters() {
     updateCounter(filtered.length);
 }
 
-
-// ----- TABLE RENDERING -----
-
 function displayVolunt(voluntarios) {
     const tbody = document.querySelector("#tabla-voluntarios");
     if (!tbody) return;
@@ -203,7 +185,6 @@ function displayVolunt(voluntarios) {
         let tr = document.createElement('tr');
         tr.style.cursor = 'pointer';
 
-        // ----- CLICK FILA -----
         tr.addEventListener('click', () => {
             clearSelection();
             tr.classList.add('selected');
@@ -255,7 +236,7 @@ function displayVolunt(voluntarios) {
             window.location.href = 'EditarVoluntario.html?id_voluntario=' + encodeURIComponent(vol.id_voluntario);
         });
 
-        // ELIMINAR (Botón único de la fila)
+        // ELIMINAR
         let btnBorrar = document.createElement('button');
         btnBorrar.type = 'button';
         btnBorrar.className = 'btn-eliminar-fila';
@@ -304,8 +285,6 @@ function updateCounter(total) {
 }
 
 
-// ----- DETAIL PANEL -----
-
 function showDetail(vol) {
     selectedVolunteerId = vol.id_voluntario;
 
@@ -341,7 +320,6 @@ async function deleteVolunteer(btn) {
         return;
     }
 
-    // CORRECCIÓN: Comparación segura de IDs convirtiéndolos a String
     const volToDelete = volunteersData.find(v => String(v.id_voluntario) === String(selectedVolunteerId));
     if (!volToDelete) {
         alert("Voluntario no encontrado en memoria.");
@@ -354,7 +332,7 @@ async function deleteVolunteer(btn) {
         btn.textContent = "Eliminando...";
         btn.disabled = true;
 
-        // 1. ELIMINAR EL VOLUNTARIO (Endpoint /voluntario/:id)
+        // 1. ELIMINAR EL VOLUNTARIO
         const volId = volToDelete.vol_id_interno;
         const responseVoluntario = await fetch(`${API_BASE}/voluntario/${volId}`, {
             method: 'DELETE',
@@ -365,7 +343,7 @@ async function deleteVolunteer(btn) {
             throw new Error(`Error al borrar voluntario: ${responseVoluntario.status}`);
         }
 
-        // 2. ELIMINAR LA PERSONA RELACIONADA (Endpoint /persona/:id)
+        // 2. ELIMINAR LA PERSONA RELACIONADA
         if (volToDelete.persona_id_interno) {
             const responsePersona = await fetch(`${API_BASE}/persona/${volToDelete.persona_id_interno}`, {
                 method: 'DELETE',

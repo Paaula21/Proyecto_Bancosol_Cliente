@@ -1,21 +1,29 @@
-/* Contenedor EXTERIOR (El fondo gris más oscuro) */
+/* Contenedor EXTERIOR */
 .historial-background {
+    padding: 16px 24px;
     width: 100%;
     box-sizing: border-box;
-    background-color: #f3f4f6;
-    padding: 1.5rem;
-    min-height: 100%;
+    font-family: system-ui, -apple-system, sans-serif;
+    background-color: #f5f7f9;
+
+    min-height: 100vh;
+    overflow: visible;
 }
 
-/* Contenedor INTERIOR (El cuadrado blanco principal) */
+/* Contenedor INTERIOR */
 .historial-container {
-    width: 100%;
-    box-sizing: border-box;
+
     background-color: #ffffff;
+    border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 1.5rem;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.03);
-    font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    padding: 20px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+    /* ALTURA FIJA */
+    height: calc(100vh - 120px);
+
+    display: flex;
+    flex-direction: column;
 }
 
 /* Cabecera */
@@ -23,81 +31,83 @@
     border-bottom: 1px solid #eaeaea;
     padding-bottom: 1rem;
     margin-bottom: 1.2rem;
+
+    flex-shrink: 0;
 }
 
 .historial-titulo {
     color: #0c1b33;
     font-size: 1.25rem;
     font-weight: 700;
-    margin: 0; /* Ajustado ya que quitamos el subtítulo */
+    margin: 0;
 }
 
-/* Mensajes de carga o vacío */
+/* Mensajes */
 .historial-mensaje {
     text-align: center;
     color: #6b7280;
     padding: 1.5rem;
 }
 
-/* Lista con DESLIZAMIENTO (Scroll) */
+/* LISTA CON SCROLL */
 .historial-lista {
     list-style: none;
     padding: 0 0.5rem 0 0;
-    margin: 0;
+
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
 
-    max-height: 420px;
+    /* scroll interno */
     overflow-y: auto;
+
+    min-height: 0;
+
+    margin-bottom: 24px;
 }
 
-/* Personalización elegante de la barra de scroll */
+/* Scroll */
 .historial-lista::-webkit-scrollbar {
     width: 6px;
 }
 
-.historial-lista::-webkit-scrollbar-track {
-    background: #f3f4f6;
-    border-radius: 4px;
-}
 
 .historial-lista::-webkit-scrollbar-thumb {
     background: #cbd5e1;
     border-radius: 4px;
 }
 
-.historial-lista::-webkit-scrollbar-thumb:hover {
-    background: #94a3b8;
-}
-
-/* Tarjeta de cada aviso individual */
+/* Tarjetas */
 .historial-item {
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    /* CAMBIO: padding vertical aumentado a 1.25rem para hacer la tarjeta más alta */
+
     padding: 1.25rem 1.2rem;
+
     display: flex;
     justify-content: space-between;
     align-items: center;
+
     background-color: #ffffff;
+
+    flex-shrink: 0;
 }
 
-/* Columna izquierda de la tarjeta */
+/* Columna izquierda */
 .historial-info {
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
 }
 
-/* Nombre de la campaña y acción */
+/* Acción */
 .historial-accion {
     font-weight: 700;
     color: #111827;
     font-size: 0.98rem;
 }
 
-/* Etiqueta "CAMPAÑA" debajo del nombre */
+/* Etiqueta */
 .historial-etiqueta {
     color: #6b7280;
     font-size: 0.75rem;
@@ -106,13 +116,13 @@
     text-transform: uppercase;
 }
 
-/* Columna derecha (Fecha) */
+/* Fecha */
 .historial-fecha {
     color: #6b7280;
     font-size: 0.88rem;
 }
 
-/* Responsividad para móviles */
+/* Responsive */
 @media (max-width: 650px) {
     .historial-item {
         flex-direction: column;

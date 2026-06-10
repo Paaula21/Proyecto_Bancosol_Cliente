@@ -21,7 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
     const titulo = document.getElementById('titulo-campana-tiendas');
     if (titulo) titulo.textContent = `Tiendas de la Campaña: ${idCampanaActual}`;
 
-    // Estricto: El filtrado NO es automático al escribir. Solo se ejecuta al hacer click en el botón morado.
     document.getElementById('btn-filter')?.addEventListener('click', aplicarFiltros);
 
     cargarTiendasDeCampana(idCampanaActual);
@@ -43,12 +42,10 @@ async function cargarTiendasDeCampana(idCampana) {
         cadenasGlobal = await (await fetch(`${API_BASE}/cadena`)).json();
         const todasLasTiendas = await (await fetch(`${API_BASE}/establecimiento`)).json();
 
-        // Guardamos la lista completa de tiendas para esta campaña
         tiendasDeEstaCampana = todasLasTiendas.filter(tienda => idsCadenasDeCampana.includes(tienda.id_cadena));
 
         poblarDesplegableCadenas(idsCadenasDeCampana);
 
-        // PREDETERMINADO: Renderizamos todas las tiendas de inicio sin filtros
         renderizarTablaTiendas(tiendasDeEstaCampana);
 
     } catch (error) {
@@ -76,7 +73,6 @@ function aplicarFiltros() {
     const cadenaSeleccionada = document.getElementById('filter-cadena')?.value || '';
     const idBuscado = document.getElementById('filter-id-tienda')?.value.trim() || '';
 
-    // Se calcula el filtro basándose en la selección actual al pulsar el botón
     const filtradas = tiendasDeEstaCampana.filter(tienda => {
         const cumpleCadena = cadenaSeleccionada === '' || tienda.id_cadena === cadenaSeleccionada;
         const cumpleId = idBuscado === '' || String(tienda.id_establecimiento).includes(idBuscado);

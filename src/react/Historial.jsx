@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import '../Historial.css';
 
 const Historial = () => {
     const [logs, setLogs] = useState([]);
@@ -27,9 +26,9 @@ const Historial = () => {
     const getTextoAccion = (log) => {
         const nombre = log.campaignName || 'Campaña';
         switch (log.action) {
-            case 'create': return `${nombre} planificada`;
-            case 'edit': return `${nombre} modificada`;
-            case 'delete': return `${nombre} eliminada`;
+            case 'create': return `${nombre} se ha creado`;
+            case 'edit': return `${nombre} se ha modificado`;
+            case 'delete': return `${nombre} se ha eliminado`;
             default: return nombre;
         }
     };
@@ -46,7 +45,6 @@ const Historial = () => {
         <div className="historial-background">
             <div className="historial-container">
                 <div className="historial-header">
-                    {/* CAMBIO: Nuevo título y el contador ha sido eliminado */}
                     <h2 className="historial-titulo">Registro de Acciones</h2>
                 </div>
 

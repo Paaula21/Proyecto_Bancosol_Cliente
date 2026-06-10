@@ -1,25 +1,44 @@
-/* src/AsignacionTurnosFinal.css */
+html,
+body {
+    overflow-y: auto;
+}
 
+/* CONTENEDOR PRINCIPAL */
 .shifts-main-container {
     padding: 16px 24px;
     width: 100%;
     box-sizing: border-box;
     font-family: system-ui, -apple-system, sans-serif;
     background-color: #f5f7f9;
+
+    min-height: 100vh;
+    overflow: visible;
 }
 
+/* PANEL BLANCO PRINCIPAL */
 .list-container {
     background-color: #ffffff;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
     padding: 20px;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+
+    /* ALTURA FIJA */
+    height: calc(100vh - 120px);
+
+    /* margen gris inferior */
+    margin-bottom: 24px;
+
+    display: flex;
+    flex-direction: column;
 }
 
+/* CABECERA */
 .list-header {
     margin-bottom: 16px;
     padding-bottom: 12px;
     border-bottom: 1px solid #e5e7eb;
+    flex-shrink: 0;
 }
 
 .list-header h2 {
@@ -28,13 +47,21 @@
     color: #111827;
 }
 
+/* CONTENEDOR TABLA */
 .table-wrapper {
-    overflow-x: auto;
+    flex: 1;
+
     margin-top: 12px;
     border: 1px solid #e5e7eb;
     border-radius: 6px;
+
+    overflow-y: auto;
+    overflow-x: auto;
+
+    min-height: 0;
 }
 
+/* TABLA */
 .data-table {
     width: 100%;
     border-collapse: collapse;
@@ -45,14 +72,18 @@
     background-color: #f8fafc;
     color: #475569;
     font-weight: 600;
-    padding: 10px 16px;
+    padding: 16px;
     border-bottom: 2px solid #e2e8f0;
     font-size: 0.8rem;
     text-transform: uppercase;
+
+    position: sticky;
+    top: 0;
+    z-index: 1;
 }
 
 .data-table td {
-    padding: 8px 16px;
+    padding: 18px 16px;
     border-bottom: 1px solid #e2e8f0;
     vertical-align: middle;
     color: #334155;
@@ -64,6 +95,7 @@
     background-color: #f1f5f9;
 }
 
+/* SELECT DE TURNOS */
 .select-turno {
     width: 100%;
     max-width: 280px;
@@ -83,27 +115,30 @@
     box-shadow: 0 0 0 2px rgba(66, 0, 152, 0.15);
 }
 
+/* BOTONES */
 .popup-actions {
     display: flex;
     justify-content: flex-end;
     gap: 12px;
+
     margin-top: 16px;
     padding-top: 16px;
+
     border-top: 1px solid #e5e7eb;
+
+    flex-shrink: 0;
 }
 
-/* Botones de acción del formulario */
-/* Botones de acción del formulario */
 .btn--primary {
     background-color: #420098;
-    color: white; /* Asegúrate de añadir el color del texto */
+    color: white;
     padding: 10px 12px;
     border-radius: 6px;
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    /* CAMBIO: Un borde muy pequeño y sutil del mismo tono que el fondo para que se note la forma */
     border: 1px solid #310073;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -111,7 +146,7 @@
 
 .btn--primary:hover {
     background-color: #310073;
-    border-color: #20004d; /* Un borde un poco más oscuro al pasar el ratón */
+    border-color: #20004d;
 }
 
 .btn--cancel {
@@ -122,8 +157,8 @@
     font-size: 0.875rem;
     font-weight: 600;
     cursor: pointer;
-    /* CAMBIO: borde definido aquí una sola vez */
     border: 1px solid #d1d5db;
+
     display: inline-flex;
     align-items: center;
     justify-content: center;
@@ -131,11 +166,11 @@
 
 .btn--cancel:hover {
     background-color: #e5e7eb;
-    border-color: #b3b7bd; /* Un borde un poco más marcado al pasar el ratón */
+    border-color: #b3b7bd;
 }
 
 .popup-actions .btn--primary,
 .popup-actions .btn--cancel {
-    flex: 1; /* Esto asegura que ocupen el mismo espacio si lo necesitas */
-    max-width: 150px; /* Opcional: para que no sean excesivamente largos */
+    flex: 1;
+    max-width: 150px;
 }
