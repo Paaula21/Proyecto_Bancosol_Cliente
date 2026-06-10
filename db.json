@@ -1331,14 +1331,6 @@
       "fecha_fin": "2025-04-06",
       "estado": "Activa",
       "id": "9g9lf4Q7RKU"
-    },
-    {
-      "id_campana": "CAMPAN2026",
-      "nombre_campana": "campana",
-      "fecha_inicio": "2026-11-15",
-      "fecha_fin": "2026-11-16",
-      "estado": "Planificada",
-      "id": "_YQ6D_B"
     }
   ],
   "campana_cadena": [
@@ -1383,39 +1375,34 @@
       "id": "qpIVM3tte38"
     },
     {
-      "id": "ioluis4jkm",
-      "id_campana": "GR2025",
-      "id_cadena": "ALCAMPO"
-    },
-    {
-      "id": "4jj2kkv6st",
-      "id_campana": "GR2025",
-      "id_cadena": "CARREFOUR"
-    },
-    {
-      "id": "7uk2nfjmh1",
-      "id_campana": "GR2025",
-      "id_cadena": "DIA"
-    },
-    {
-      "id": "lvt0gtpvfa",
-      "id_campana": "GR2025",
-      "id_cadena": "ECI"
-    },
-    {
-      "id": "ccgiudqofb",
-      "id_campana": "GR2025",
-      "id_cadena": "ALDI"
-    },
-    {
       "id": "r9whs17y2",
       "id_cadena": "SUMA",
       "id_campana": "PRIM2025"
     },
     {
-      "id_campana": "CAMPAN2026",
-      "id_cadena": "ALCAMPO",
-      "id": "kv6DQOe"
+      "id": "hwap1jgwxi",
+      "id_campana": "GR2025",
+      "id_cadena": "ALCAMPO"
+    },
+    {
+      "id": "7pn3kim1hv",
+      "id_campana": "GR2025",
+      "id_cadena": "CARREFOUR"
+    },
+    {
+      "id": "hkgnn5zxxx",
+      "id_campana": "GR2025",
+      "id_cadena": "DIA"
+    },
+    {
+      "id": "u0kfzg04kv",
+      "id_campana": "GR2025",
+      "id_cadena": "ECI"
+    },
+    {
+      "id": "xfqjvtbdyv",
+      "id_campana": "GR2025",
+      "id_cadena": "ALDI"
     }
   ],
   "direccion": [
@@ -12529,6 +12516,34 @@
       "aspectos_positivos": "",
       "fecha_creacion": "2026-06-08T21:13:04.497Z",
       "id": 2
+    },
+    {
+      "rol": "Coordinador",
+      "nombre_persona": "paco perex",
+      "id_campana": "PRIM2025",
+      "id_cadena": "ALCAMPO",
+      "tienda": "pepe",
+      "turno_dia": "Lunes",
+      "turno_franja": "Mañana",
+      "urgencia": "Alta",
+      "descripcion": "se ha portado mal",
+      "aspectos_positivos": "",
+      "fecha_creacion": "2026-06-10T11:48:37.809Z",
+      "id": 3
+    },
+    {
+      "rol": "Coordinador",
+      "nombre_persona": "paco perex",
+      "id_campana": "GR2025",
+      "id_cadena": "SUMA",
+      "tienda": "pepe",
+      "turno_dia": "Lunes",
+      "turno_franja": "Mañana",
+      "urgencia": "Media",
+      "descripcion": "nsfgnjfgts",
+      "aspectos_positivos": "",
+      "fecha_creacion": "2026-06-10T11:57:45.415Z",
+      "id": 4
     }
   ],
   "tipo_notificacion": [
@@ -12583,7 +12598,7 @@
       "id_tipo": "CAMPANA",
       "titulo": "Nueva Campaña Creada",
       "mensaje": "Se ha creado la campaña \"campana\" y está lista para ser gestionada.",
-      "leida": false,
+      "leida": true,
       "fecha_creacion": "2026-06-09T17:26:01.906Z",
       "fecha_envio_programado": null,
       "id_asignacion_ref": null
@@ -12595,8 +12610,80 @@
       "id_tipo": "CAMPANA",
       "titulo": "Nueva Campaña Creada",
       "mensaje": "Se ha creado la campaña \"prueba\" y está lista para ser gestionada.",
-      "leida": false,
+      "leida": true,
       "fecha_creacion": "2026-06-09T20:00:26.050Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "ifrjjrzf1l",
+      "id_notificacion": 1781091552537,
+      "id_persona_destino": 43,
+      "id_tipo": "CAMPANA",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"campana\" y está lista para ser gestionada.",
+      "leida": true,
+      "fecha_creacion": "2026-06-10T11:39:12.537Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "8yca7m2yei",
+      "id_notificacion": 1781091626760,
+      "id_persona_destino": 43,
+      "id_tipo": "CAMPANA",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"campana\" y está lista para ser gestionada.",
+      "leida": true,
+      "fecha_creacion": "2026-06-10T11:40:26.760Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "yijydbvwyr",
+      "id_notificacion": 1781092117843,
+      "id_persona_destino": 43,
+      "id_tipo": "INCIDENCIA",
+      "titulo": "Incidencia en Campaña Primavera 2025",
+      "mensaje": "Cadena: ALCAMPO\nTienda: pepe\nTurno: Lunes (Mañana)\nUrgencia: Alta\nDescripción: se ha portado mal\nMensaje positivo: Ninguno",
+      "leida": true,
+      "fecha_creacion": "2026-06-10T11:48:37.843Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "vywvaxde42",
+      "id_notificacion": 1781092487308,
+      "id_persona_destino": 43,
+      "id_tipo": "CAMPANA",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"campana\" y está lista para ser gestionada.",
+      "leida": true,
+      "fecha_creacion": "2026-06-10T11:54:47.308Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "7huogr2n1t",
+      "id_notificacion": 1781092557711,
+      "id_persona_destino": 50,
+      "id_tipo": "CAMPANA",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"campana\" y está lista para ser gestionada.",
+      "leida": true,
+      "fecha_creacion": "2026-06-10T11:55:57.711Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "o0iihb3rjm",
+      "id_notificacion": 1781092665454,
+      "id_persona_destino": 50,
+      "id_tipo": "INCIDENCIA",
+      "titulo": "Incidencia en Campaña Verano 2025",
+      "mensaje": "Cadena: SUMA\nTienda: pepe\nTurno: Lunes (Mañana)\nUrgencia: Media\nDescripción: nsfgnjfgts\nMensaje positivo: Ninguno",
+      "leida": true,
+      "fecha_creacion": "2026-06-10T11:57:45.454Z",
       "fecha_envio_programado": null,
       "id_asignacion_ref": null
     }
@@ -17940,6 +18027,66 @@
       "campaignName": "campana",
       "timestamp": "2026-06-09T17:26:01.857Z",
       "id": 25
+    },
+    {
+      "action": "create",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T11:39:12.511Z",
+      "id": 26
+    },
+    {
+      "action": "create",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T11:40:26.720Z",
+      "id": 27
+    },
+    {
+      "action": "create",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T11:54:47.263Z",
+      "id": 28
+    },
+    {
+      "action": "create",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T11:55:57.418Z",
+      "id": 29
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T12:00:58.178Z",
+      "id": 30
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T12:01:00.580Z",
+      "id": 31
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T12:01:03.436Z",
+      "id": 32
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T12:01:05.795Z",
+      "id": 33
+    },
+    {
+      "action": "delete",
+      "campaignName": "campana",
+      "timestamp": "2026-06-10T12:01:08.223Z",
+      "id": 34
+    },
+    {
+      "action": "edit",
+      "campaignName": "Campaña Verano 2025",
+      "timestamp": "2026-06-10T12:19:35.394Z",
+      "id": 35
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

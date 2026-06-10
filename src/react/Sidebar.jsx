@@ -17,14 +17,13 @@ export default function Sidebar() {
 
     let rutaDashboard = '/dashboard';
 
-    // Función auxiliar: Si la URL actual incluye la ruta que le pasamos, devuelve la clase 'active'
+    // Si la URL actual incluye la ruta que le pasamos, devuelve la clase 'active'
     const verificarActivo = (ruta) => {
         return location.pathname.includes(ruta) ? 'active' : '';
     };
 
     return (
         <aside className="sidebar">
-            {/* Si entras al perfil, también se puede marcar como activo si quisieras */}
             <Link to="/perfil" className="enlace-perfil" data-titulo="Perfil de usuario" data-subtitulo="Ajustes del usuario">
                 <div className="user-block">
                     <div className="avatar avatar-jc">{usuario.nombre.charAt(0).toUpperCase()}</div>
@@ -37,11 +36,11 @@ export default function Sidebar() {
 
             <h2 className="menu-heading">MENÚ PRINCIPAL</h2>
             <ul id="menu">
-                {/* Le asignamos dinámicamente la clase con nuestra función verificarActivo */}
                 <li id="dashboard" className={verificarActivo('dashboard')}>
                     <Link to={rutaDashboard}>Dashboard</Link>
                 </li>
 
+                {/* MENÚ PARA ADMINISTRADOR Y COORDINADOR */}
                 {(usuario.rol === '1' || usuario.rol === '2') && (
                     <>
                         <li id="campana" className={verificarActivo('/campanas')}>
@@ -59,6 +58,7 @@ export default function Sidebar() {
                     </>
                 )}
 
+                {/* MENÚ SOLO PARA ADMINISTRADORES */}
                 {usuario.rol === '1' && (
                     <>
                         <li id="establecimientos" className={verificarActivo('/tiendas')}>
@@ -66,6 +66,18 @@ export default function Sidebar() {
                         </li>
                         <li id="colaboradores" className={verificarActivo('/colaboradores')}>
                             <Link to="/colaboradores">Colaboradores</Link>
+                        </li>
+                    </>
+                )}
+
+                {/* MENÚ SOLO PARA COLABORADORES */}
+                {usuario.rol === '3' && (
+                    <>
+                        <li id="campana" className={verificarActivo('/campanas')}>
+                            <Link to="/campanas">Campañas</Link>
+                        </li>
+                        <li id="voluntarios" className={verificarActivo('/voluntarios')}>
+                            <Link to="/voluntarios">Voluntarios</Link>
                         </li>
                     </>
                 )}

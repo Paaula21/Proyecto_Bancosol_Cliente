@@ -335,3 +335,7 @@ tbody tr.selected {
 .btn-delete:hover {
     background-color: #7f1d1d;
 }
+
+.estado-vacio {
+    margin-top: 50px;
+}

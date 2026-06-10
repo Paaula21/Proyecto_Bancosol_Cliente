@@ -1,39 +1,49 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 
 export function useFetch(url) {
     const [datos, setDatos] = useState([]);
     const [cargando, setCargando] = useState(true);
 
+    // Separamos la petición en una función para poder llamarla cuando queramos
+    const fetchData = useCallback(async () => {
+        try {
+            const respuesta = await fetch(url, { cache: 'no-store' });
+            const json = await respuesta.json();
+            setDatos(json);
+        } catch (error) {
+            console.error("Error en la base de datos:", error);
+        } finally {
+            setCargando(false);
+        }
+    }, [url]);
+
     useEffect(() => {
-        let ignore = false; 
+        let ignore = false;
+        
+        // 1. Carga inicial
+        fetchData();
 
-        setCargando(true);
-        // AÑADIMOS cache: 'no-store' PARA OBLIGAR A TRAER DATOS FRESCOS
-        fetch(url, { cache: 'no-store' })
-            .then(respuesta => respuesta.json())
-            .then(json => {
-                if (!ignore) {
-                    setDatos(json);
-                    setCargando(false);
-                }
-            })
-            .catch(error => {
-                if (!ignore) {
-                    console.error("Error en la base de datos:", error);
-                    setCargando(false);
-                }
-            });
+        // 2. Escuchar si alguien avisa de que hay cambios
+        const handleCambios = () => {
+            if (!ignore) fetchData();
+        };
+        window.addEventListener('notificacionesActualizadas', handleCambios);
 
+        // Limpiamos el evento cuando se desmonta el componente
         return () => {
             ignore = true;
+            window.removeEventListener('notificacionesActualizadas', handleCambios);
         };
-    }, [url]);
+    }, [fetchData]);
 
     const eliminarDato = async (id) => {
         try {
             const respuesta = await fetch(`${url}/${id}`, { method: 'DELETE' });
             if (respuesta.ok) {
                 setDatos(datosActuales => datosActuales.filter(item => item.id !== id));
+                
+                // AVISAMOS A TODA LA APP (Por ejemplo, al Header)
+                window.dispatchEvent(new Event('notificacionesActualizadas'));
                 return true; 
             }
             return false;
@@ -55,6 +65,9 @@ export function useFetch(url) {
                 setDatos(datosActuales => datosActuales.map(item => 
                     item.id === id ? { ...item, leida: true } : item
                 ));
+                
+                // AVISAMOS A TODA LA APP (Para que el Header quite el color morado y el punto rojo)
+                window.dispatchEvent(new Event('notificacionesActualizadas'));
             }
         } catch (error) {
             console.error("Error al marcar como leída:", error);

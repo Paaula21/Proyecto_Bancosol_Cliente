@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import { useNotificaciones } from './useNotificaciones'; // IMPORTAMOS EL HOOK DE LAS NOTIFICACIONES
 
 export default function FormularioIncidencias({ idCampana, contexto = 'campana', onClose }) {
+    
+    const { enviarNotificacion } = useNotificaciones(); // INICIALIZAMOS EL HOOK DE NOTIFICACIONES
+
     const [estadoFormulario, setEstadoFormulario] = useState('escribiendo');
     const [error, setError] = useState(null);
     const [mostrarPopupConfirmacion, setMostrarPopupConfirmacion] = useState(false);
@@ -47,6 +51,7 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
         setEstadoFormulario('enviando');
 
         try {
+            // 1. Guardamos la incidencia
             const resIncidencia = await fetch('http://localhost:3000/incidencia', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -58,63 +63,34 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
 
             if (!resIncidencia.ok) throw new Error('Error al registrar la incidencia');
 
-            let nuevoIdNotificacion = 1;
-            try {
-                const resNotifsActuales = await fetch('http://localhost:3000/notificacion');
-                if (resNotifsActuales.ok) {
-                    const notifsActuales = await resNotifsActuales.json();
-                    if (notifsActuales.length > 0) {
-                        nuevoIdNotificacion = Math.max(...notifsActuales.map(n => n.id_notificacion)) + 1;
-                    }
-                }
-            } catch (_) {}
-
-            const idPersonaRaw = sessionStorage.getItem('id_usuario');
-            const idPersonaDestino = idPersonaRaw ? parseInt(idPersonaRaw, 10) : null;
-
+            // 2. Preparamos el título y mensaje con los datos del formulario
             const campanaObj = campanas.find(c => c.id_campana === formData.id_campana);
             const nombreCampana = campanaObj?.nombre_campana || null;
-            const titulo = nombreCampana ? `Incidencia en ${nombreCampana}` : 'Incidencia';
+            const titulo = nombreCampana ? `Incidencia en ${nombreCampana}` : 'Nueva Incidencia';
 
             const cadenaObj = cadenas.find(c => c.id_cadena === formData.id_cadena);
-            const nombreCadena = (cadenaObj?.nombre_cadena) || null;
-
-            const tienda = formData.tienda?.trim() || null;
-            const descripcion = formData.descripcion?.trim() || null;
-            const mensajePositivo = formData.aspectos_positivos?.trim() || null;
+            const nombreCadena = (cadenaObj?.nombre_cadena) || 'No especificada';
+            const tienda = formData.tienda?.trim() || 'No especificada';
+            const descripcion = formData.descripcion?.trim() || 'Sin descripción';
+            const mensajePositivo = formData.aspectos_positivos?.trim() || 'Ninguno';
 
             const mensajeTexto = [
-                `cadena: ${nombreCadena ?? 'null'}`,
-                `tienda: ${tienda ?? 'null'}`,
-                `turno: ${formData.turno_dia} ${formData.turno_franja}`,
-                `urgencia: ${formData.urgencia}`,
-                `descripcion: ${descripcion ?? 'null'}`,
-                `mensaje positivo: ${mensajePositivo ?? 'null'}`
+                `Cadena: ${nombreCadena}`,
+                `Tienda: ${tienda}`,
+                `Turno: ${formData.turno_dia} (${formData.turno_franja})`,
+                `Urgencia: ${formData.urgencia}`,
+                `Descripción: ${descripcion}`,
+                `Mensaje positivo: ${mensajePositivo}`
             ].join('\n');
 
-            const idUnico = Math.random().toString(36).substring(2, 13);
-
-            const notificacionObj = {
-                id_notificacion: nuevoIdNotificacion,
-                id_persona_destino: idPersonaDestino,
-                id_tipo: 'INCIDENCIA',
-                titulo: titulo,
-                mensaje: mensajeTexto,
-                leida: false,
-                fecha_creacion: new Date().toISOString(),
-                fecha_envio_programado: null,
-                id_asignacion_ref: null,
-                id: idUnico
-            };
-
-            const resNotif = await fetch('http://localhost:3000/notificacion', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify(notificacionObj)
-            });
-
-            if (!resNotif.ok) {
-                console.warn('La incidencia se guardó pero no se pudo crear la notificación.');
+            // ENVIAMOS LA NOTIFICACIÓN USANDO EL HOOK
+            try {
+                await enviarNotificacion(titulo, mensajeTexto, 'INCIDENCIA');
+                
+                // AVISAMOS AL HEADER DE QUE HAY UNA NUEVA NOTIFICACIÓN
+                window.dispatchEvent(new Event('notificacionesActualizadas'));
+            } catch (errNotif) {
+                console.warn('La incidencia se guardó pero no se pudo crear la notificación:', errNotif);
             }
 
             onClose();
