@@ -12557,6 +12557,19 @@
       "aspectos_positivos": "",
       "fecha_creacion": "2026-06-10T11:57:45.415Z",
       "id": 4
+    },
+    {
+      "rol": "Coordinador",
+      "nombre_persona": "prueba",
+      "id_campana": "GR2025",
+      "id_cadena": "ECI",
+      "tienda": "",
+      "turno_dia": "Lunes",
+      "turno_franja": "Mañana",
+      "urgencia": "Baja",
+      "descripcion": "prueba",
+      "fecha_creacion": "2026-06-13T12:22:48.434Z",
+      "id": 6
     }
   ],
   "tipo_notificacion": [

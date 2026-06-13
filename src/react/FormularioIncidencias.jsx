@@ -99,10 +99,10 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
 
             const mensajeTexto = [
                 `Cadena: ${nombreCadena ?? ''}`,
-                tienda && `Tienda: ${tienda}`,
-                `Turno: ${formData.turno_dia} ${formData.turno_franja}`,
-                `Urgencia: ${formData.urgencia}`,
-                descripcion && `Descripción: ${descripcion}`
+                tienda && `\nTienda: ${tienda}`,
+                `\nTurno: ${formData.turno_dia} ${formData.turno_franja}`,
+                `\nUrgencia: ${formData.urgencia}`,
+                descripcion && `\nDescripción: ${descripcion}`
             ].filter(Boolean).join('\n');
 
             const idUnico = Math.random().toString(36).substring(2, 13);
