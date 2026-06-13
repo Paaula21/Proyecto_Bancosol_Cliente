@@ -88,7 +88,7 @@ export default function Perfil() {
                     contrasenia: passwords.nueva
                 })
             });
-
+            // En vez del popup, mostramos el resultado o los errores con colores en el formulario por velocidad
             if (response.ok) {
                 setMensaje({ texto: '¡Contraseña actualizada con éxito!', tipo: 'exito' });
                 setPasswords({ actual: '', nueva: '', confirmacion: '' });

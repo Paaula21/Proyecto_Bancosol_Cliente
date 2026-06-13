@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^6.9.1",
     "@testing-library/react": "^16.3.2",
     "@testing-library/user-event": "^13.5.0",
+    "json-server": "0.17.4",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
     "react-router-dom": "^7.17.0",
@@ -15,6 +16,9 @@
     "xlsx": "^0.18.5"
   },
   "scripts": {
+    "start:backend": "node server.js",
+    "start:frontend": "npm start",
+    "bancosol": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
@@ -39,6 +43,7 @@
     ]
   },
   "devDependencies": {
+    "concurrently": "^10.0.3",
     "eslint-config-react-app": "^7.0.1"
   }
 }

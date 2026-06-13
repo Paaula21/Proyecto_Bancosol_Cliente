@@ -1,18 +1,2 @@
-Para iniciar el servidor local: npx json-server@0.17.4 --watch db.json --port 3000
-Para lanzar la web en local: npx live-server
-Entrar en la carpeta html y seleccionar Login.html
-
-En esta versión del proyecto solo se puede entrar como administrador con el las siguientes credenciales:
-    usuario: "admin"
-    contraseña: "admin1234"
-
-La función de recordar al usuario está implementada pero la de recuperar contraseña no.
-
-
-////////////////////////////////////////////////////////
-//////////////MEJORAR ESCRITURA A FUTURO////////////////
-////////////////////////////////////////////////////////
- Para iniciar con react la aplicación, es necesario encender el json-server (lo de arriba)
- y iniciar el servidor de react (pnpm start)
-
- Tras esto, escribir en el navegador http://localhost:4000/html/login.html
+Se instalan todas las dependencias con pnpm install
+Para iniciar el servidor completo, se debe escribir en la terminal pnpm run bancosol
