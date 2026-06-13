@@ -12529,6 +12529,19 @@
       "aspectos_positivos": "",
       "fecha_creacion": "2026-06-08T21:13:04.497Z",
       "id": 2
+    },
+    {
+      "rol": "Coordinador",
+      "nombre_persona": "Prueba",
+      "id_campana": "PRIM2025",
+      "id_cadena": "MAKRO",
+      "tienda": "",
+      "turno_dia": "Miércoles",
+      "turno_franja": "Mañana",
+      "urgencia": "Baja",
+      "descripcion": "Estamos probando que el select de campaña filtre por las cadenas",
+      "fecha_creacion": "2026-06-13T10:48:47.984Z",
+      "id": 3
     }
   ],
   "tipo_notificacion": [
@@ -12583,7 +12596,7 @@
       "id_tipo": "CAMPANA",
       "titulo": "Nueva Campaña Creada",
       "mensaje": "Se ha creado la campaña \"campana\" y está lista para ser gestionada.",
-      "leida": false,
+      "leida": true,
       "fecha_creacion": "2026-06-09T17:26:01.906Z",
       "fecha_envio_programado": null,
       "id_asignacion_ref": null
@@ -12595,10 +12608,70 @@
       "id_tipo": "CAMPANA",
       "titulo": "Nueva Campaña Creada",
       "mensaje": "Se ha creado la campaña \"prueba\" y está lista para ser gestionada.",
-      "leida": false,
+      "leida": true,
       "fecha_creacion": "2026-06-09T20:00:26.050Z",
       "fecha_envio_programado": null,
       "id_asignacion_ref": null
+    },
+    {
+      "id": "4o5ah61yss",
+      "id_notificacion": 1781086145699,
+      "id_persona_destino": 50,
+      "id_tipo": "CAMPANA",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"prueba\" y está lista para ser gestionada.",
+      "leida": false,
+      "fecha_creacion": "2026-06-10T10:09:05.699Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "vteh9xxv09",
+      "id_notificacion": 1781086202241,
+      "id_persona_destino": 50,
+      "id_tipo": "CAMPANA",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"prueba\" y está lista para ser gestionada.",
+      "leida": false,
+      "fecha_creacion": "2026-06-10T10:10:02.241Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "5lm3c1yipm",
+      "id_notificacion": 1781086234804,
+      "id_persona_destino": 50,
+      "id_tipo": "CAMPANA",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"ppp\" y está lista para ser gestionada.",
+      "leida": false,
+      "fecha_creacion": "2026-06-10T10:10:34.804Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id": "e3v9o7suik",
+      "id_notificacion": 1781086311180,
+      "id_persona_destino": 50,
+      "id_tipo": "CAMPANA",
+      "titulo": "Nueva Campaña Creada",
+      "mensaje": "Se ha creado la campaña \"prueba\" y está lista para ser gestionada.",
+      "leida": false,
+      "fecha_creacion": "2026-06-10T10:11:51.180Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null
+    },
+    {
+      "id_notificacion": 1781086311181,
+      "id_persona_destino": 50,
+      "id_tipo": "INCIDENCIA",
+      "titulo": "Incidencia en Campaña Primavera 2025",
+      "mensaje": "cadena: MAKRO\ntienda: null\nturno: Miércoles Mañana\nurgencia: Baja\ndescripcion: Estamos probando que el select de campaña filtre por las cadenas",
+      "leida": true,
+      "fecha_creacion": "2026-06-13T10:48:48.133Z",
+      "fecha_envio_programado": null,
+      "id_asignacion_ref": null,
+      "id": "d13btpjlbpc"
     }
   ],
   "asignacion_coordinador": [
@@ -17940,6 +18013,48 @@
       "campaignName": "campana",
       "timestamp": "2026-06-09T17:26:01.857Z",
       "id": 25
+    },
+    {
+      "action": "create",
+      "campaignName": "prueba",
+      "timestamp": "2026-06-10T10:09:05.649Z",
+      "id": 26
+    },
+    {
+      "action": "delete",
+      "campaignName": "prueba",
+      "timestamp": "2026-06-10T10:09:15.528Z",
+      "id": 27
+    },
+    {
+      "action": "create",
+      "campaignName": "prueba",
+      "timestamp": "2026-06-10T10:10:02.200Z",
+      "id": 28
+    },
+    {
+      "action": "create",
+      "campaignName": "ppp",
+      "timestamp": "2026-06-10T10:10:34.761Z",
+      "id": 29
+    },
+    {
+      "action": "create",
+      "campaignName": "prueba",
+      "timestamp": "2026-06-10T10:11:51.137Z",
+      "id": 30
+    },
+    {
+      "action": "delete",
+      "campaignName": "prueba",
+      "timestamp": "2026-06-10T10:12:03.154Z",
+      "id": 31
+    },
+    {
+      "action": "delete",
+      "campaignName": "prueba",
+      "timestamp": "2026-06-10T10:12:11.955Z",
+      "id": 32
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

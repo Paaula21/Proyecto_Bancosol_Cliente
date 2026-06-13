@@ -6,6 +6,7 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
     const [mostrarPopupConfirmacion, setMostrarPopupConfirmacion] = useState(false);
     const [campanas, setCampanas] = useState([]);
     const [cadenas, setCadenas] = useState([]);
+    const [cadenasFiltradas, setCadenasFiltradas] = useState([]);
     const [formData, setFormData] = useState({
         rol: 'Coordinador',
         nombre_persona: '',
@@ -15,8 +16,7 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
         turno_dia: 'Lunes',
         turno_franja: 'Mañana',
         urgencia: 'Media',
-        descripcion: '',
-        aspectos_positivos: ''
+        descripcion: ''
     });
 
     useEffect(() => {
@@ -32,6 +32,20 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
             .then(data => setCadenas(data))
             .catch(() => {});
     }, []);
+
+    useEffect(() => {
+        if (!formData.id_campana) {
+            setCadenasFiltradas([]);
+            return;
+        }
+        fetch(`http://localhost:3000/campana_cadena?id_campana=${formData.id_campana}`)
+            .then(r => r.json())
+            .then(data => {
+                const ids = data.map(cc => cc.id_cadena);
+                setCadenasFiltradas(cadenas.filter(c => ids.includes(c.id_cadena)));
+            })
+            .catch(() => setCadenasFiltradas([]));
+    }, [formData.id_campana, cadenas]);
 
     const handleChange = (e) => {
         setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
@@ -81,16 +95,14 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
 
             const tienda = formData.tienda?.trim() || null;
             const descripcion = formData.descripcion?.trim() || null;
-            const mensajePositivo = formData.aspectos_positivos?.trim() || null;
 
             const mensajeTexto = [
-                `cadena: ${nombreCadena ?? 'null'}`,
-                `tienda: ${tienda ?? 'null'}`,
-                `turno: ${formData.turno_dia} ${formData.turno_franja}`,
-                `urgencia: ${formData.urgencia}`,
-                `descripcion: ${descripcion ?? 'null'}`,
-                `mensaje positivo: ${mensajePositivo ?? 'null'}`
-            ].join('\n');
+                `Cadena: ${nombreCadena ?? ''}`,
+                tienda && `Tienda: ${tienda}`,
+                `Turno: ${formData.turno_dia} ${formData.turno_franja}`,
+                `Urgencia: ${formData.urgencia}`,
+                descripcion && `Descripción: ${descripcion}`
+            ].filter(Boolean).join('\n');
 
             const idUnico = Math.random().toString(36).substring(2, 13);
 
@@ -182,7 +194,7 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
                                 <select name="id_cadena" className="select-ficha-lateral"
                                     value={formData.id_cadena} onChange={handleChange}>
                                     <option value="">Seleccionar cadena</option>
-                                    {cadenas.map(c => (
+                                    {cadenasFiltradas.map(c => (
                                         <option key={c.id_cadena} value={c.id_cadena}>
                                             {c.nombre_cadena}
                                         </option>
@@ -242,15 +254,6 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
                                 <textarea name="descripcion" className="input-ficha-lateral" required
                                     rows={4} placeholder="Describe la incidencia..."
                                     value={formData.descripcion} onChange={handleChange} />
-                            </div>
-                        </div>
-
-                        <div className="ficha-tarjeta-info sin-margen-inferior">
-                            <h5>Aspectos positivos</h5>
-                            <div className="campo-formulario-ficha">
-                                <textarea name="aspectos_positivos" className="input-ficha-lateral"
-                                    rows={3} placeholder="¿Algo que destacar positivamente?"
-                                    value={formData.aspectos_positivos} onChange={handleChange} />
                             </div>
                         </div>
 
