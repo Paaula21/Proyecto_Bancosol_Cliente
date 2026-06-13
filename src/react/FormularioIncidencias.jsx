@@ -1,9 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useNotificaciones } from './useNotificaciones'; // IMPORTAMOS EL HOOK DE LAS NOTIFICACIONES
-
 
 export default function FormularioIncidencias({ idCampana, contexto = 'campana', onClose }) {
-    const { enviarNotificacion } = useNotificaciones(); // INICIALIZAMOS EL HOOK DE NOTIFICACIONES
+
     const [estadoFormulario, setEstadoFormulario] = useState('escribiendo');
     const [error, setError] = useState(null);
     const [mostrarPopupConfirmacion, setMostrarPopupConfirmacion] = useState(false);
@@ -64,7 +62,6 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
         setEstadoFormulario('enviando');
 
         try {
-            // 1. Guardamos la incidencia
             const resIncidencia = await fetch('http://localhost:3000/incidencia', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -97,7 +94,7 @@ export default function FormularioIncidencias({ idCampana, contexto = 'campana',
             const cadenaObj = cadenas.find(c => c.id_cadena === formData.id_cadena);
             const nombreCadena = (cadenaObj?.nombre_cadena) || null;
 
-            const tienda = formData.tienda?.trim() || null;
+            const tienda = formData.tienda?.trim() || 'No especificada';
             const descripcion = formData.descripcion?.trim() || null;
 
             const mensajeTexto = [
