@@ -11,7 +11,6 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
 
     e.preventDefault();
 
-    // CHECKBOXES
     const asistencias = [];
 
     document.querySelectorAll('input[name="asistencia"]:checked')
@@ -19,7 +18,6 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
             asistencias.push(checkbox.value);
         });
 
-    // VALIDACIÓN
     if (asistencias.length === 0) {
         alert("Debes seleccionar al menos una disponibilidad.");
         return;
@@ -29,17 +27,13 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
     const datos = Object.fromEntries(formData.entries());
 
     try {
-        // ====================================
-        // 1. OBTENER PERSONAS EXISTENTES
-        // ====================================
+        // Personas existentes
         const responsePersonas = await fetch('http://localhost:3000/persona');
         const personas = await responsePersonas.json();
 
         const nuevoIdPersona = maxNumero(personas, 'id_persona') + 1;
 
-        // ====================================
-        // 2. CREAR PERSONA
-        // ====================================
+        // Crear persona
         const nuevaPersona = {
             id_persona: nuevoIdPersona,
             nombre_completo: datos.volunt_name,
@@ -58,17 +52,13 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
             throw new Error("Error al crear persona");
         }
 
-        // ====================================
-        // 3. OBTENER VOLUNTARIOS EXISTENTES
-        // ====================================
+        // Voluntarios existentes
         const responseVols = await fetch('http://localhost:3000/voluntario');
         const voluntarios = await responseVols.json();
 
         const nuevoIdVoluntario = maxNumero(voluntarios, 'id_voluntario') + 1;
 
-        // ====================================
-        // 4. CREAR OBJETO VOLUNTARIO
-        // ====================================
+        // Crear voluntario
         const nuevoVoluntario = {
             id_voluntario: nuevoIdVoluntario,
             id_persona: nuevoIdPersona,
@@ -76,9 +66,7 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
             id_colaborador: null
         };
 
-        // ====================================
-        // 5. GUARDAR VOLUNTARIO EN LA DB
-        // ====================================
+        // Guardar voluntario en db.json
         const responseVoluntario = await fetch('http://localhost:3000/voluntario', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
@@ -90,18 +78,13 @@ document.getElementById('form-voluntario').addEventListener('submit', async func
         }
 
 
-        // ====================================
-        // 6. MOSTRAR POPUP Y LIMPIAR FORMULARIO
-        // ====================================
-        // Seleccionamos tus elementos del HTML
+        // Mostrar pop-up
         const overlay = document.getElementById('overlay');
         const popup = document.getElementById('popup');
 
-        // Activamos el CSS del popup añadiendo la clase 'active'
         overlay.classList.add('active');
         popup.classList.add('active');
 
-        // Limpiamos los campos por si acaso
         e.target.reset();
 
     } catch (error) {

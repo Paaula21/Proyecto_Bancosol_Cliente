@@ -25,7 +25,6 @@ async function cargarDatosVoluntario(idVol) {
         const resPersonas = await fetch(`${API_BASE}/persona`);
         const personas = await resPersonas.json();
 
-        // Conversión segura de identificadores a String
         voluntarioActual = voluntarios.find(v => String(v.id_voluntario) === String(idVol));
 
         if (!voluntarioActual) {
@@ -41,12 +40,12 @@ async function cargarDatosVoluntario(idVol) {
         document.getElementById('email').value = personaActual ? personaActual.email : '';
         document.getElementById('telefono').value = personaActual ? personaActual.telefono : '';
 
-        // --- CARGAR CHECKBOXES DE ASISTENCIA SEMANAL ---
+        // --- Checkboxes de asistencia ---
         const turnosGuardados = voluntarioActual.preferencia_horario
             ? voluntarioActual.preferencia_horario.split(',').map(t => t.trim().toLowerCase())
             : [];
 
-        // Buscamos los inputs con name="asistencia" como en el registro
+        // Buscamos los inputs "asistencia"
         const checkboxes = document.querySelectorAll('input[name="asistencia"]');
 
         checkboxes.forEach(cb => {
@@ -108,12 +107,12 @@ async function guardarCambiosVoluntario() {
     const nuevoEmail = document.getElementById('email').value;
     const nuevoTelefono = document.getElementById('telefono').value;
 
-    // --- RECOPILAR TURNOS SELECCIONADOS (name="asistencia") ---
+    // Recopilar "asistencia" seleccionada
     const checkboxesActivos = document.querySelectorAll('input[name="asistencia"]:checked');
     const listaTurnos = Array.from(checkboxesActivos).map(cb => cb.value);
     const nuevaDisponibilidadString = listaTurnos.join(', '); // Formato: "lunes-mañana, martes-tarde"
 
-    // VALIDACIÓN: El voluntario debe tener al menos un turno marcado
+    // El voluntario debe tener al menos un turno marcado
     if (listaTurnos.length === 0) {
         alert("Debes seleccionar al menos una disponibilidad.");
 
@@ -127,7 +126,7 @@ async function guardarCambiosVoluntario() {
     }
 
     try {
-        // 1. Actualizar datos en la entidad /persona
+        // Actualizar datos en la persona
         await fetch(`${API_BASE}/persona/${personaActual.id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },
@@ -138,7 +137,7 @@ async function guardarCambiosVoluntario() {
             })
         });
 
-        // 2. Actualizar datos de turnos en la entidad /voluntario
+        // Actualizar datos de turnos en voluntario
         await fetch(`${API_BASE}/voluntario/${voluntarioActual.id}`, {
             method: 'PATCH',
             headers: { 'Content-Type': 'application/json' },

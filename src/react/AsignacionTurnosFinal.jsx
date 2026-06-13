@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
-import '../AsignacionTurnosFinal.css';
 
 export default function AsignacionTurnosFinal() {
     const [searchParams] = useSearchParams();
@@ -26,7 +25,7 @@ export default function AsignacionTurnosFinal() {
 
     const RELACION_DIAS = ['domingo', 'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado'];
 
-    // Convertidor de fecha ultra-preciso UTC
+    // Convertidor de fecha
     const obtenerDiaSemanaSeguro = (fechaStr) => {
         if (!fechaStr) return '';
         try {
@@ -51,7 +50,7 @@ export default function AsignacionTurnosFinal() {
         }
     };
 
-    // Función auxiliar para calcular la fecha YYYY-MM-DD correspondiente a un día de la semana concreto
+    // Calcular la fecha YYYY-MM-DD correspondiente a un día de la semana concreto
     const calcularFechaParaDia = (fechaReferencia, targetDiaId) => {
         try {
             const soloFecha = fechaReferencia.split('T')[0];
@@ -204,7 +203,6 @@ export default function AsignacionTurnosFinal() {
             }
 
             if (cambiosRealizados) {
-                // Delay de seguridad de 400ms para asegurar que json-server termine de escribir en el disco duro db.json
                 await new Promise(resolve => setTimeout(resolve, 400));
                 alert("¡Cuadrante guardado con éxito!");
                 navigate(-1);

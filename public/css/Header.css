@@ -57,3 +57,24 @@
     background-color: #e2e8f0;
     color: #1e293b;
 }
+
+/* --- ESTILOS PARA CUANDO HAY NOTIFICACIONES SIN LEER --- */
+.btn-notificaciones.notificaciones-pendientes {
+    background-color: #f1f5f9;
+    color: #475569;                 
+}
+
+.btn-notificaciones.notificaciones-pendientes:hover {
+    background-color: #e2e8f0;
+}
+
+/* punto rojo */
+.punto-rojo-aviso {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    background-color: #e74c3c;
+    border-radius: 50%;
+    margin-left: 6px;
+    box-shadow: 0 0 4px rgba(231, 76, 60, 0.5);
+}

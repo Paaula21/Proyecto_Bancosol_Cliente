@@ -1,14 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { useFetch } from './useFetch'; 
+import { UserContext } from './ContextoUsuario';
 
 export default function Notificaciones() {
-    // 1. Extraemos tu nueva función marcarComoLeida
-    const { datos: notificacionesBrutas, cargando, eliminarDato, marcarComoLeida } = useFetch('http://localhost:3000/notificacion');
     
-    // 2. Ya no hace falta el array de "leidas". Solo guardamos la que está seleccionada.
+    // OBTENEMOS AL USUARIO ACTUAL
+    const { usuario } = useContext(UserContext);
+
+    const { datos: todasLasNotificaciones, cargando, eliminarDato, marcarComoLeida } = useFetch('http://localhost:3000/notificacion');
+    
     const [seleccionada, setSeleccionada] = useState(null);
     const [mostrarPopup, setMostrarPopup] = useState(false);
 
+    // FILTRAMOS LAS NOTIFICACIONES PARA QUE SOLO VEA LAS SUYAS
+    const notificacionesBrutas = todasLasNotificaciones.filter(
+        notif => String(notif.id_persona_destino) === String(usuario.id_usuario)
+    );
+
+    // Las ordenamos por fecha
     const notificaciones = [...notificacionesBrutas].sort((a, b) => new Date(b.fecha_creacion) - new Date(a.fecha_creacion));
 
     const formatearFecha = (fechaCadena) => {
@@ -18,11 +27,9 @@ export default function Notificaciones() {
         });
     };
 
-    // 3. Cuando hacemos clic, avisamos a la base de datos
     const handleSeleccionar = (notif) => {
         setSeleccionada(notif);
         
-        // Si en la base de datos dice que no estaba leída, la marcamos
         if (!notif.leida) {
             marcarComoLeida(notif.id);
         }
@@ -67,7 +74,6 @@ export default function Notificaciones() {
                         ) : (
                             <div className="notificaciones-list">
                                 {notificaciones.map((notif) => {
-                                    // Comprobamos directamente si la BD dice que está leída
                                     const esLeida = notif.leida; 
                                     const estaSeleccionada = seleccionada?.id === notif.id;
 
@@ -85,7 +91,6 @@ export default function Notificaciones() {
                                                 <span className="notif-item-date">
                                                     {formatearFecha(notif.fecha_creacion).split(',')[0]}
                                                 </span>
-                                                {/* Etiqueta nueva si en la BD leida es false */}
                                                 {!esLeida && (
                                                     <span className="notif-item-new-badge">Nueva</span>
                                                 )}
@@ -148,7 +153,6 @@ export default function Notificaciones() {
                 </div>
             </main>
 
-            {/* POPUP DE CONFIRMACIÓN */}
             {mostrarPopup && (
                 <div className="overlay active">
                     <div className="popup active">
@@ -158,9 +162,7 @@ export default function Notificaciones() {
                         </p>
                         
                         <div>
-                            {/* Usamos onSubmit para evitar que la página recargue si pulsan Enter */}
                             <form action="" onSubmit={(e) => e.preventDefault()}>
-                                {/* Clases idénticas a las de tu compañera */}
                                 <button 
                                     className="btn btn--delete" 
                                     onClick={handleConfirmarBorrado}

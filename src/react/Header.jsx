@@ -1,12 +1,28 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom'; // IMPORTANTE: Importamos useNavigate
+import React, { useState, useEffect, useContext } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom'; 
+import { useFetch } from './useFetch'; 
+import { UserContext } from './ContextoUsuario';
 
 export default function Header() {
     const [titulo, setTitulo] = useState('Bancosol');
     const [subtitulo, setSubtitulo] = useState('');
     
     const location = useLocation();
-    const navigate = useNavigate(); // Iniciamos la función de navegación
+    const navigate = useNavigate();
+
+    // OBTENEMOS AL USUARIO ACTUAL
+    const { usuario } = useContext(UserContext);
+
+    // OBTENEMOS LAS NOTIFICACIONES DE LA BD
+    const { datos: notificaciones } = useFetch('http://localhost:3000/notificacion');
+    
+    // FILTRAMOS NOTIFICACIONES
+    const misNotificaciones = notificaciones ? notificaciones.filter(
+        notif => String(notif.id_persona_destino) === String(usuario.id_usuario)
+    ) : [];
+
+    // COMPROBAMOS SI HAY NOTIFICACIONES SIN LEER PARA MOSTRAR EL AVISO EN EL BOTÓN
+    const haySinLeer = misNotificaciones.some(notif => notif.leida === false);
 
     useEffect(() => {
         const rutaActual = location.pathname.split('/').pop();
@@ -27,7 +43,6 @@ export default function Header() {
             setTitulo("Asignación de turnos");
             setSubtitulo("Control y asignación de voluntarios");
         }
-
 
         const titulosMenu = {
             'dashboard': { t: 'Dashboard', s: 'Resumen general de los datos' },
@@ -63,13 +78,13 @@ export default function Header() {
                     </div>
                 </div>
                 
-                {/* Al hacer clic, le decimos a React que navegue a la nueva pantalla */}
                 <button 
-                    className="btn-notificaciones" 
+                    className={`btn-notificaciones ${haySinLeer ? 'notificaciones-pendientes' : ''}`} 
                     id="btn-notifications"
                     onClick={() => navigate('/notificaciones')}
                 >
                     Notificaciones
+                    {haySinLeer && <span className="punto-rojo-aviso"></span>}
                 </button>
             </nav>
         </header>
